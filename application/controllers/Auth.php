@@ -421,6 +421,10 @@ class Auth extends CI_Controller {
 	// create a new user
 	public function create_user()
     {
+			$this->load->model('Sector_req_model');
+			$this->data['all_sector_req'] = $this->Sector_req_model->get_all_sector_req();
+			$this->data['groupos'] = $this->ion_auth->groups()->result_array();
+
         $this->data['title'] = $this->lang->line('create_user_heading');
 
         if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin())
@@ -444,10 +448,12 @@ class Auth extends CI_Controller {
         {
             $this->form_validation->set_rules('email', $this->lang->line('create_user_validation_email_label'), 'required|valid_email|is_unique[' . $tables['users'] . '.email]');
         }
-        $this->form_validation->set_rules('phone', $this->lang->line('create_user_validation_phone_label'), 'trim');
+
         $this->form_validation->set_rules('company', $this->lang->line('create_user_validation_company_label'), 'trim');
         $this->form_validation->set_rules('password', $this->lang->line('create_user_validation_password_label'), 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|max_length[' . $this->config->item('max_password_length', 'ion_auth') . ']|matches[password_confirm]');
         $this->form_validation->set_rules('password_confirm', $this->lang->line('create_user_validation_password_confirm_label'), 'required');
+				$this->form_validation->set_rules('id_sectores[]', 'Sectores', 'callback_validate_sectores');
+
 
         if ($this->form_validation->run() == true)
         {
@@ -460,9 +466,12 @@ class Auth extends CI_Controller {
                 'last_name'  => $this->input->post('last_name'),
                 'company'    => $this->input->post('company'),
                 'phone'      => $this->input->post('phone'),
+
             );
+						$group = $this->input->post('groups[]');
+						$sectores = $this->input->post('id_sectores[]');
         }
-        if ($this->form_validation->run() == true && $this->ion_auth->register($identity, $password, $email, $additional_data))
+        if ($this->form_validation->run() == true && $this->ion_auth->register($identity, $password, $email, $additional_data, $group, $sectores ))
         {
             // check to see if we are creating the user
             // redirect them back to the admin page
@@ -526,7 +535,22 @@ class Auth extends CI_Controller {
         }
     }
 
-
+			public function validate_sectores($str){
+				if(empty($str)){
+					$this->form_validation->set_message('validate_sectores','Debe Introducir al menos un sector.');
+					return false;
+				}else{
+					return true;
+				}
+			}
+			public function validate_group($str){
+				if(empty($str)){
+					$this->form_validation->set_message('validate_group','Debe Introducir al menos un sector.');
+					return false;
+				}else{
+					return true;
+				}
+			}
 
 
 	// edit a user

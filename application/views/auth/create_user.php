@@ -50,6 +50,42 @@
             <?php echo form_input($password_confirm);?>
           <span class="text-danger">  <?= form_error('password_confirm') ?></span>
       </div>
+      <div class="col-md-6">
+        <label class="control-label">Sectores Habilitados</label>
+        <div class="form-group">
+          <select name="id_sectores[]" multiple class="form-control" >
+            <?php
+            foreach($all_sector_req as $sector)
+            {
+
+              echo '<option value="'.$sector['id_sector_req'].'">'.$sector['nombre_sector'].'</option>';
+            }
+            ?>
+          </select>
+          <small>Utilice la tecla Ctrl para seleccionar varios sectores.</small>
+          <span class="text-danger"><?php echo form_error('id_sectores[]');?></span>
+        </div>
+      </div>
+          <div class="col-md-6">
+            <label class="control-label">Perfil</label>
+            <div class="form-group">
+              <select name="groups[]"  class="form-control" >
+                <?php
+                foreach($groupos as $group){
+
+                  if ($group['id'] == $this->config->item('Administrator')){
+                    $disabled = 'disabled=disabled';
+                    }else{
+                    $disabled = '';
+                    }
+                    echo '<option value="'.$group['id'].'" '.$disabled.' >'. htmlspecialchars($group['description'],ENT_QUOTES,'UTF-8').'</option>';
+                  }
+                ?>
+                </select>
+                <span class="text-danger"><?php echo form_error('groups[]');?></span>
+              </div>
+            </div>
+      </div>
     </div>
   </div>
 

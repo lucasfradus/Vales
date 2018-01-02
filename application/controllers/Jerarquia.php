@@ -37,10 +37,7 @@ class Jerarquia extends CI_Controller{
     function index()
     {
 
-      $params['user'] = 12;
 
-
-      $result = $this->Jerarquia_model->get_all_jerarquias($params);
 
           $this->data['all_sector_req'] = $this->Sector_req_model->get_all_sector_req();
           $this->data['all_users'] = $this->User_model->get_all_users();

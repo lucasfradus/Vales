@@ -878,7 +878,7 @@ class Ion_auth_model extends CI_Model
 	 * @return bool
 	 * @author Mathew
 	 **/
-	public function register($identity, $password, $email, $additional_data = array(), $groups = array())
+	public function register($identity, $password, $email, $additional_data = array(), $groups = array(), $sectores = array())
 	{
 		$this->trigger_events('pre_register');
 
@@ -942,16 +942,46 @@ class Ion_auth_model extends CI_Model
 			$groups[] = $default_group->id;
 		}
 
+
+		/*
+		| Acá Registro las jerarquias que fui recibiendo, si viene vacio(no deberia)
+		| cargo la jerarquia x default
+		|
+		*/
+
+
+		$this->load->model('Jerarquia_model');
+		if (!empty($sectores))
+		{
+			// add to sectores
+			foreach ($sectores as $s)
+			{
+				$params = array(
+					'id_user_padre' => $id,
+					'id_user_hijo' => $id,
+					'id_sector_jerarquia' => $s,
+				);
+			$jerarquia_id = $this->Jerarquia_model->add_jerarquia($params);
+			}
+		}else{
+			$params = array(
+				'id_user_padre' => $id,
+				'id_user_hijo' => $id,
+				'id_sector_jerarquia' => $this->config->item('JerarquiaDefault'),
+			);
+			$jerarquia_id = $this->Jerarquia_model->add_jerarquia($params);
+		}
 		if (!empty($groups))
 		{
-			// add to groups
-			foreach ($groups as $group)
-			{
+			foreach ($groups as $group ) {
 				$this->add_to_group($group, $id);
 			}
+
 		}
 
 		$this->trigger_events('post_register');
+
+
 
 		return (isset($id)) ? $id : FALSE;
 	}

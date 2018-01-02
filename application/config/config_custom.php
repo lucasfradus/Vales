@@ -14,6 +14,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 $config['email'] = 'lucas.fradusco@gmail.com';
 
+/*
+|--------------------------------------------------------------------------
+| Custom Config: Jerarquia Default
+|--------------------------------------------------------------------------
+| Aca defino la jerarquia que se le asigna x default a los usuarios cuando son cargados.
+| si no tiene ninguna jerarquia asociada, va a tener errores cuando inicia sesion.
+| tambien defino cual será la jerarquia de prueba
+|
+*/
+$config['JerarquiaDefault']		    		= 28;
+$config['JerarquiaPrueba']		    		= 27;
 
 
 /*
