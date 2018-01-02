@@ -17,7 +17,6 @@
                       <th>%</th>
                       <th>Acciones</th>
                     </tr>
-                    adasdasd
                     <?php
 
                     foreach($vales_consumo as $v){
