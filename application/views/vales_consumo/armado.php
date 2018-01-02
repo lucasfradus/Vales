@@ -8,15 +8,16 @@
             <div class="box-body">
                 <table class="table table-striped">
                     <tr>
-						<th>Id Vale</th>
-						<th>Requeridor</th>
-						<th>Sector Aprobador</th>
-                        <th>Fecha Creación</th>
-                        <th>Estado de Entrega </th>
-                        <th>Estado Armado</th>
-                        <th>%</th>
-						<th>Acciones</th>
+                      <th>Id Vale</th>
+                      <th>Requeridor</th>
+                      <th>Sector Aprobador</th>
+                      <th>Fecha Creación</th>
+                      <th>Estado de Entrega </th>
+                      <th>Estado Armado</th>
+                      <th>%</th>
+                      <th>Acciones</th>
                     </tr>
+                    adasdasd
                     <?php
 
                     foreach($vales_consumo as $v){
