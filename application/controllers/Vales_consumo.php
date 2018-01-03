@@ -387,16 +387,7 @@ class Vales_consumo extends CI_Controller{
 
         }
 
-
-
-		/*
-    $this->load->model('User_model');
-			$this->data['all_users'] = $this->User_model->get_all_users();
-      $this->load->model('Estado_entrega_model');
-      $this->data['all_estados'] = $this->Estado_entrega_model->get_all_estado_entrega();
-
-*/
-                $this->data['all_productos'] = $this->Articulo_model->get_all_articulos();
+                $this->data['all_productos'] = $this->Articulo_model->get_all_articulos($params = array('status' => $this->config->item('Activo')));
                 $this->data['all_sector_req'] = $this->Jerarquia_model->get_sector_user($this->user->id);
                 $this->data['_view'] = 'vales_consumo/add';
                 $this->load->view('layouts/main',$this->data);

@@ -137,10 +137,15 @@ public function get_autocomplete_uno($search_data)
        $this->db->join('fk_un_med u1', 'u1.id_un_medida = articulos.id_un_med1');
        $this->db->join('fk_un_med u2', 'u2.id_un_medida = articulos.id_un_med2');
         $this->db->order_by('id_articulo', 'asc');
-        if(isset($params) && !empty($params))
+        if(isset($params['limit']) && !empty($params['limit']))
         {
             $this->db->limit($params['limit'], $params['offset']);
         }
+        if(isset($params['status']) && !empty($params['status']))
+        {
+            $this->db->where('status', $params['status']);
+        }
+
         return $this->db->get('articulos')->result_array();
     }
 

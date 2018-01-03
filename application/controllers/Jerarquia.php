@@ -77,7 +77,8 @@ class Jerarquia extends CI_Controller{
 
       $query = 'select * from sector_req where not exists (select 1 from jerarquias where jerarquias.id_sector_jerarquia = sector_req.id_sector_req and jerarquias.id_user_padre = '.$this->input->post('id_user_padre').')';
       $result = $this->Jerarquia_model->query($query);
-          foreach ($result as $sector) {
+echo   $query;
+        foreach ($result as $sector) {
             echo '<option value="'.$sector->id_sector_req.'">'.$sector->nombre_sector.'</option>';
       }
   }

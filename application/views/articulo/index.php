@@ -21,7 +21,7 @@
 
 
 
-                    </div>             
+                    </div>
                 </div>
             </div>
             <div class="box-body">
@@ -58,38 +58,22 @@
                               <div class="btn-group">
                   <a href="<?php echo site_url('articulo/view/'.$a['id_articulo']); ?>" class="btn btn-xs btn-info" data-toggle="tooltip" title="Ver">
                   <i class="glyphicon glyphicon-search"></i>
-               </a>               
+               </a>
                 <a href="<?php echo site_url('articulo/edit/'.$a['id_articulo']); ?>" class="btn btn-xs btn-warning" data-toggle="tooltip" title="Editar">
                   <i class="glyphicon glyphicon-pencil"></i>
                </a>
-                <a href="<?php echo site_url('articulo/remove/'.$a['id_articulo']); ?>" class="btn btn-xs btn-danger" data-toggle="tooltip" title="Eliminar">
-                  <i class="glyphicon glyphicon-remove"></i>
+                <a href="<?php echo site_url('articulo/remove/'.$a['id_articulo']); ?>" class="<?= ($a['status'] == $this->config->item('Inactivo') ? 'btn btn-xs btn-success' : 'btn btn-xs btn-danger') ?>" data-toggle="tooltip" title="<?= ($a['status'] == $this->config->item('Inactivo') ? 'Habilitar' : 'Deshabilitar') ?>">
+                  <i class="<?= ($a['status'] == $this->config->item('Inactivo') ? 'glyphicon glyphicon-ok' : 'glyphicon glyphicon-remove') ?>"></i>
                 </a>
                 </div>
 
-                           
+
                         </td>
                     </tr>
                     <?php } ?>
                      </tbody>
                 </table>
 
-                <div class="pull-right">
-                    <?= $this->pagination->create_links(); ?> 
-                </div>    
-                    <div class="pull-left"> 
-                        <div class="dropdown">
-                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Registros Por Pagina
-                            <span class="caret"></span></button>
-                                <ul class="dropdown-menu">
-                                    <li><a href="<?php echo base_url('Articulos/index/per_page/20') ?>">20</a></li>
-                                    <li><a href="#">50</a></li>
-                                    <li><a href="#">100</a></li>
-                                    <li><a href="#">Todos</a></li>
-                                </ul>
-                        </div>                  
-                </div>   
-                                
             </div>
         </div>
     </div>

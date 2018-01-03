@@ -51,15 +51,18 @@
 <script>
   function get_select(){
       var id_user_padre = $('#id_user_padre').val();
+      //vacio el selector por si estan haciendo una sobre consulta
+      $('#select').empty();
       $.ajax({
           type: "POST",
           url: "<?php echo base_url(); ?>" + "jerarquia/get_select",
           data : {id_user_padre:id_user_padre},
             success: function(data) {
               if(data){
+                console.log(data);
                 $('#select').append(data);
               }else{
-                document.getElementById('notif').innerHTML = '<span class="text-danger">No se puede dar mas sectores a ese usuaroui</span>';
+                document.getElementById('notif').innerHTML = '<span class="text-danger">No se puede asignar más sectores a este usuario.</span>';
               }
             },
             error: function(data){

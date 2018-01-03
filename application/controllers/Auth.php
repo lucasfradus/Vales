@@ -19,7 +19,7 @@ class Auth extends CI_Controller {
 	{
 		$user = $this->ion_auth->user()->row();
         $data['user'] = $user;
-        if($this->ion_auth->loginCheck() && $this->ion_auth->RolCheck($user->id, $this->config->item('AdministrarUsuarios'))){
+        if($this->config->item('AdministrarUsuarios')){
 
 		if (!$this->ion_auth->logged_in())
 		{

@@ -28,7 +28,9 @@
           echo lang('create_user_identity_label', 'identity');
           echo '<br />';
           echo form_input($identity);
-          ?><span class="text-danger"><?= form_error('identity');?></span><?php
+          ?>
+          <small>El Nombre de Usuario es unico, y se utiliza para iniciar sesión</small>
+          <span class="text-danger"><?= form_error('identity');?></span><?php
       }
       ?>
       </div>
@@ -36,6 +38,7 @@
       <div class="col-md-6">
             <?php echo lang('create_user_email_label', 'email');?> <br />
             <?php echo form_input($email);?>
+            <small>El Email se utiliza para enviar notificaciones.</small>
             <span class="text-danger"><?= form_error('email') ?></span>
       </div>
 
@@ -82,6 +85,7 @@
                   }
                 ?>
                 </select>
+                <small>El Perfil por default es de Requeridor.</small>
                 <span class="text-danger"><?php echo form_error('groups[]');?></span>
               </div>
             </div>
