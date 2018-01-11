@@ -53,17 +53,18 @@
                         <!-- User Account: style can be found in dropdown.less -->
                             <li class="dropdown user user-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <img src="<?php echo site_url('resources/img/user2-160x160.jpg');?>" class="user-image" alt="User Image">
+                                    <img src="<?php echo site_url('resources/img/ilva.jpg');?>" class="user-image" alt="User Image">
                                     <span class="hidden-xs"><?= $sesion->username?></span>
                                 </a>
                                 <ul class="dropdown-menu">
                                     <!-- User image -->
                                     <li class="user-header">
-                                        <img src="<?php echo site_url('resources/img/user2-160x160.jpg');?>" class="img-circle" alt="User Image">
+                                        <img src="<?php echo site_url('resources/img/ilva.jpg');?>" class="img-circle" alt="User Image">
 
                                     <p>
                                         <?= $sesion->first_name.' '.$sesion->last_name?>
                                         <small>Mail: <?= $sesion->email?></small>
+                                        <small>Perfil: <?= $perfil->description?></small>
                                     </p>
                                     </li>
                                     <!-- Menu Footer-->
@@ -187,46 +188,29 @@
                                 </li>
                             </ul>
                         </li>
-
-
-
-
 						<li>
                             <a href="#">
-                                <i class="fa fa-desktop"></i> <span>Role</span>
+                                <i class="fa fa-desktop"></i> <span>Permisos Por Usuario</span>
                             </a>
                             <ul class="treeview-menu">
 								<li class="active">
-                                    <a href="<?php echo site_url('role/add');?>"><i class="fa fa-plus"></i> Add</a>
+                                    <a href="<?php echo site_url('roles_group/add');?>"><i class="fa fa-plus"></i> Agregar</a>
                                 </li>
 								<li>
-                                    <a href="<?php echo site_url('role/index');?>"><i class="fa fa-list-ul"></i> Listing</a>
+                                    <a href="<?php echo site_url('roles_group/index');?>"><i class="fa fa-list-ul"></i> Listar</a>
                                 </li>
 							</ul>
                         </li>
 						<li>
                             <a href="#">
-                                <i class="fa fa-desktop"></i> <span>Roles Group</span>
+                                <i class="fa fa-desktop"></i> <span>Sectores</span>
                             </a>
                             <ul class="treeview-menu">
 								<li class="active">
-                                    <a href="<?php echo site_url('roles_group/add');?>"><i class="fa fa-plus"></i> Add</a>
+                                    <a href="<?php echo site_url('sector_req/add');?>"><i class="fa fa-plus"></i> Agregar</a>
                                 </li>
 								<li>
-                                    <a href="<?php echo site_url('roles_group/index');?>"><i class="fa fa-list-ul"></i> Listing</a>
-                                </li>
-							</ul>
-                        </li>
-						<li>
-                            <a href="#">
-                                <i class="fa fa-desktop"></i> <span>Sector Req</span>
-                            </a>
-                            <ul class="treeview-menu">
-								<li class="active">
-                                    <a href="<?php echo site_url('sector_req/add');?>"><i class="fa fa-plus"></i> Add</a>
-                                </li>
-								<li>
-                                    <a href="<?php echo site_url('sector_req/index');?>"><i class="fa fa-list-ul"></i> Listing</a>
+                                    <a href="<?php echo site_url('sector_req/index');?>"><i class="fa fa-list-ul"></i> Listar</a>
                                 </li>
 							</ul>
                         </li>
@@ -323,7 +307,8 @@
         <script src="<?php echo site_url('resources/js/moment.js');?>"></script>
         <script src="<?php echo site_url('resources/js/bootstrap-datetimepicker.min.js');?>"></script>
         <script src="<?php echo site_url('resources/js/global.js');?>"></script>
-
+        <!-- funciones Custom en js -->
+        <script src="<?php echo site_url('resources/js/funciones.js');?>"></script>
 
 
 

@@ -12,38 +12,26 @@ class Dashboard extends CI_Controller{
         $this->load->library('session');
         $this->load->model('Vales_consumo_model');
         $this->load->model('Jerarquia_model');
-        $this->load->library('unit_test');
 
-
-        if (!$this->ion_auth->logged_in()){
-             redirect('auth/login');
-            }
-
-         $this->user = $this->ion_auth->user()->row();
-        $sectores = $this->Jerarquia_model->get_sector_user($this->user->id);
-         $this->data['sesion'] = $this->user;
-        $this->data['aprobaciones_barra'] =  $this->Vales_consumo_model->get_all_vales_count($this->config->item('Pendiente'),null,$sectores);
-        $this->data['estado_barra'] =  $this->Vales_consumo_model->get_all_vales_count($this->config->item('Aprobado'),$this->config->item('EnProcesoDeArmado'), $this->Jerarquia_model->get_sector_user($this->user->id));
-
-/*
-$test = 1 + 1;
-
-$expected_result = 2;
-
-$test_name = 'Vales para aprobar';
-
-echo $this->unit->run($test, $expected_result, $test_name);
-
-*/
-
+    $this->data = $this->generales->imports_generales();
 
     }
 
     function index()
     {
-          if($this->ion_auth->loginCheck()){
-            //Acá cargo diferentes datos en el dashboard segun el grupo al que pertenece el usuario
-                 if ($this->ion_auth->in_group($this->config->item('Requeridor'))){
+
+      //Acá cargo diferentes datos en el dashboard segun el grupo al que pertenece el usuario
+           if ($this->ion_auth->in_group($this->config->item('Requeridor'))){
+
+
+             
+
+           }
+
+
+
+/*
+
                     $this->data['vales'] = $this->Vales_consumo_model->get_latest_vales_consumo($this->user->id);
 
 
@@ -90,10 +78,10 @@ echo $this->unit->run($test, $expected_result, $test_name);
 
 
             $this->data['_view'] = 'dashboard';
-            $this->load->view('layouts/main',$this->data);
+            $this->load->view('layouts/main',$this->data);*/
 
         }
-    }
+
 
 
 

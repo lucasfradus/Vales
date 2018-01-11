@@ -37,19 +37,24 @@ $config['JerarquiaPrueba']		    		= 27;
 |
 */
 
-$config['VerArticulos']		    		= 1;
-$config['AdministrarRoles']				= 1;
-$config['EditarArticulos']				= 1;
-$config['AltaArticulos']				  = 1;
-$config['AdministrarUsuarios']		= 1;
-$config['VerArticulos']					  = 1;
-$config['VerVales']						    = 1;
-$config['NuevoVale']					    = 1;
-$config['VerVale']						    = 1;
-$config['AprobarVales']					  = 1;
-$config['ArmadoDeVales']			   	= 1;
-$config['VerDashboard']				  	= 1;
-$config['PrepararVale']				  	= 1;
+$config['VerArticulos']		    		     = 1;
+$config['AdministrarRoles']				     = 1;
+$config['EditarArticulos']				     = 1;
+$config['AltaArticulos']				       = 1;
+$config['AdministrarUsuarios']		     = 1;
+$config['VerArticulos']					       = 1;
+$config['VerVales']						         = 1;
+$config['NuevoVale']					         = 1;
+$config['VerVale']						         = 1;
+$config['AprobarVales']					       = 1;
+$config['ArmadoDeVales']			   	     = 1;
+$config['VerDashboard']				  	     = 1;
+$config['PrepararVale']				  	     = 1;
+$config['AdministrarSectores']		     = 1;
+$config['AdministrarRolesPorUsuario']  = 1;
+
+
+
 
 /*
 |--------------------------------------------------------------------------

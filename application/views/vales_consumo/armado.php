@@ -1,3 +1,4 @@
+<div id="notif"></div>
 <div class="row">
     <div class="col-md-12">
         <div class="box">
@@ -6,7 +7,7 @@
 
             </div>
             <div class="box-body">
-                <table class="table table-striped">
+                <table class="table table-striped" id="table">
                     <tr>
                       <th>Id Vale</th>
                       <th>Requeridor</th>
@@ -36,7 +37,7 @@
 						<td><?php echo $v['username']; ?></td>
 						<td><?php echo $v['nombre_sector']; ?></td>
                         <td><?php echo date('m/d/Y H:i:s', $v['fecha_creado']); ?></td>
-                        <td><?php echo $v['nombre_estado']; ?></td>
+                        <td id="cell<?= $v['id_vale']; ?>"><?php echo $v['nombre_estado']; ?></td>
                         <td>
                             <div class="progress progress-xl progress-striped active">
                                  <div class="<?=$class?>" style="width: <?=$result.'%'?>"></div>
@@ -48,14 +49,48 @@
                                 <a href="<?php echo site_url('vales_consumo/preparar/'.$v['id_vale']); ?>" class="btn btn-xs btn-info" data-toggle="tooltip" title="Preparar">
                                 <i class="fa fa-play"></i>
                                 </a>
-                                <a href="<?php echo site_url('vales_consumo/preparar/'.$v['id_vale']); ?>" class="btn btn-xs btn-warning" data-toggle="tooltip" title="Modificar Estado">
-                                <i class="fa fa-edit"></i>
-                                </a>
+                                <button type="button"  data-toggle="modal" data-target="#myModal" class="btn btn-xs btn-warning" data-toggle="tooltip" title="Modificar Estado"> <i class="fa fa-edit"></i> </button>
+                              </div>
+                              <!-- Modal -->
+                              <div id="myModal" class="modal fade" role="dialog">
+                                <div class="modal-dialog">
+
+                                  <!-- Modal content-->
+                                  <div class="modal-content">
+                                      <div class="modal-header">
+                                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                          <h4 class="modal-title" id="modal-title" >Cambiar estado de Vale #<?= $v['id_vale']?></h4>
+
+                                      </div>
+                                      <div class="modal-body">
+                                          <p>Una vez que el Vale pase a estar listo para retirar se notificará al requiridor para que pase a retirarlo. Y una vez que lo haya retirado, se debe actualizar el estado a "Retirado".
+                                          </p>
+                                          <label for="id_sector" class="control-label"><span class="text-danger">*</span>Estado</label>
+                                            <div class="form-group">
+                                                        <select name="estado" class="form-control" id=EstadoVale>
+                                                          <option value=<?= $this->config->item('EnProcesoDeArmado')?>  >En Proceso De Armado</option>
+                                                          <option value=<?= $this->config->item('ListoParaRetirar')?> <?= ( $v['id_estado'] == $this->config->item('ListoParaRetirar') ? 'disabled' : '')?>>Listo Para Retirar</option>
+                                                          <option value=<?= $this->config->item('Retirado')?>>Retirado</option>
+                                                        </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="id_sector" class="control-label"><span class="text-danger">*</span>Comentarios</label>
+                                                <textarea class="form-control" rows="5" name="comment" id=ComentsVale></textarea>
+                                            </div>
+                                      </div>
+                                      <div class="modal-footer">
+                                          <button onclick="update_status(<?= $v['id_vale']?>)" class="btn btn-success" >Guardar</button>
+                                          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                      </div>
+                                  </div>
+                                </div>
                               </div>
 
 
                         </td>
                     </tr>
+
+
                     <?php } ?>
                 </table>
 

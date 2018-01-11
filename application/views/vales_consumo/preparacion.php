@@ -122,7 +122,7 @@
 												<th><?=$item_cargados->cantidad_entregada?></th>
 
 													<th>
-													<button onclick="borrar(<?=$item_cargados->id_vale_articulos?>,<?=$item_cargados->id_articulo?>,<?=$item_cargados->cantidad?>)" class="btn btn-xs btn-danger">
+													<button onclick="borrar_item_preparacion(<?=$item_cargados->id_vale_articulos?>,<?=$item_cargados->id_articulo?>,<?=$item_cargados->cantidad?>)" class="btn btn-xs btn-danger">
                  										 <i class="glyphicon glyphicon-remove"></i>
                										 </button>
 													</th>
@@ -169,51 +169,8 @@
             <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
         </div>
     </div>
-<script>
-    function update_status(id_vale){
-      var status = $('#EstadoVale').val();
-      var comments = $('#ComentsVale').val();
-
-
-      console.log('estado recibido: '+ status);
-      console.log('comentarios recibidos: '+ comments);
-      console.log('id del vale: ' + id_vale);
-
-
-        $.ajax({
-            type: "POST",
-            url: "<?php echo base_url(); ?>" + "vales_consumo/update_status",
-            data : {id_vale:id_vale, status:status, comments:comments},
-              success: function(data) {
-                if(data){
-                  $('#myModal').modal('toggle');
-                  $('#notif').addClass("alert alert-success").append('<a href="#" class="close" data-dismiss="alert>×</a>"');
-                  document.getElementById('notif').innerHTML = '<strong>Exito!</strong> Vale Actualizado correctamente';
-                  $('input[name=nombre_estado]').val(data);
-                }else{
-                  $('#myModal').modal('toggle');
-                  $('#notif').addClass("alert alert-error").append('<a href="#" class="close" data-dismiss="alert>×</a>"');
-                  document.getElementById('notif').innerHTML = '<strong>Error!</strong> Error al actualizar. Intente nuevamente';
-                }
-
-
-
-
-              },
-              error: function(data){
-                console.log(data);
-
-              }
-        });
-
-
-    }
-
-</script>
-
-
-
-
+  </div>
+</div>
 
 <script>
    function agregar(id_item,id_vale,cantidad_max,num_articulo) {
@@ -259,45 +216,6 @@
 						    }
 						});
 						}
-
-
-
-
-
-			}
-
-</script>
-
-<script>
-   function borrar(id_vale,id_item,cantidad) {
-
-   	var id_item = id_item;
-   	var id_vale = id_vale;
-   	var cantidad = cantidad;
-
-
-
-		    		console.log("vale de consumo: ", id_vale);
-		    		console.log("item a borrar: ", id_item);
-
-
-							    $.ajax({
-						    type: "POST",
-						    url: "<?php echo base_url(); ?>" + "vales_consumo/remove_item_vale",
-						     data : {id_vale:id_vale, id_articulo:id_item, cantidad:cantidad},
-
-						    success: function(data) {
-						    console.log("item borrado: ", data);
-						    	//si esta todo ok, finalmente remuevo el item de la tabla
-						    	//$('#fila'+id_item).fadeOut(600, function(){ $(this).remove();});
-                  $('#fila'+id_item).fadeOut(1500, function(){ $(this).remove();});
-						   		$('#tabla_1 > tbody:last-child').append(data).fadeIn(600);
-						    },
-						    error: function(data){
-						    	 console.log("item no borrado");
-						    }
-						});
-
 
 
 

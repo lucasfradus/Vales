@@ -41,7 +41,7 @@
 					 <div class="col-md-6">
 					 	<label for="id_sector" class="control-label"><span class="text-danger">*</span>Articulo</label>
                             <div class="form-group">
-										<select name="articulo" class="form-control select2" onchange="get_un_med(this.value)">
+										<select name="articulo" class="form-control select2" required onchange="get_un_med(this.value)">
 											<?php
 											foreach($all_productos as $articulo)
 											{

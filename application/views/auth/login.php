@@ -110,14 +110,16 @@ $password = array(
 <div class = "container">
     <div class="wrapper">
         <form action="" method="post" name="Login_Form" class="form-signin">
-            <h3 class="form-signin-heading">Bienvenido!</h3>
+          <div class="form-signin-heading">
+            <h3 >Bienvenido!</h3>
+              <img src="<?php echo site_url('resources/img/ilva.jpg');?>">
               <hr class="colorgraph"><br>
-
+            </div>
               <?php echo form_input($identity);?>
                   <?php echo form_input($password);?>
                  <?php echo lang('login_remember_label', 'remember');?>
               <?php echo form_checkbox('remember', '1', FALSE, 'id="remember"',"class='checkbox pull-left'");?>
-              <button class="btn btn-lg btn-primary btn-block"  name="Submit" value="Login" type="Submit">Login</button>
+              <button class="btn btn-lg btn-primary btn-block"  name="Submit" value="Login" type="Submit">Ingresar</button>
 
         </form>
     </div>

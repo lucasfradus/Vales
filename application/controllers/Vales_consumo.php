@@ -16,22 +16,16 @@ class Vales_consumo extends CI_Controller{
         $this->load->model('Articulo_model');
         $this->load->model('Evolucion_vale_model');
         $this->load->model('Estado_entrega_model');
+        $this->load->model('Ion_auth_model');
         $this->load->library('pagination');
         $this->load->library('ion_auth');
         $this->load->helper('date');
         $this->load->library('form_validation');
         $this->load->model('Jerarquia_model');
 
-        if (!$this->ion_auth->logged_in()){
-          $this->session->set_flashdata('error','Debe estar logueado para realizar esta acción.');
-        redirect('auth/login');
-        }
 
         $this->user = $this->ion_auth->user()->row();
-        $sectores = $this->Jerarquia_model->get_sector_user($this->user->id);
-        $this->data['sesion'] = $this->user;
-        $this->data['aprobaciones_barra'] =  $this->Vales_consumo_model->get_all_vales_count($this->config->item('Pendiente'),null,$sectores);
-        $this->data['estado_barra'] =  $this->Vales_consumo_model->get_all_vales_count($this->config->item('Aprobado'),$this->config->item('EnProcesoDeArmado'), $this->Jerarquia_model->get_sector_user($this->user->id));
+        $this->data = $this->generales->imports_generales();
 
 
     }
