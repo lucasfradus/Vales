@@ -16,18 +16,17 @@ class Jerarquia extends CI_Controller{
         $this->load->helper('date');
         $this->load->library('form_validation');
 
-
-
-        if (!$this->ion_auth->logged_in()){
-          $this->session->set_flashdata('error','Debe estar logueado para realizar esta acción.');
-        redirect('auth/login');
-        }
-
         $this->user = $this->ion_auth->user()->row();
-        $sectores = $this->Jerarquia_model->get_sector_user($this->user->id);
-        $this->data['sesion'] = $this->user;
-        $this->data['aprobaciones_barra'] =  $this->Vales_consumo_model->get_all_vales_count($this->config->item('Pendiente'),null,$sectores);
-        $this->data['estado_barra'] =  $this->Vales_consumo_model->get_all_vales_count($this->config->item('Aprobado'),$this->config->item('EnProcesoDeArmado'), $this->Jerarquia_model->get_sector_user($this->user->id));
+        $this->data = $this->generales->imports_generales();
+        //Perfiles habilitados para ver esta pagina
+        $group = array($this->config->item('Administrator'), $this->config->item('Pañolero'));
+
+          if(!$this->ion_auth->in_group($group) || !$this->ion_auth->RolCheck($this->config->item('AdministrarJerarquias'))){
+            $this->session->set_flashdata('error', 'No Tiene permisos para realizar esta acción');
+                    redirect('/');
+          }
+
+
 
     }
 

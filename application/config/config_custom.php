@@ -52,6 +52,8 @@ $config['VerDashboard']				  	     = 1;
 $config['PrepararVale']				  	     = 1;
 $config['AdministrarSectores']		     = 1;
 $config['AdministrarRolesPorUsuario']  = 1;
+$config['AdministrarJerarquias']       = 1;
+
 
 
 
@@ -121,8 +123,25 @@ $config['Activo']		    		= 1;
 |
 */
 
-$config['Cargado']						= 0;
+$config['Cargado']						  = 0;
 $config['Pendiente']		    		= 1;
+
+
+
+//donde guardo los templates para enviar mails
+$config['templates'] = 'email/';
+
+/*
+|--------------------------------------------------------------------------
+| Custom Config: mails templates
+|--------------------------------------------------------------------------
+| Acá defino la constante que uso para definir la plantilla que elijo en determinados eventos.
+|
+*/
+
+
+
+$config['Nuevo_Vale']			 = 'new.tpl.php';
 
 
 

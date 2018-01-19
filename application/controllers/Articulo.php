@@ -14,6 +14,14 @@ class Articulo extends CI_Controller{
 
 
         $this->data = $this->generales->imports_generales();
+
+        //aca valido que solo ciertos perfiles de usuarios puedan utilizar los metodos de estre controlador
+        $group = array($this->config->item('Administrator'), $this->config->item('Pañolero'));
+                if(!$this->ion_auth->in_group($group)){
+                  $this->session->set_flashdata('error','No tiene permiso para realizar esta acción.');
+                         redirect('/');
+
+                }
     }
 
     /*

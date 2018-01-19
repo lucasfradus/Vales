@@ -3,11 +3,9 @@
         <div class="box">
             <div class="box-header with-border">
               <h3 class="box-title">Panel de Control</h3>
-
             </div>
-
         </div>
-    </div>
+
 
 
   <?php if(ISSET($pendientes)){    ?>
@@ -53,6 +51,7 @@
       </div>
      </section>
 <?php } ?>
+
   <section class="content">
      <div class="box box-info">
             <div class="box-header with-border">
@@ -130,5 +129,7 @@
             </div>
             <!-- /.box-footer -->
           </div>
+    </div>
   </section>
+</div>
 </div>

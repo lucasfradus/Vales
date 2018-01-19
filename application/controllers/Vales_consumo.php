@@ -29,6 +29,23 @@ class Vales_consumo extends CI_Controller{
 
 
     }
+/*
+    function sendMail($datos){
+      $this->load->library('email');
+      $this->email->from('lucas.fradusco@gmail.com.ar', 'Sistema de Vales');
+      $this->email->to($datos['user']->email);
+      $this->email->subject(($datos['subject']);
+      $this->email->message('test');
+
+      if($this->email->send()){
+        echo "todo ok";
+      }else{
+        echo "no todo ok!";
+      }
+    }
+
+*/
+
 
     /*
      * Listado de Vales, segun el perfil que tenga el usuario, voy a traer los vales:
@@ -222,6 +239,8 @@ class Vales_consumo extends CI_Controller{
 
 
             if($this->Evolucion_vale_model->add_evolucion_vale($evolucion_vale) && $this->Vales_consumo_model->update_vales_consumo($id_vale,$actualizacion_vale)){
+
+
                     $this->session->set_flashdata('success','Vale Actualizado correctamente');
                      redirect('vales_consumo/armado');
                 }
@@ -237,16 +256,21 @@ class Vales_consumo extends CI_Controller{
     function aprobaciones()
     {
 
-            if($this->ion_auth->loginCheck() && $this->ion_auth->RolCheck($this->user->id, $this->config->item('AprobarVales'))){
+        $group = array($this->config->item('Administrator'), $this->config->item('Pañolero'),$this->config->item('Aprobador'));
+            if($this->ion_auth->in_group($group)){
+                if($this->ion_auth->RolCheck($this->config->item('AprobarVales'))){
 
-                $this->data['estado'] = $this->Estado_entrega_model->get_all_estado_aprobacion();
-                $this->data['vales_consumo'] = $this->Vales_consumo_model->get_all_vales_consumo_estado($this->config->item('Pendiente'));
-                $this->data['_view'] = 'vales_consumo/aprobaciones';
-                $this->load->view('layouts/main',$this->data);
+                    $this->data['estado'] = $this->Estado_entrega_model->get_all_estado_aprobacion();
+                    $this->data['vales_consumo'] = $this->Vales_consumo_model->get_all_vales_consumo_estado($this->config->item('Pendiente'));
+                    $this->data['_view'] = 'vales_consumo/aprobaciones';
+                    $this->load->view('layouts/main',$this->data);
 
 
+                }
+            }else{
+              $this->session->set_flashdata('error','No tiene permiso para realizar esta acción.');
+               redirect('vales_consumo/index');
             }
-
     }
 
     function UpdateStatusAprobacion(){
@@ -415,8 +439,26 @@ class Vales_consumo extends CI_Controller{
                     'id_aprobacion' => $this->config->item('Pendiente'),
                 );
                 if($this->Evolucion_vale_model->add_evolucion_vale($evolucion_vale) && $this->Vales_consumo_model->update_vales_consumo($id_vale,$params) && $this->Evolucion_vale_model->add_aprobacion_vale($aprobacion_vale)){
-                    $this->session->set_flashdata('success','Vale Creado correctamente! ID del Vale: '.$id_vale);
+
+
+      /*
+      Argumentos que envio al mail
+
+      */
+                  $mail['id_vale'] = $id_vale;
+                  $mail['fecha'] = time();
+                  $mail['id_responsable'] = $user->id;
+                  $mail['user'] = $user;
+                  $mail['view'] = $this->config->item('templates').$this->config->item('Nuevo_Vale');
+                  $this->generales->Send_mails($mail);
+
+
+
+                  /*  $this->session->set_flashdata('success','Vale Creado correctamente! ID del Vale: '.$id_vale);
                      redirect('vales_consumo/index');
+*/
+
+
                 }else{
                    $this->session->set_flashdata('error','Ocurrió un error al crear el vale, intente nuevamente.');
                    redirect('vales_consumo/index');

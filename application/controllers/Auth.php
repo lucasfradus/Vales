@@ -12,17 +12,35 @@ class Auth extends CI_Controller {
 		$this->form_validation->set_error_delimiters($this->config->item('error_start_delimiter', 'ion_auth'), $this->config->item('error_end_delimiter', 'ion_auth'));
 
 		$this->lang->load('auth');
+		$this->user = $this->ion_auth->user()->row();
+
+
+		//Valiudo que haya alguien logueado para que funcionen bien las redirecciones
+		if(isset($this->user)){
+			$sectores = $this->Jerarquia_model->get_sector_user($this->user->id);
+			$this->data['sesion'] = $this->user;
+			$this->data['user'] = $this->user;
+			$this->data['perfil'] = $this->Ion_auth_model->get_users_groups()->row();
+			$this->data['aprobaciones_barra'] =  $this->Vales_consumo_model->get_all_vales_count($this->config->item('Pendiente'),null,$sectores);
+
+			$this->data['estado_barra'] = $this->Vales_consumo_model->get_all_vales_count($this->config->item('Aprobado'),$this->config->item('EnProcesoDeArmado'), $this->Jerarquia_model->get_sector_user($this->user->id));
+
+		}
+
+
+
+
 	}
 
 	// redirect if needed, otherwise display the user list
 	public function index()
 	{
-		$user = $this->ion_auth->user()->row();
-        $data['user'] = $user;
+
         if($this->config->item('AdministrarUsuarios')){
 
 		if (!$this->ion_auth->logged_in())
 		{
+			$this->session->set_flashdata('error', sprintf(lang('error_no_login')));
 			// redirect them to the login page
 			redirect('auth/login', 'refresh');
 		}

@@ -34,9 +34,9 @@
                 <!-- Logo -->
                 <a href="<?= base_url('/'); ?>" class="logo">
                     <!-- mini logo for sidebar mini 50x50 pixels -->
-                    <span class="logo-mini">ILVA SA</span>
+                    <span class="logo-mini">ILVA SA -- Version: 0.1 -- Branch: Desarrollo</span>
                     <!-- logo for regular state and mobile devices -->
-                    <span class="logo-lg">ILVA SA</span>
+                    <span class="logo-lg">ILVA SA -- Version: 0.1 -- Branch: Desarrollo</span>
                 </a>
                 <!-- Header Navbar: style can be found in header.less -->
                 <nav class="navbar navbar-static-top">
@@ -162,61 +162,66 @@
                                 </li>
 							</ul>
                         </li>
-                            <li>
-                            <a href="#">
-                                <i class="fa fa-barcode"></i> <span>Administrador de Jerarquias</span>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li class="active">
-                                    <a href="<?php echo site_url('jerarquia/add');?>"><i class="fa fa-plus"></i> Agregar Nuevo</a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo site_url('jerarquia/index');?>"><i class="fa fa-list-ul"></i> Ver Listado</a>
-                                </li>
-                            </ul>
-                        </li>
+
                         <li>
-                            <a href="#">
-                                <i class="fa fa-desktop"></i> <span>Usuarios</span>
-                            </a>
+                          <a href="#">
+                            <i class="fa fa-cogs"></i> <span>Configuracion de Usuarios</span>
+                          </a>
                             <ul class="treeview-menu">
-                                <li class="active">
-                                    <a href="<?php echo site_url('auth/create_user');?>"><i class="fa fa-plus"></i> Nuevo Usuario</a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo site_url('auth/index');?>"><i class="fa fa-list-ul"></i> Listado</a>
-                                </li>
+                                  <li>
+                                    <a href="#">
+                                      <i class="fa fa-group"></i> <span>Usuarios</span>
+                                    </a>
+                                  <ul class="treeview-menu">
+                                    <li class="active">
+                                      <a href="<?php echo site_url('auth/create_user');?>"><i class="fa fa-plus"></i> Nuevo Usuario</a>
+                                    </li>
+                                    <li>
+                                      <a href="<?php echo site_url('auth/index');?>"><i class="fa fa-list-ul"></i> Listado</a>
+                                    </li>
+                                  </ul>
+                                  </li>
+                                  <li>
+                                    <a href="#">
+                                      <i class="fa fa-briefcase"></i> <span>Roles</span>
+                                    </a>
+                                  <ul class="treeview-menu">
+                                    <li class="active">
+                                      <a href="<?php echo site_url('roles_group/add');?>"><i class="fa fa-plus"></i> Agregar</a>
+                                    </li>
+                                    <li>
+                                      <a href="<?php echo site_url('roles_group/index');?>"><i class="fa fa-list-ul"></i> Listar</a>
+                                    </li>
+                                  </ul>
+                                  </li>
+                                  <li>
+                                    <a href="#">
+                                      <i class="fa fa-sitemap"></i> <span>Jerarquias</span>
+                                    </a>
+                                  <ul class="treeview-menu">
+                                    <li class="active">
+                                      <a href="<?php echo site_url('jerarquia/add');?>"><i class="fa fa-plus"></i> Agregar Nuevo</a>
+                                    </li>
+                                    <li>
+                                      <a href="<?php echo site_url('jerarquia/index');?>"><i class="fa fa-list-ul"></i> Ver Listado</a>
+                                    </li>
+                                  </ul>
+                                  </li>
+                                  <li>
+                                    <a href="#">
+                                      <i class="fa fa-building-o"></i> <span>Sectores</span>
+                                    </a>
+                                  <ul class="treeview-menu">
+                                    <li class="active">
+                                      <a href="<?php echo site_url('sector_req/add');?>"><i class="fa fa-plus"></i> Agregar</a>
+                                    </li>
+                                    <li>
+                                      <a href="<?php echo site_url('sector_req/index');?>"><i class="fa fa-list-ul"></i> Listar</a>
+                                    </li>
+                                  </ul>
+                                  </li>
                             </ul>
                         </li>
-						<li>
-                            <a href="#">
-                                <i class="fa fa-desktop"></i> <span>Permisos Por Usuario</span>
-                            </a>
-                            <ul class="treeview-menu">
-								<li class="active">
-                                    <a href="<?php echo site_url('roles_group/add');?>"><i class="fa fa-plus"></i> Agregar</a>
-                                </li>
-								<li>
-                                    <a href="<?php echo site_url('roles_group/index');?>"><i class="fa fa-list-ul"></i> Listar</a>
-                                </li>
-							</ul>
-                        </li>
-						<li>
-                            <a href="#">
-                                <i class="fa fa-desktop"></i> <span>Sectores</span>
-                            </a>
-                            <ul class="treeview-menu">
-								<li class="active">
-                                    <a href="<?php echo site_url('sector_req/add');?>"><i class="fa fa-plus"></i> Agregar</a>
-                                </li>
-								<li>
-                                    <a href="<?php echo site_url('sector_req/index');?>"><i class="fa fa-list-ul"></i> Listar</a>
-                                </li>
-							</ul>
-                        </li>
-
-
-
                     </ul>
                 </section>
                 <!-- /.sidebar -->
