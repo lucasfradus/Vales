@@ -84,7 +84,7 @@ $config['Pañolero']		    					= 4;
 |
 */
 
-$config['Pendiente']		    	= 1;
+$config['Pendiente']		    = 1;
 $config['Aprobado']					= 2;
 $config['Rechazado']				= 3;
 

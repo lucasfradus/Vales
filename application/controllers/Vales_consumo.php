@@ -438,7 +438,7 @@ class Vales_consumo extends CI_Controller{
                     'id_estado'     => $this->config->item('PendienteDeAprobacion'),
                     'id_aprobacion' => $this->config->item('Pendiente'),
                 );
-                if($this->Evolucion_vale_model->add_evolucion_vale($evolucion_vale) && $this->Vales_consumo_model->update_vales_consumo($id_vale,$params) && $this->Evolucion_vale_model->add_aprobacion_vale($aprobacion_vale)){
+    if($this->Evolucion_vale_model->add_evolucion_vale($evolucion_vale) && $this->Vales_consumo_model->update_vales_consumo($id_vale,$params) && $this->Evolucion_vale_model->add_aprobacion_vale($aprobacion_vale)){
 
 
       /*

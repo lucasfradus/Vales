@@ -43,12 +43,27 @@ class Generales{
 
         $this->user = $this->CI->ion_auth->user()->row();
         $this->data['sectores'] = $this->CI->Jerarquia_model->get_sector_user($this->user->id);
-
         $this->data['sesion'] = $this->user;
         $this->data['perfil'] = $this->CI->Ion_auth_model->get_users_groups()->row();
-        $this->data['aprobaciones_barra'] =  $this->CI->Vales_consumo_model->get_all_vales_count($this->CI->config->item('Pendiente'),null,$this->data['sectores']);
 
-        $this->data['estado_barra'] = $this->CI->Vales_consumo_model->get_all_vales_count($this->CI->config->item('Aprobado'),$this->CI->config->item('EnProcesoDeArmado'), $this->data['sectores']);
+
+            $aprobaciones_barra = array(
+                'id_aprobacion' => $this->CI->config->item('Pendiente'),
+                'sectores' => $this->data['sectores'],
+            );
+            $estado_barra = array(
+                'id_aprobacion' => $this->CI->config->item('Aprobado'),
+                'sectores' => $this->data['sectores'],
+                'id_estado' => $this->CI->config->item('EnProcesoDeArmado'),
+            );
+
+            $this->data['aprobaciones_barra']       = $this->CI->Vales_consumo_model->get_all_vales_count_array($aprobaciones_barra);
+            $this->data['estado_barra']             = $this->CI->Vales_consumo_model->get_all_vales_count_array($estado_barra);
+
+
+        //$this->data['aprobaciones_barra'] =  $this->CI->Vales_consumo_model->get_all_vales_count($this->CI->config->item('Pendiente'),null,$this->data['sectores']);
+
+        //$this->data['estado_barra'] = $this->CI->Vales_consumo_model->get_all_vales_count($this->CI->config->item('Aprobado'),$this->CI->config->item('EnProcesoDeArmado'), $this->data['sectores']);
 
 
 

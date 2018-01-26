@@ -47,6 +47,9 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </a>
+                    <a href="#" class="sidebar-toggle" onClick="window.print()">
+                      <i class="fa fa-print"></i>
+                      </a>
 
                     <div class="navbar-custom-menu">
                         <ul class="nav navbar-nav">
@@ -298,6 +301,7 @@
         </div>
         <!-- ./wrapper -->
 
+
         <!-- jQuery 2.2.3 -->
         <script src="<?php echo site_url('resources/js/jquery-2.2.3.min.js');?>"></script>
         <!-- Bootstrap 3.3.6 -->
@@ -315,8 +319,13 @@
         <!-- funciones Custom en js -->
         <script src="<?php echo site_url('resources/js/funciones.js');?>"></script>
 
+        <script type="text/javascript" src="<?php echo site_url('resources/js/jquery.tablesorter.js');?>"></script>
 
+        <!-- DataTables -->
+        <link rel="stylesheet" href="<?php echo site_url('resources/datatables.net-bs/css/dataTables.bootstrap.min.css');?>">
 
+        <script src="<?php echo site_url('resources/datatables.net/js/jquery.dataTables.min.js');?>"></script>
+        <script src="<?php echo site_url('resources/datatables.net-bs/js/dataTables.bootstrap.min.js');?>"></script>
 
     </body>
 
