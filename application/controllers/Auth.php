@@ -8,6 +8,7 @@ class Auth extends CI_Controller {
 		$this->load->database();
 		$this->load->library(array('ion_auth','form_validation'));
 		$this->load->helper(array('url','language'));
+		$this->load->model('Notificaciones_user_model');
 
 		$this->form_validation->set_error_delimiters($this->config->item('error_start_delimiter', 'ion_auth'), $this->config->item('error_end_delimiter', 'ion_auth'));
 
@@ -584,8 +585,9 @@ class Auth extends CI_Controller {
 		$user = $this->ion_auth->user($id)->row();
 		$groups=$this->ion_auth->groups()->result_array();
 		$currentGroups = $this->ion_auth->get_users_groups($id)->result();
+		$this->data['currenNotifications'] = $this->Notificaciones_user_model->get_notificaciones_by_user_id($id);
 
-			$data['title'] = '<div align=center><h3>Roles Habilitados por Usuario</h3></div> <hr>';
+		$data['title'] = '<div align=center><h3>Roles Habilitados por Usuario</h3></div> <hr>';
 		$this->data['currentRoles'] = $this->ion_auth->listarRolesPorID($id);
 		$this->data['roles'] = $this->ion_auth->listarRoles();
 		$identity_column = $this->config->item('identity','ion_auth');
@@ -595,8 +597,9 @@ class Auth extends CI_Controller {
 		// validate form input
 		$this->form_validation->set_rules('first_name', $this->lang->line('edit_user_validation_fname_label'), 'required');
 		$this->form_validation->set_rules('last_name', $this->lang->line('edit_user_validation_lname_label'), 'required');
+		$this->form_validation->set_rules('email', 'Email', 'required|valid_email');
 	///	$this->form_validation->set_rules('identity',$this->lang->line('create_user_validation_identity_label'),'required|is_unique['.$tables['users'].'.'.$identity_column.']');
-		$this->form_validation->set_rules('roles', 'Debe seleccionar al menos un rol', 'callback_set_roles');
+		//$this->form_validation->set_rules('roles', 'Debe seleccionar al menos un rol', 'callback_set_roles');
 		if (isset($_POST) && !empty($_POST))
 		{
 			// do we have a valid request?
@@ -617,6 +620,7 @@ class Auth extends CI_Controller {
 				$data = array(
 					'first_name' => $this->input->post('first_name'),
 					'last_name'  => $this->input->post('last_name'),
+					'email' 		 => $this->input->post('email'),
 					'company'    => $this->input->post('company'),
 					'phone'      => $this->input->post('phone'),
 				);
@@ -719,6 +723,14 @@ class Auth extends CI_Controller {
 			'type'  => 'text',
 			'value' => $this->form_validation->set_value('first_name', $user->first_name),
 		);
+		$this->data['email'] = array(
+			'name'  => 'email',
+			'id'    => 'email',
+			'class' => 'form-control',
+			'type'  => 'text',
+			'value' => $this->form_validation->set_value('email', $user->email),
+		);
+
 
 		$this->data['identity'] = array(
 			'name'  => 'identity',

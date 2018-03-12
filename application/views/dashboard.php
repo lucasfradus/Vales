@@ -52,9 +52,28 @@
      </section>
 <?php } ?>
 
-        <div class="box box-success">
+
+          <div class="box box-success">
             <div class="box-header with-border">
-              <h3 class="box-title">Bar Chart</h3>
+              <h3 class="box-title">Vales por Sector</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <div class="box-body">
+              <div class="chart">
+                <canvas id="myChart" style="height:230px"></canvas>
+              </div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+          <div class="box box-success">
+            <div class="box-header with-border">
+              <h3 class="box-title">Vales por Sector</h3>
 
               <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -67,7 +86,13 @@
                 <canvas id="barChart" style="height:230px"></canvas>
               </div>
             </div>
-  </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+
+
+
+
   <section class="content">
      <div class="box box-info">
             <div class="box-header with-border">
@@ -149,16 +174,19 @@
   </section>
 </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.js"></script>
+
 
 <script>
-var ctx = document.getElementById("barChart").getContext('2d');
+var ctx = document.getElementById("myChart").getContext('2d');
 var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange", "frar", "jey"],
         datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
+            label: '# de Vales',
+            data: [12, 19, 3, 5, 2, 3,6, 7],
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',

@@ -1,7 +1,3 @@
-
-
-
-
 <div class="row">
     <div class="col-md-12">
       	<div class="box box-info">
@@ -38,22 +34,19 @@
 							</select>
 						</div>
 					</div>
-					 <div class="col-md-6">
-					 	<label for="id_sector" class="control-label"><span class="text-danger">*</span>Articulo</label>
-                            <div class="form-group">
-										<select name="articulo" class="form-control select2" required onchange="get_un_med(this.value)">
-											<?php
-											foreach($all_productos as $articulo)
-											{
-
-
-												echo '<option value="'.$articulo['id_articulo'].'">'.$articulo['num_articulo'].' | '.$articulo['descripcion1'].' | '.$articulo['descripcion2'].'</option>';
-											}
-											?>
-										</select>
-
-                                </div>
-                    </div>
+					<div class="col-md-6">
+						<label for="id_sector" ><span class="text-danger">*</span>Articulo</label>
+						<div class="form-group">
+						<select name="articulo" class="form-control select2" style="width: 100%" required onchange="get_un_med(this.value)">
+						<?php
+						foreach($all_productos as $articulo)
+						{
+						echo '<option value="'.$articulo['id_articulo'].'">'.$articulo['num_articulo'].' | '.$articulo['descripcion1'].' | '.$articulo['descripcion2'].'</option>';
+						}
+						?>
+						</select>
+						</div>
+					</div>
 
                     <div class="col-md-6">
                     	<label for="cantidad" class="control-label"><span class="text-danger">*</span>Cantidad</label>
@@ -68,13 +61,19 @@
             	<button type="submit" class="btn btn-success">
             		<i class="fa fa-plus"></i> Agregar Articulo
             	</button>
+							<?php if(isset($items)){
+								?>
+											<button class="btn btn-success" id="btn-confirm"><i class="fa fa-check"></i> Cargar Vale</button>
+											<a href="<?php echo site_url('vales_consumo/delete_tmp/'.$vales_consumo_id);?>" class="btn btn-danger"><i class="fa fa-times-circle"></i> Cancelar </a>
+											</button>
+
+
+								<?php
+							}
+							?>
           	</div>
 				</div>
 			</div>
-
-
-
-
 </div>
 
 
@@ -82,20 +81,20 @@
 
 
 			<div class="box-body">
-                <table class="table table-striped">
-                    <tread>
-						<th>Id Articulo</th>
-						<th>Código Articulo</th>
-						<th>Descripción 1</th>
-						<th>Cantidad</th>
-						<th>Acciones</th>
-                    </tread>
+                <table class="table table-bordered table-striped" id="tableArticles" >
+                    <thead>
+											<th>Id Articulo</th>
+											<th>Código Articulo</th>
+											<th>Descripción 1</th>
+											<th>Cantidad</th>
+											<th>Acciones</th>
+                    </thead>
                     <tbody>
-                    	<?php
-                    	if(isset($items)){
-                    		echo form_hidden('corrida', FALSE);
-									echo form_hidden('vales_consumo_id', $vales_consumo_id);
-									foreach($items as $item){
+    	<?php
+    	if(isset($items)){
+    		echo form_hidden('corrida', 2);
+				echo form_hidden('vales_consumo_id', $vales_consumo_id);
+					foreach($items as $item){
 
 												?>
 											<tr id=<?= 'fila'.$item->id_articulo?>>
@@ -110,35 +109,81 @@
                										 </button>
 
 												</th>
-
+											</tr>
 										<?php
 											}
-											?> <tr>
-
-													<div class="box-footer">
-														<a href="<?php echo site_url('vales_consumo/create/'.$vales_consumo_id);?>" class="btn btn-success"><i class="fa fa-check"></i> Cargar Vale</a>
-										            	<a href="<?php echo site_url('vales_consumo/delete_tmp/'.$vales_consumo_id);?>" class="btn btn-danger"><i class="fa fa-times-circle"></i> Cancelar </a>
-										            	</button>
-										          	</div>
-												<?php
-
                     	}else{
-                    		echo form_hidden('corrida', TRUE);
+                    		echo form_hidden('corrida', 1);
                     	}
 									?>
+								</tbody>
+								</table>
 
-
-                    </tbody>
-                </table>
+<?php echo form_close(); ?>
             </div>
 
-          	 <?php echo form_close(); ?>
+
       	</div>
     </div>
 </div>
 
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="mi-modal">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Desea Confirmar la carga del vale?</h4>
+
+      </div>
+			<p class="modal-body" id="myModalLabel">Una vez que el vale este cargado, este no podrá ser editado</p>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" id="modal-btn-si">Si</button>
+        <button type="button" class="btn btn-primary" id="modal-btn-no">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
 
 <script>
+
+var modalConfirm = function(callback){
+
+$("#btn-confirm").on("click", function(){
+	$("#mi-modal").modal('show');
+});
+
+$("#modal-btn-si").on("click", function(){
+	callback(true);
+	$("#mi-modal").modal('hide');
+});
+
+$("#modal-btn-no").on("click", function(){
+	callback(false);
+	$("#mi-modal").modal('hide');
+});
+};
+
+modalConfirm(function(confirm){
+if(confirm){
+	//Acciones si el usuario confirma
+	$(location).attr('href', '<?php echo site_url('vales_consumo/create/'.$vales_consumo_id);?>')
+}else{
+	//Acciones si el usuario no confirma
+	//$("#result").html("NO CONFIRMADO");
+}
+});
+
+
+
+
+
+
+
+
    function borrar(elemento,id_vale) {
    	var id_item = elemento;
    	var id_vale = id_vale;
@@ -214,7 +259,38 @@ function get_un_med(element) {
 </script>
 
 
-<script>
-  $('.select2').select2();
+<script type="text/javascript">
+     $(document).ready(function() {
+
+			     $('.select2').select2();
+
+					 $('#tableArticles').DataTable({
+						 'paging'      : true,
+						 'lengthChange': true,
+						 'searching'   : true,
+						 'ordering'    : true,
+						 'info'        : true,
+						 'autoWidth'   : true,
+						 "language": {
+														 "lengthMenu": "Mostrar _MENU_ Resultados por página",
+														 "zeroRecords": "No se han encontrado resultados",
+														 "info": "Mostrando página _PAGE_ de _PAGES_ | Total de Resultados: _MAX_ ",
+														 "search" : "Buscar",
+														 "infoEmpty": "No se han encontrado resultados",
+														 "paginate": {
+																							"first":      "<<<",
+																							"last":       ">>>",
+																							"next":       ">>",
+																							"previous":   "<<"
+																					},
+														 "infoFiltered": "(filtrado de  _MAX_ total de resultados)"
+												 },
+							"columnDefs": [{
+															"targets": 'nosort',
+															"orderable": false
+													}]
+					 })
+});
+
 
 </script>

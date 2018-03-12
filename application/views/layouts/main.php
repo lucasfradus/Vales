@@ -24,8 +24,6 @@
              folder instead of downloading all of them to reduce the load. -->
         <link rel="stylesheet" href="<?php echo site_url('resources/css/_all-skins.min.css');?>">
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
     </head>
 
     <body class="hold-transition skin-blue sidebar-mini">
@@ -223,6 +221,19 @@
                                     </li>
                                   </ul>
                                   </li>
+                                  <li>
+                                    <a href="#">
+                                      <i class="fa fa-bell"></i> <span>Centro de Notificaciones</span>
+                                    </a>
+                                  <ul class="treeview-menu">
+                                    <li class="active">
+                                      <a href="<?php echo site_url('notificaciones_user/add');?>"><i class="fa fa-plus"></i> Agregar</a>
+                                    </li>
+                                    <li>
+                                      <a href="<?php echo site_url('notificaciones_user/index');?>"><i class="fa fa-list-ul"></i> Listar</a>
+                                    </li>
+                                  </ul>
+                                  </li>
                             </ul>
                         </li>
                     </ul>
@@ -323,9 +334,18 @@
 
         <!-- DataTables -->
         <link rel="stylesheet" href="<?php echo site_url('resources/datatables.net-bs/css/dataTables.bootstrap.min.css');?>">
-
         <script src="<?php echo site_url('resources/datatables.net/js/jquery.dataTables.min.js');?>"></script>
         <script src="<?php echo site_url('resources/datatables.net-bs/js/dataTables.bootstrap.min.js');?>"></script>
+        <!-- Pace Loader -->
+        <script src="<?php echo site_url('resources/js/pace/pace.js');?>"></script>
+        <link rel="stylesheet" href="<?php echo site_url('resources/js/pace/themes/red/pace-theme-flash.css');?>">
+        <!-- Select2 -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
+
+
+
 
     </body>
 

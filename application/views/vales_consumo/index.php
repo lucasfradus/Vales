@@ -13,15 +13,15 @@
                 <table class="table table-bordered table-striped" id="example1" >
                     <thead>
                         <tr>
-    						<th>Id Vale</th>
-    						<th>Requeridor</th>
-    						<th>Sector Aprobador</th>
-                            <th>Fecha Creación</th>
-                            <th>Estado Aprobacion</th>
-                            <th>Estado de Entrega</th>
-    						<th class="nosort">Estado de Preparación</th>
-                            <th>%</th>
-    						<th class="nosort">Acciones</th>
+                          <th>Id Vale</th>
+                          <th>Requeridor</th>
+                          <th>Sector Aprobador</th>
+                          <th>Fecha Creación</th>
+                          <th>Estado Aprobacion</th>
+                          <th>Estado de Entrega</th>
+                          <th class="nosort">Estado de Preparación</th>
+                          <th>%</th>
+                          <th class="nosort">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -37,20 +37,7 @@
                             $class = 'progress-bar progress-bar-warning';
                         }
 
-                        if($v['id_aprobacion'] == $this->config->item('Pendiente')){
-                            $link =  site_url('vales_consumo/edit/'.$v['id_vale']);
-                            $disabled = '';
-                            $tooltip = 'Editar';
-                        }else{
-                            $link =  '#';
-                            $disabled = 'disabled';
-                            $tooltip= 'Solo se pueden modificar los vales con estado pendiente';
-                        }
-                        if($v['id_requeridor'] != $sesion->id){
-                            $link =  '#';
-                            $disabled = 'disabled';
-                            $tooltip  .= '| Los vales solo pueden ser modificados por sus dueños.';
-                        }
+
 
                         ?>
 
@@ -71,9 +58,6 @@
                                 <div class="btn-group">
                                     <a href="<?php echo site_url('vales_consumo/view/'.$v['id_vale']); ?>" class="btn btn-xs btn-info" data-toggle="tooltip" title="Ver">
                                     <i class="glyphicon glyphicon-search"></i>
-                                    </a>
-                                    <a href="<?=$link?>" class="btn btn-xs btn-warning" data-toggle="tooltip" title="<?= $tooltip ?>" <?=$disabled?>>
-                                    <i class="glyphicon glyphicon-pencil"></i>
                                     </a>
 
                                 </div>

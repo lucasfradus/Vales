@@ -7,17 +7,20 @@
 
             </div>
             <div class="box-body">
-                <table class="table table-striped" id="table">
-                    <tr>
-                      <th>Id Vale</th>
-                      <th>Requeridor</th>
-                      <th>Sector Aprobador</th>
-                      <th>Fecha Creación</th>
-                      <th>Estado de Entrega </th>
-                      <th>Estado Armado</th>
-                      <th>%</th>
-                      <th>Acciones</th>
-                    </tr>
+                <table class="table table-striped" id="tableArmado">
+                    <thead>
+                        <tr>
+                          <th>Id Vale</th>
+                          <th>Requeridor</th>
+                          <th>Sector Aprobador</th>
+                          <th>Fecha Creación</th>
+                          <th>Estado de Entrega </th>
+                          <th class="nosort">Estado Armado</th>
+                          <th>%</th>
+                          <th class="nosort">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                     <?php
 
                     foreach($vales_consumo as $v){
@@ -92,9 +95,41 @@
 
 
                     <?php } ?>
+                  </tbody>
                 </table>
 
             </div>
         </div>
     </div>
 </div>
+<script>
+
+  $(function () {
+    $('#tableArmado').DataTable({
+      'paging'      : true,
+      'lengthChange': true,
+      'searching'   : true,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : true,
+      "language": {
+                      "lengthMenu": "Mostrar _MENU_ Resultados por página",
+                      "zeroRecords": "No se han encontrado resultados",
+                      "info": "Mostrando página _PAGE_ de _PAGES_ | Total de Resultados: _MAX_ ",
+                      "search" : "Buscar",
+                      "infoEmpty": "No se han encontrado resultados",
+                      "paginate": {
+                                       "first":      "<<<",
+                                       "last":       ">>>",
+                                       "next":       ">>",
+                                       "previous":   "<<"
+                                   },
+                      "infoFiltered": "(filtrado de  _MAX_ total de resultados)"
+                  },
+       "columnDefs": [{
+                       "targets": 'nosort',
+                       "orderable": false
+                   }]
+    })
+  })
+</script>

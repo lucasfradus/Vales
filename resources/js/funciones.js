@@ -54,34 +54,6 @@ function update_status(id_vale){
     });
 }
 
-function borrar_item_preparacion(id_vale,id_item,cantidad){
-
- var id_item = id_item;
- var id_vale = id_vale;
- var cantidad = cantidad;
-
-         console.log("vale de consumo: ", id_vale);
-         console.log("item a borrar: ", id_item);
-
-
-               $.ajax({
-             type: "POST",
-             url: base_url() + "vales_consumo/remove_item_vale",
-              data : {id_vale:id_vale, id_articulo:id_item, cantidad:cantidad},
-
-             success: function(data) {
-             console.log("item borrado: ", data);
-               //si esta todo ok, finalmente remuevo el item de la tabla
-               //$('#fila'+id_item).fadeOut(600, function(){ $(this).remove();});
-               $('#fila'+id_item).fadeOut(1500, function(){ $(this).remove();});
-               $('#tabla_1 > tbody:last-child').append(data).fadeIn(600);
-             },
-             error: function(data){
-                console.log("item no borrado");
-             }
-         });
-   }
-
    function buscar_rol(){
       console.log("llegue");
    }

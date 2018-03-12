@@ -34,7 +34,7 @@ class Sector_req extends CI_Controller{
      */
     function index()
     {
-        $this->data['sector_req'] = $this->Sector_req_model->get_all_sector_req();
+        $this->data['sector_req'] = $this->Sector_req_model->get_all_sector_req_index();
 
         $this->data['_view'] = 'sector_req/index';
         $this->load->view('layouts/main',$this->data);
@@ -50,6 +50,7 @@ class Sector_req extends CI_Controller{
             $params = array(
 				'nombre_sector' => $this->input->post('nombre_sector'),
                 'FASE' => $this->input->post('fase'),
+                'status_sector' => $this->config->item('Activo')
             );
 
             $sector_req_id = $this->Sector_req_model->add_sector_req($params);
@@ -102,7 +103,16 @@ class Sector_req extends CI_Controller{
         // check if the sector_req exists before trying to delete it
         if(isset($sector_req['id_sector_req']))
         {
-            $this->Sector_req_model->delete_sector_req($id_sector_req);
+          if($sector_req['status_sector'] == $this->config->item('Inactivo')){
+              $array = array(
+                  'status_sector' => $this->config->item('Activo')
+              );
+          }else{
+              $array = array(
+                  'status_sector' => $this->config->item('Inactivo')
+              );
+          }
+            $this->Sector_req_model->update_sector_req($id_sector_req,$array);
             redirect('sector_req/index');
         }
         else

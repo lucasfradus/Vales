@@ -14,6 +14,7 @@ class Generales{
         $this->CI->load->model('Vales_consumo_model');
         $this->CI->load->model('Ion_auth_model');
         $this->CI->load->helper('url');
+        $this->CI->load->library('email');
 
 
       }
@@ -70,6 +71,31 @@ class Generales{
       return $this->data;
     }
 
+
+    public function Notify_owner($datos_vale, $id_vale, $sector){
+        $data['datos_vale'] = $datos_vale;
+        $data['id_vale'] = $id_vale;
+        $data['sector'] = $sector;
+        $data['user'] = $this->CI->ion_auth->user()->row();
+        $message = $this->CI->load->view('email/new', $data, TRUE);
+        log_message('error', 'llegue a la funcion notifica');
+        $this->CI->email->from('lucas.fradusco@gmail.com.ar', 'Sistema de Vales');
+        $this->CI->email->to($data['user']->email);
+        $this->CI->email->set_mailtype("html");
+        $this->CI->email->subject('Nuevo Vale de Consumo #'. $id_vale);
+        $this->CI->email->message($message);
+
+        if($this->CI->email->send()){
+          log_message('error', 'se mando mail');
+        }else{
+         log_message('error', 'no se mando mail');
+        }
+
+    }
+
+    public function Notify_responsible($user, $datos_vale, $id_vale){
+
+    }
 
     public function Send_mails($args){
 

@@ -106,9 +106,9 @@ $config['Retirado']						     = 5;
 
 /*
 |--------------------------------------------------------------------------
-| Custom Config: Articulos Activos o dados de baja
+| Custom Config: Articulos/Sectores Activos o dados de baja
 |--------------------------------------------------------------------------
-| Acá defino la constante que uso en la base de datos para marrcar los articulos activos o inactivos.
+| Acá defino la constante que uso en la base de datos para marrcar los articulos o Sectores activos o inactivos.
 |
 */
 
@@ -138,14 +138,43 @@ $config['templates'] = 'email/';
 | Acá defino la constante que uso para definir la plantilla que elijo en determinados eventos.
 |
 */
-
-
-
 $config['Nuevo_Vale']			 = 'new.tpl.php';
 
 
+/*
+|--------------------------------------------------------------------------
+| Custom Config: Notificaciones x mail
+|--------------------------------------------------------------------------
+| Acá defino a quien se le mandan los mails.
+|
+*/
+
+//$config['Mail_Aprobacion']			 = array($config['Aprobador'], $config['Pañolero']);
+
+$config['Mail_Aprobacion']			 = 99;
+
+/*
+|--------------------------------------------------------------------------
+| Custom Config: Eventos Notificables
+|--------------------------------------------------------------------------
+| Acá defino sobre que eventos se van a construir las notificaciones via mail
+|
+*/
+$config['Nuevo_Vale']			                   = 'vale_nuevo';
+$config['Aprobacion_Vale']			             = 'vale_aprobado';
+$config['Listo_Para_Retirar_Vale']			     = 'vale_listo';
+$config['Retirado_Vale']          			     = 'vale_retirado';
 
 
+/*
+|--------------------------------------------------------------------------
+| Custom Config: Aglunas Rutas
+|--------------------------------------------------------------------------
+| Acá defino algunas rutas estaticas que voy a pasar como parametro de tipo NEXT a algunas funciones.
+|
+|
+*/
 
+$config['Ruta_notificaciones']          			     = 'notificaciones_user/index';
 
 ?>

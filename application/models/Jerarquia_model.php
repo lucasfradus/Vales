@@ -99,8 +99,29 @@ class Jerarquia_model extends CI_Model
 
     function get_sector_user($id_user){
         $this->db->join('sector_req', 'id_sector_req = id_sector_jerarquia');
+        $this->db->where('status_sector', $this->config->item('Activo'));
         return $this->db->get_where('jerarquias',array('id_user_padre'=>$id_user))->result();
     }
+
+
+/*
+*   Esta Funcion devuelve un objeto con la informacion del usuario que es Aprobador/Pañolero de un determinado sector
+*
+*
+*/
+    function get_responsible_by_sector($id_sector){
+
+        $this->db->join('users ', 'users.id = id_user_padre');
+        $this->db->join('users_groups  ','users_groups.user_id = users.id');
+        $this->db->join('groups', 'groups.id = users_groups.group_id' );
+        $this->db->join('sector_req','id_sector_req = id_sector_jerarquia');
+        $this->db->where('id_sector_jerarquia',$id_sector);
+        //
+        $this->db->where_in('groups.id', $this->config->item('Mail_Aprobacion'));
+        return $this->db->get('jerarquias')->result();
+
+    }
+
 
 
 function query($query){

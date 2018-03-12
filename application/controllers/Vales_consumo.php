@@ -22,6 +22,8 @@ class Vales_consumo extends CI_Controller{
         $this->load->helper('date');
         $this->load->library('form_validation');
         $this->load->model('Jerarquia_model');
+        $this->load->model('Notificaciones_user_model');
+        $this->load->library('email');
 
 
         $this->user = $this->ion_auth->user()->row();
@@ -47,6 +49,7 @@ class Vales_consumo extends CI_Controller{
 */
 
 
+
     /*
      * Listado de Vales, segun el perfil que tenga el usuario, voy a traer los vales:
      *  Requeridor : solo traigo sus Vales.
@@ -69,6 +72,15 @@ class Vales_consumo extends CI_Controller{
             $this->data['_view'] = 'vales_consumo/index';
             $this->load->view('layouts/main',$this->data);
     }
+
+
+
+
+function testing(){
+    $result = $this->input->post('search_data');
+    echo print_r($result);
+}
+
 
     function preparar($id_vale =  null){
       $group = array($this->config->item('Aprobador'), $this->config->item('Pañolero'));
@@ -93,7 +105,7 @@ class Vales_consumo extends CI_Controller{
 
                             if($this->Articulo_model->update_articulo_por_vale($update_articulo_por_vale,$this->config->item('Cargado'))){
                                 $this->session->set_flashdata('success','Item Agregado Flama');
-                         redirect('vales_consumo/preparar/'.$id_vale);
+                                redirect('vales_consumo/preparar/'.$id_vale);
                             }
 
 
@@ -136,14 +148,13 @@ class Vales_consumo extends CI_Controller{
                                 );
                            $descripcion = $this->Articulo_model->get_articulo($this->input->post('id_articulo'));
                             if($this->Articulo_model->update_articulo_por_vale($update_articulo_por_vale,$this->config->item('Cargado'))){
-
                                 $html = '<tr id=fila'.$this->input->post('num_articulo').'>';
                                         $html .= '<th>'.$this->input->post('num_articulo').'</th>';
                                          $html .= '<th>'.$descripcion['descripcion1'].'</th>';
                                          $html .= '<th>'.$this->input->post('cant_max').'</th>';
                                          $html .= '<th>'.$this->input->post('cantidad').'</th>';
                                           $html .= '<th>
-                                            <button onclick="borrar('.$this->input->post('id_vale').','.$this->input->post('id_articulo').','.$this->input->post('cant_max').')" class="btn btn-xs btn-danger">
+                                            <button onclick="borrar_item_preparacion('.$this->input->post('id_vale').','.$this->input->post('id_articulo').','.$this->input->post('cant_max').')" class="btn btn-xs btn-danger">
                                                          <i class="glyphicon glyphicon-remove"></i>
                                                      </button>
                                           </th>';
@@ -165,7 +176,7 @@ class Vales_consumo extends CI_Controller{
                         $descripcion = $this->Articulo_model->get_articulo($this->input->post('id_articulo'));
                             if($this->Articulo_model->update_articulo_por_vale($update_articulo_por_vale,$this->config->item('Pendiente'))){
 
-                                                    $html = '<tr>';
+                                                    $html = '<tr id=fila'.$descripcion['num_articulo'].'>';
                                                     $html .= '<th>'.$descripcion['num_articulo'].'</th>';
                                                     $html .= '<th>'.$descripcion['descripcion1'].'</th>';
                                                     $html .= '<th>'.$this->input->post('cantidad').'</th>';
@@ -357,61 +368,138 @@ class Vales_consumo extends CI_Controller{
             }
     }
 
+    function add(){
+        $this->data['all_productos'] = $this->Articulo_model->get_all_articulos($params = array('status' => $this->config->item('Activo')));
+        $this->data['all_sector_req'] = $this->Jerarquia_model->get_sector_user($this->user->id);
+        $this->data['_view'] = 'vales_consumo/new';
+        $this->load->view('layouts/main',$this->data);
+    }
+
+
+    function new_create(){
+        $datos_user = $this->input->post('datos_user');
+        $total_items = $this->input->post('total_items');
+        $sector = $this->input->post('sector');
+
+    $params = array(
+     'id_requeridor'                 => $this->user->id,
+     'id_sector'                     => $datos_user['id_sector'],
+     'fecha_creado'                  => time(),
+     'id_estado'                     => $this->config->item('PendienteDeAprobacion'),
+     'id_aprobacion'                 => $this->config->item('Pendiente'),
+    );
+
+     $vales_consumo_id = $this->Vales_consumo_model->add_vales_consumo($params);
+
+if($vales_consumo_id){
+     $evolucion_vale = array(
+         'id_vale_evolucion'          => $vales_consumo_id,
+         'id_estado'                  => $this->config->item('PendienteDeAprobacion'),
+         'fecha'                      => time(),
+         'id_responsable'             => $this->user->id,
+     );
+     $aprobacion_vale = array(
+             'id_vale_aprobacion'             => $vales_consumo_id,
+             'id_estado_aprobacion'           => $this->config->item('Pendiente'),
+             'fecha_aprobacion'               => time(),
+             'id_responsable_aprobacion'      => $this->user->id,
+     );
+    $this->Evolucion_vale_model->add_aprobacion_vale($aprobacion_vale);
+      $this->Evolucion_vale_model->add_evolucion_vale($evolucion_vale);
+      foreach ($total_items as $items ) {
+          $articulos_por_vale = array(
+                  'id_vale_articulos'          => $vales_consumo_id,
+                  'id_articulo_por_vale'       => $items['id_item'],
+                  'cantidad'                   => $items['cantidad'],
+                  'estado_entrega_item'        => $this->config->item('Pendiente'),
+          );
+          $this->Articulo_model->add_articulo_por_vale($articulos_por_vale);
+
+      }
+      //sleep(1);
+      /*
+      * Aca reviso si el usuario quiere ser notificado o no, y le envio un mail.
+      */
+      if($this->Notificaciones_user_model->get_notifications_settings($this->user->id, $this->config->item('Nuevo_Vale'))){
+          $this->generales->Notify_owner($total_items, $vales_consumo_id, $sector);
+      }
+
+      if(empty($this->generales->Notify_responsible($total_items, $vales_consumo_id, $sector))){
+          $this->session->set_flashdata('warning','Vale Creado correctamente! ID del Vale: '.$vales_consumo_id.'. El sector '.$sector.' no tiene usuarios cargados para habilitar el vale.');
+      }else{
+          $this->session->set_flashdata('success','Vale Creado correctamente! ID del Vale: '.$vales_consumo_id);
+      }
+
+      echo $vales_consumo_id;
+    }else{
+         $this->session->set_flashdata('danger','Ha ocurrido un error. Intente nuevamente.');
+        echo false;
+
+    }
+}
+function test(){
+    $result = $this->Notificaciones_user_model->get_notifications_settings($this->user->id, $this->config->item('Nuevo_Vale'));
+    print_r($result);
+}
+
     /*
      * Adding a new vales_consumo
      */
-    function add(){
-        if($this->ion_auth->RolCheck($this->config->item('NuevoVale'))){
-
-        $this->form_validation->set_rules('cantidad','Cantidad','required');
-
-        if($this->form_validation->run()){
-            if($this->input->post('corrida')){
-
-                 $params = array(
-                'id_requeridor' => $this->user->id,
-                'id_sector' => $this->input->post('id_sector'),
-                'fecha_creado' => time(),
-                'id_estado' => $this->config->item('EnProcesoDeCarga'),
-            );
-
-                $vales_consumo_id = $this->Vales_consumo_model->add_vales_consumo($params);
-                $evolucion_vale = array(
-                    'id_vale_evolucion'          => $vales_consumo_id,
-                    'id_estado'                  => $this->config->item('EnProcesoDeCarga'),
-                    'fecha'                      => time(),
-                    'id_responsable'            => $this->user->id,
-            );
-                 $this->Evolucion_vale_model->add_evolucion_vale($evolucion_vale);
-
-
-            }else{
-                $vales_consumo_id = $this->input->post('vales_consumo_id');
-                }
-
-            $articulos_por_vale = array(
-                    'id_vale_articulos'       => $vales_consumo_id,
-                    'id_articulo_por_vale'   => $this->input->post('articulo'),
-                    'cantidad'      => $this->input->post('cantidad'),
-                    'estado_entrega_item' => $this->config->item('Pendiente'),
-            );
-             //una vez que ya generé el vale deshabilito algunos campos para que no hagan lio
-            $this->data['disabled'] = 'disabled';
-
-            $this->Articulo_model->add_articulo_por_vale($articulos_por_vale);
-
-                $this->data['items'] = $this->Articulo_model->get_articulo_por_vale($vales_consumo_id);
-                $this->data['vales_consumo_id'] = $vales_consumo_id;
-
-        }
-
-                $this->data['all_productos'] = $this->Articulo_model->get_all_articulos($params = array('status' => $this->config->item('Activo')));
-                $this->data['all_sector_req'] = $this->Jerarquia_model->get_sector_user($this->user->id);
-                $this->data['_view'] = 'vales_consumo/add';
-                $this->load->view('layouts/main',$this->data);
-
-        }
-    }
+    // function add(){
+    //     if($this->ion_auth->RolCheck($this->config->item('NuevoVale'))){
+    //
+    //     $this->form_validation->set_rules('cantidad','Cantidad','required');
+    //
+    //     if($this->form_validation->run()){
+    //         if($this->input->post('corrida')==1){
+    //
+    //              $params = array(
+    //             'id_requeridor'                 => $this->user->id,
+    //             'id_sector'                     => $this->input->post('id_sector'),
+    //             'fecha_creado'                  => time(),
+    //             'id_estado'                     => $this->config->item('EnProcesoDeCarga'),
+    //         );
+    //
+    //             $vales_consumo_id = $this->Vales_consumo_model->add_vales_consumo($params);
+    //
+    //
+    //
+    //             $evolucion_vale = array(
+    //                 'id_vale_evolucion'          => $vales_consumo_id,
+    //                 'id_estado'                  => $this->config->item('EnProcesoDeCarga'),
+    //                 'fecha'                      => time(),
+    //                 'id_responsable'             => $this->user->id,
+    //         );
+    //              $this->Evolucion_vale_model->add_evolucion_vale($evolucion_vale);
+    //
+    //
+    //         }else{
+    //             $vales_consumo_id = $this->input->post('vales_consumo_id');
+    //             }
+    //
+    //         $articulos_por_vale = array(
+    //                 'id_vale_articulos'          => $vales_consumo_id,
+    //                 'id_articulo_por_vale'       => $this->input->post('articulo'),
+    //                 'cantidad'                   => $this->input->post('cantidad'),
+    //                 'estado_entrega_item'        => $this->config->item('Pendiente'),
+    //         );
+    //          //una vez que ya generé el vale deshabilito algunos campos para que no hagan lio
+    //         $this->data['disabled'] = 'disabled';
+    //
+    //         $this->Articulo_model->add_articulo_por_vale($articulos_por_vale);
+    //
+    //             $this->data['items'] = $this->Articulo_model->get_articulo_por_vale($vales_consumo_id);
+    //             $this->data['vales_consumo_id'] = $vales_consumo_id;
+    //
+    //     }
+    //
+    //             $this->data['all_productos'] = $this->Articulo_model->get_all_articulos($params = array('status' => $this->config->item('Activo')));
+    //             $this->data['all_sector_req'] = $this->Jerarquia_model->get_sector_user($this->user->id);
+    //             $this->data['_view'] = 'vales_consumo/add';
+    //             $this->load->view('layouts/main',$this->data);
+    //
+    //     }
+    // }
 
       /*
         *   Cargo el vale que genero el usuario

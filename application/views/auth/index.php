@@ -14,16 +14,20 @@
 <div class="row well">
 <div class="container" >
 
-<table class="table table-striped">
-	<tr>
-		<th><?php echo lang('index_fname_th');?></th>
-    	<th>Nombre de Usuario</th>
-		<th><?php echo lang('index_email_th');?></th>
-        <th>Ultimo Login</th>
-		<th><?php echo lang('index_groups_th');?></th>
-		<th><?php echo lang('index_status_th');?></th>
-		<th><?php echo lang('index_action_th');?></th>
-	</tr>
+            <table class="table table-striped" id="tableUsers">
+    <thead>
+      <tr>
+          <th><?php echo lang('index_fname_th');?></th>
+          <th>Nombre de Usuario</th>
+          <th><?php echo lang('index_email_th');?></th>
+          <th>Ultimo Login</th>
+          <th><?php echo lang('index_groups_th');?></th>
+          <th><?php echo lang('index_status_th');?></th>
+          <th class="nosort"><?php echo lang('index_action_th');?></th>
+      </tr>
+    </thead>
+    <tbody>
+
 	<?php foreach ($users as $usuario):?>
 		<tr>
             <td><?php echo htmlspecialchars($usuario->first_name.', '.$usuario->last_name,ENT_QUOTES,'UTF-8');?></td>
@@ -44,5 +48,37 @@
 			<td><a href="<?php echo site_url('auth/edit_user/'.$usuario->id); ?>" class="btn btn-info btn-xs"><span class="fa fa-pencil"></span> Editar</a> </td>
 		</tr>
 	<?php endforeach;?>
+    </tbody>
 </table>
 </div>
+<script>
+
+  $(function () {
+    $('#tableUsers').DataTable({
+      'paging'      : true,
+      'lengthChange': true,
+      'searching'   : true,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : true,
+      "language": {
+                      "lengthMenu": "Mostrar _MENU_ Resultados por página",
+                      "zeroRecords": "No se han encontrado resultados",
+                      "info": "Mostrando página _PAGE_ de _PAGES_ | Total de Resultados: _MAX_ ",
+                      "search" : "Buscar",
+                      "infoEmpty": "No se han encontrado resultados",
+                      "paginate": {
+                                       "first":      "<<<",
+                                       "last":       ">>>",
+                                       "next":       ">>",
+                                       "previous":   "<<"
+                                   },
+                      "infoFiltered": "(filtrado de  _MAX_ total de resultados)"
+                  },
+       "columnDefs": [{
+                       "targets": 'nosort',
+                       "orderable": false
+                   }]
+    })
+  })
+</script>
