@@ -24,8 +24,6 @@
              folder instead of downloading all of them to reduce the load. -->
         <link rel="stylesheet" href="<?php echo site_url('resources/css/_all-skins.min.css');?>">
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
     </head>
 
     <body class="hold-transition skin-blue sidebar-mini">
@@ -34,9 +32,9 @@
                 <!-- Logo -->
                 <a href="<?= base_url('/'); ?>" class="logo">
                     <!-- mini logo for sidebar mini 50x50 pixels -->
-                    <span class="logo-mini">ILVA SA</span>
+                    <span class="logo-mini">ILVA SA -- Version: 0.1 -- Branch: Desarrollo</span>
                     <!-- logo for regular state and mobile devices -->
-                    <span class="logo-lg">ILVA SA</span>
+                    <span class="logo-lg">ILVA SA -- Version: 0.1 -- Branch: Desarrollo</span>
                 </a>
                 <!-- Header Navbar: style can be found in header.less -->
                 <nav class="navbar navbar-static-top">
@@ -47,6 +45,9 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </a>
+                    <a href="#" class="sidebar-toggle" onClick="window.print()">
+                      <i class="fa fa-print"></i>
+                      </a>
 
                     <div class="navbar-custom-menu">
                         <ul class="nav navbar-nav">
@@ -162,61 +163,79 @@
                                 </li>
 							</ul>
                         </li>
-                            <li>
-                            <a href="#">
-                                <i class="fa fa-barcode"></i> <span>Administrador de Jerarquias</span>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li class="active">
-                                    <a href="<?php echo site_url('jerarquia/add');?>"><i class="fa fa-plus"></i> Agregar Nuevo</a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo site_url('jerarquia/index');?>"><i class="fa fa-list-ul"></i> Ver Listado</a>
-                                </li>
-                            </ul>
-                        </li>
+
                         <li>
-                            <a href="#">
-                                <i class="fa fa-desktop"></i> <span>Usuarios</span>
-                            </a>
+                          <a href="#">
+                            <i class="fa fa-cogs"></i> <span>Configuracion de Usuarios</span>
+                          </a>
                             <ul class="treeview-menu">
-                                <li class="active">
-                                    <a href="<?php echo site_url('auth/create_user');?>"><i class="fa fa-plus"></i> Nuevo Usuario</a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo site_url('auth/index');?>"><i class="fa fa-list-ul"></i> Listado</a>
-                                </li>
+                                  <li>
+                                    <a href="#">
+                                      <i class="fa fa-group"></i> <span>Usuarios</span>
+                                    </a>
+                                  <ul class="treeview-menu">
+                                    <li class="active">
+                                      <a href="<?php echo site_url('auth/create_user');?>"><i class="fa fa-plus"></i> Nuevo Usuario</a>
+                                    </li>
+                                    <li>
+                                      <a href="<?php echo site_url('auth/index');?>"><i class="fa fa-list-ul"></i> Listado</a>
+                                    </li>
+                                  </ul>
+                                  </li>
+                                  <li>
+                                    <a href="#">
+                                      <i class="fa fa-briefcase"></i> <span>Roles</span>
+                                    </a>
+                                  <ul class="treeview-menu">
+                                    <li class="active">
+                                      <a href="<?php echo site_url('roles_group/add');?>"><i class="fa fa-plus"></i> Agregar</a>
+                                    </li>
+                                    <li>
+                                      <a href="<?php echo site_url('roles_group/index');?>"><i class="fa fa-list-ul"></i> Listar</a>
+                                    </li>
+                                  </ul>
+                                  </li>
+                                  <li>
+                                    <a href="#">
+                                      <i class="fa fa-sitemap"></i> <span>Jerarquias</span>
+                                    </a>
+                                  <ul class="treeview-menu">
+                                    <li class="active">
+                                      <a href="<?php echo site_url('jerarquia/add');?>"><i class="fa fa-plus"></i> Agregar Nuevo</a>
+                                    </li>
+                                    <li>
+                                      <a href="<?php echo site_url('jerarquia/index');?>"><i class="fa fa-list-ul"></i> Ver Listado</a>
+                                    </li>
+                                  </ul>
+                                  </li>
+                                  <li>
+                                    <a href="#">
+                                      <i class="fa fa-building-o"></i> <span>Sectores</span>
+                                    </a>
+                                  <ul class="treeview-menu">
+                                    <li class="active">
+                                      <a href="<?php echo site_url('sector_req/add');?>"><i class="fa fa-plus"></i> Agregar</a>
+                                    </li>
+                                    <li>
+                                      <a href="<?php echo site_url('sector_req/index');?>"><i class="fa fa-list-ul"></i> Listar</a>
+                                    </li>
+                                  </ul>
+                                  </li>
+                                  <li>
+                                    <a href="#">
+                                      <i class="fa fa-bell"></i> <span>Centro de Notificaciones</span>
+                                    </a>
+                                  <ul class="treeview-menu">
+                                    <li class="active">
+                                      <a href="<?php echo site_url('notificaciones_user/add');?>"><i class="fa fa-plus"></i> Agregar</a>
+                                    </li>
+                                    <li>
+                                      <a href="<?php echo site_url('notificaciones_user/index');?>"><i class="fa fa-list-ul"></i> Listar</a>
+                                    </li>
+                                  </ul>
+                                  </li>
                             </ul>
                         </li>
-						<li>
-                            <a href="#">
-                                <i class="fa fa-desktop"></i> <span>Permisos Por Usuario</span>
-                            </a>
-                            <ul class="treeview-menu">
-								<li class="active">
-                                    <a href="<?php echo site_url('roles_group/add');?>"><i class="fa fa-plus"></i> Agregar</a>
-                                </li>
-								<li>
-                                    <a href="<?php echo site_url('roles_group/index');?>"><i class="fa fa-list-ul"></i> Listar</a>
-                                </li>
-							</ul>
-                        </li>
-						<li>
-                            <a href="#">
-                                <i class="fa fa-desktop"></i> <span>Sectores</span>
-                            </a>
-                            <ul class="treeview-menu">
-								<li class="active">
-                                    <a href="<?php echo site_url('sector_req/add');?>"><i class="fa fa-plus"></i> Agregar</a>
-                                </li>
-								<li>
-                                    <a href="<?php echo site_url('sector_req/index');?>"><i class="fa fa-list-ul"></i> Listar</a>
-                                </li>
-							</ul>
-                        </li>
-
-
-
                     </ul>
                 </section>
                 <!-- /.sidebar -->
@@ -293,6 +312,7 @@
         </div>
         <!-- ./wrapper -->
 
+
         <!-- jQuery 2.2.3 -->
         <script src="<?php echo site_url('resources/js/jquery-2.2.3.min.js');?>"></script>
         <!-- Bootstrap 3.3.6 -->
@@ -309,6 +329,20 @@
         <script src="<?php echo site_url('resources/js/global.js');?>"></script>
         <!-- funciones Custom en js -->
         <script src="<?php echo site_url('resources/js/funciones.js');?>"></script>
+
+        <script type="text/javascript" src="<?php echo site_url('resources/js/jquery.tablesorter.js');?>"></script>
+
+        <!-- DataTables -->
+        <link rel="stylesheet" href="<?php echo site_url('resources/datatables.net-bs/css/dataTables.bootstrap.min.css');?>">
+        <script src="<?php echo site_url('resources/datatables.net/js/jquery.dataTables.min.js');?>"></script>
+        <script src="<?php echo site_url('resources/datatables.net-bs/js/dataTables.bootstrap.min.js');?>"></script>
+        <!-- Pace Loader -->
+        <script src="<?php echo site_url('resources/js/pace/pace.js');?>"></script>
+        <link rel="stylesheet" href="<?php echo site_url('resources/js/pace/themes/red/pace-theme-flash.css');?>">
+        <!-- Select2 -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
 
 
 

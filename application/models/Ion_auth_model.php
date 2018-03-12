@@ -388,13 +388,13 @@ class Ion_auth_model extends CI_Model
 
  		$buffer = '';
         $buffer_valid = false;
-
-        if (function_exists('mcrypt_create_iv') && !defined('PHALANGER')) {
-            $buffer = mcrypt_create_iv($raw_salt_len, MCRYPT_DEV_URANDOM);
-            if ($buffer) {
-                $buffer_valid = true;
-            }
-        }
+				//
+        // if (function_exists('mcrypt_create_iv') && !defined('PHALANGER')) {
+        //     $buffer = mcrypt_create_iv($raw_salt_len, MCRYPT_DEV_URANDOM);
+        //     if ($buffer) {
+        //         $buffer_valid = true;
+        //     }
+        // }
 
         if (!$buffer_valid && function_exists('openssl_random_pseudo_bytes')) {
             $buffer = openssl_random_pseudo_bytes($raw_salt_len);
@@ -547,9 +547,22 @@ class Ion_auth_model extends CI_Model
 		$return = $this->db->affected_rows() == 1;
 		if ($return)
 			$this->set_message('deactivate_successful');
-		else
+		else{
 			$this->set_error('deactivate_unsuccessful');
-
+		}
+		/*
+		* Cuando desactivamos el usuario, tambien le seteamos las notificaciones en off
+		*
+		*/
+			$this->load->model('Notificaciones_user_model');
+				$notificaciones = array(
+					'vale_nuevo' => 0,
+					'vale_aprobado' => 0,
+					'vale_listo' => 0,
+					'vale_retirado' => 0,
+					'user_id' => $id,
+				);
+			$notificaciones_user_id = $this->Notificaciones_user_model->add_notificaciones_user($notificaciones);
 		return $return;
 	}
 
@@ -946,9 +959,18 @@ class Ion_auth_model extends CI_Model
 		/*
 		| Acá Registro las jerarquias que fui recibiendo, si viene vacio(no deberia)
 		| cargo la jerarquia x default
-		|
+		|	Tambien registro los seteos para las notificaciones. por defaulte se notificia todo
 		*/
 
+		$this->load->model('Notificaciones_user_model');
+			$notificaciones = array(
+				'vale_nuevo' => 1,
+				'vale_aprobado' => 1,
+				'vale_listo' => 1,
+				'vale_retirado' => 1,
+				'user_id' => $id,
+			);
+		$notificaciones_user_id = $this->Notificaciones_user_model->add_notificaciones_user($notificaciones);
 
 		$this->load->model('Jerarquia_model');
 		if (!empty($sectores))

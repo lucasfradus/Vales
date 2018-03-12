@@ -3,27 +3,11 @@
         <div class="box">
             <div class="box-header">
                 <h2 class="box-title">Articulos Cargados</h2> <br><br>
-
-<div class="pull-right">
-                   <div class="box-tools ">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                  <div class="input-group">
-                                    <span class="input-group-btn">
-                                        <a href="<?php echo site_url('articulo/add'); ?>" class="btn btn-success">Nuevo Articulo</a>
-                                      <button type="submit" class="btn btn-default" disabled>Buscar</button>
-                                    </span>
-                                    <input type="text" id="search_data"  class="form-control" name="search_data"  placeholder="Buscar Producto por nombre o código" onkeyup="ajaxSearch();">
-                                 </div>
-                                    <div id="suggestions" class="list-group"><br></div>
-                            </div>
-
-
-
-
-                    </div>
+                <div class="box-tools">
+                    <a href="<?=site_url('articulo/add'); ?>" class="btn btn-success btn-sm">Crear Nuevo Articulo</a>
                 </div>
-            </div>
+
+
             <div class="box-body">
                <table id="example2" class="table table-bordered table-hover">
                     <thead>
@@ -35,7 +19,7 @@
                         <th>UN Medida 1</th>
                         <th>UN Medida 2</th>
                         <th>Estado</th>
-                        <th>Acciones</th>
+                        <th class="nosort" >Acciones</th>
                 </tr>
                 </thead>
                  <tbody>
@@ -117,15 +101,32 @@ function ajaxSearch()
 
 
 <script>
-  $(function () {
-    $('#example1').DataTable()
-    $('#example2').DataTable({
-      'paging'      : true,
-      'lengthChange': false,
-      'searching'   : false,
-      'ordering'    : true,
-      'info'        : true,
-      'autoWidth'   : false
-    })
-  })
+    $(function () {
+           $('#example2').DataTable({
+             'paging'      : true,
+             'lengthChange': true,
+             'searching'   : true,
+             'ordering'    : true,
+             'info'        : true,
+             'autoWidth'   : true,
+             "language": {
+                             "lengthMenu": "Mostrar _MENU_ Resultados por página",
+                             "zeroRecords": "No se han encontrado resultados",
+                             "info": "Mostrando página _PAGE_ de _PAGES_ | Total de Resultados: _MAX_ ",
+                             "search" : "Buscar",
+                             "infoEmpty": "No se han encontrado resultados",
+                             "paginate": {
+                                              "first":      "<<<",
+                                              "last":       ">>>",
+                                              "next":       ">>",
+                                              "previous":   "<<"
+                                          },
+                             "infoFiltered": "(filtrado de  _MAX_ total de resultados)"
+                         },
+              "columnDefs": [{
+                              "targets": 'nosort',
+                              "orderable": false
+                          }]
+           })
+         })
 </script>

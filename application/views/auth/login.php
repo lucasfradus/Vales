@@ -119,8 +119,10 @@ $password = array(
                   <?php echo form_input($password);?>
                  <?php echo lang('login_remember_label', 'remember');?>
               <?php echo form_checkbox('remember', '1', FALSE, 'id="remember"',"class='checkbox pull-left'");?>
-              <button class="btn btn-lg btn-primary btn-block"  name="Submit" value="Login" type="Submit">Ingresar</button>
 
+              <button class="btn btn-lg btn-primary btn-block"  name="Submit" value="Login" type="Submit">Ingresar</button>
+              <br>
+              <a href="<?php echo site_url('auth/forgot_password/')?>">Olvide Mi Contraseña</a>
         </form>
     </div>
 </div>

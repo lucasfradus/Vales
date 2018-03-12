@@ -2,7 +2,7 @@
     <div class="col-md-12">
       	<div class="box box-info">
             <div class="box-header with-border">
-              	<h3 class="box-title">Sector Req Add</h3>
+              	<h3 class="box-title">Nuevo Sector</h3>
             </div>
             <?php echo form_open('sector_req/add'); ?>
           	<div class="box-body">
@@ -13,6 +13,12 @@
 							<input type="text" name="nombre_sector" value="<?php echo $this->input->post('nombre_sector'); ?>" class="form-control" id="nombre_sector" />
 						</div>
 					</div>
+                    <div class="col-md-6">
+                        <label for="fase" class="control-label">FASE</label>
+                        <div class="form-group">
+                            <input type="text" name="fase" value="<?php echo $this->input->post('fase'); ?>" class="form-control" id="fase" />
+                        </div>
+                    </div>
 				</div>
 			</div>
           	<div class="box-footer">

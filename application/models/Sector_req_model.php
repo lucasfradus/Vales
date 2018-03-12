@@ -24,8 +24,16 @@ class Sector_req_model extends CI_Model
      */
     function get_all_sector_req()
     {
-        $this->db->where('id_sector_req !=', $this->config->item('JerarquiaDefault'));
-        $this->db->where('id_sector_req !=', $this->config->item('JerarquiaPrueba'));
+      //  $this->db->where('id_sector_req !=', $this->config->item('JerarquiaDefault'));
+        $this->db->where('status_sector', $this->config->item('Activo'));
+        $this->db->order_by('id_sector_req', 'desc');
+        return $this->db->get('sector_req')->result_array();
+    }
+
+    function get_all_sector_req_index()
+    {
+      //  $this->db->where('id_sector_req !=', $this->config->item('JerarquiaDefault'));
+        //$this->db->where('status_sector !=', $this->config->item('Inactivo'));
         $this->db->order_by('id_sector_req', 'desc');
         return $this->db->get('sector_req')->result_array();
     }

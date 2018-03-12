@@ -1,4 +1,5 @@
 <div id="notif"></div>
+
 <div class="row">
     <div class="col-md-12">
       	<div class="box box-info">
@@ -146,7 +147,7 @@
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Cambiar estado de Vale #<?=$vale['id_estado']?></h4>
+            <h4 class="modal-title">Cambiar estado de Vale #<?=$vale['id_vale']?></h4>
         </div>
         <div class="modal-body">
             <p>Una vez que el Vale pase a estar listo para retirar se notificará al requiridor para que pase a retirarlo. Y una vez que lo haya retirado, se debe actualizar el estado a "Retirado".
@@ -173,6 +174,7 @@
 </div>
 
 <script>
+
    function agregar(id_item,id_vale,cantidad_max,num_articulo) {
 
    	var cantidad = $('#item'+id_item).val();
@@ -223,4 +225,25 @@
 
 			}
 
+			function borrar_item_preparacion(id_vale,id_item,cantidad){
+		console.log("item hoasdadasd: ");
+			               $.ajax({
+											// Pace.start();
+			             type: "POST",
+			             url: "<?php echo base_url(); ?>" + "vales_consumo/remove_item_vale",
+			              data : {id_vale:id_vale, id_articulo:id_item, cantidad:cantidad},
+
+			             success: function(data) {
+			             console.log("item borrado: ", data);
+			               //si esta todo ok, finalmente remuevo el item de la tabla
+			               //$('#fila'+id_item).fadeOut(600, function(){ $(this).remove();});
+			               $('#fila'+id_item).fadeOut(1500, function(){ $(this).remove();});
+			               $('#tabla_1 > tbody:last-child').append(data).fadeIn(600);
+			             },
+			             error: function(data){
+			                console.log("item no borrado");
+			             }
+									// Pace.stop();
+			         });
+			   }
 </script>

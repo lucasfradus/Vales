@@ -17,10 +17,10 @@ class Sector_req extends CI_Controller{
         $this->data = $this->generales->imports_generales();
 
         //Perfiles habilitados para ver esta pagina
-        $group = array($this->config->item('Administrator'), $this->config->item('Pañolero'));
+        $group = array($this->config->item('Administrator'));
 
           if(!$this->ion_auth->in_group($group) || !$this->ion_auth->RolCheck($this->config->item('AdministrarSectores'))){
-            $this->session->set_flashdata('error', 'No Tiene permisos para realizar esta acción');
+            $this->session->set_flashdata('error', 'No Tiene permisos para realizar esta acción. Para Administrar los sectores se debe comunicar con el administrador del sistema.');
                     redirect('/');
           }
 
@@ -34,7 +34,7 @@ class Sector_req extends CI_Controller{
      */
     function index()
     {
-        $this->data['sector_req'] = $this->Sector_req_model->get_all_sector_req();
+        $this->data['sector_req'] = $this->Sector_req_model->get_all_sector_req_index();
 
         $this->data['_view'] = 'sector_req/index';
         $this->load->view('layouts/main',$this->data);
@@ -49,6 +49,8 @@ class Sector_req extends CI_Controller{
         {
             $params = array(
 				'nombre_sector' => $this->input->post('nombre_sector'),
+                'FASE' => $this->input->post('fase'),
+                'status_sector' => $this->config->item('Activo')
             );
 
             $sector_req_id = $this->Sector_req_model->add_sector_req($params);
@@ -67,14 +69,15 @@ class Sector_req extends CI_Controller{
     function edit($id_sector_req)
     {
         // check if the sector_req exists before trying to edit it
-        $data['sector_req'] = $this->Sector_req_model->get_sector_req($id_sector_req);
+        $this->data['sector_req'] = $this->Sector_req_model->get_sector_req($id_sector_req);
 
-        if(isset($data['sector_req']['id_sector_req']))
+        if(isset($this->data['sector_req']['id_sector_req']))
         {
             if(isset($_POST) && count($_POST) > 0)
             {
                 $params = array(
 					'nombre_sector' => $this->input->post('nombre_sector'),
+                    'FASE' => $this->input->post('fase'),
                 );
 
                 $this->Sector_req_model->update_sector_req($id_sector_req,$params);
@@ -100,7 +103,16 @@ class Sector_req extends CI_Controller{
         // check if the sector_req exists before trying to delete it
         if(isset($sector_req['id_sector_req']))
         {
-            $this->Sector_req_model->delete_sector_req($id_sector_req);
+          if($sector_req['status_sector'] == $this->config->item('Inactivo')){
+              $array = array(
+                  'status_sector' => $this->config->item('Activo')
+              );
+          }else{
+              $array = array(
+                  'status_sector' => $this->config->item('Inactivo')
+              );
+          }
+            $this->Sector_req_model->update_sector_req($id_sector_req,$array);
             redirect('sector_req/index');
         }
         else

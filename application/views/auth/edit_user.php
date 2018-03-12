@@ -1,17 +1,18 @@
 
-
-
 <div align=center><h1><?php echo lang('edit_user_heading');?></h1></div>
 <hr>
+
 <p><?php echo lang('edit_user_subheading');?></p>
 
 <div id="infoMessage" class="text-danger"><?php echo $message;?></div>
+
+
 
 <?php echo form_open(uri_string());?>
 
 <fieldset>
 <div class="col-xs-3"><p>
-    <label for="ex1">Id:</label>
+    <label for=" ex1">Id:</label>
       <?php echo form_input($id);?>
        <small class="text-muted">Los ID los Genera Automaticamente el Sistema y no se pueden modificar.</small>
 </p> </div>
@@ -34,6 +35,10 @@
 </fieldset>
 <br>
 <fieldset>
+    <div class="col-xs-3"><p>
+                <?php echo lang('edit_user_email_label', 'email');?> <br />
+                <?php echo form_input($email);?>
+    </p> </div>
 <div class="col-xs-3"><p>
             <?php echo lang('edit_user_password_label', 'password');?> <br />
             <?php echo form_input($password);?>
@@ -43,7 +48,46 @@
             <?php echo lang('edit_user_password_confirm_label', 'password_confirm');?><br />
             <?php echo form_input($password_confirm);?>
 </p> </div>
+
+<br>
+<div class="box-body">
+    <div class="col-xs-6"><p>
+    <label> Actualizar Notificaciones </label>
+    <small class="text-muted"> Seleccione los eventos por los cuales desea recibir notificaciones via email</small> 
+    </p>
+    <table class="table table-striped">
+        <tr>
+            <th>Vale Nuevo</th>
+            <th>Vale Aprobado</th>
+            <th>Vale Listo</th>
+            <th>Vale Retirado</th>
+        </tr>
+        <tr>
+            <td>
+                <a href="<?= site_url('notificaciones_user/update_by_user/'.$currenNotifications['id_notificaciones_users'].'/'.$this->config->item('Nuevo_Vale'))?>" class="<?= $currenNotifications['vale_nuevo'] == 1 ? "fa fa-check" : "fa fa-times" ; ?>"></a>
+            </td>
+            <td>
+                <a href="<?= site_url('notificaciones_user/update_by_user/'.$currenNotifications['id_notificaciones_users'].'/'.$this->config->item('Aprobacion_Vale'))?>" class="<?= $currenNotifications['vale_aprobado'] == 1 ? "fa fa-check" : "fa fa-times" ; ?>"></a>
+            </td>
+            <td>
+                <a href="<?= site_url('notificaciones_user/update_by_user/'.$currenNotifications['id_notificaciones_users'].'/'.$this->config->item('Listo_Para_Retirar_Vale'))?>" class="<?= $currenNotifications['vale_listo'] == 1 ? "fa fa-check" : "fa fa-times" ; ?>"></a>
+            </td>
+            <td>
+                <a href="<?= site_url('notificaciones_user/update_by_user/'.$currenNotifications['id_notificaciones_users'].'/'.$this->config->item('Retirado_Vale'))?>" class="<?= $currenNotifications['vale_retirado'] == 1 ? "fa fa-check" : "fa fa-times" ; ?>"></a>
+            </td>
+        </tr>
+    </table>
+    </div>
+</div>
+
+
+
 </fieldset>
+
+
+
+
+
       <?php if ($this->ion_auth->is_admin()): ?>
 
         <div align="left">
