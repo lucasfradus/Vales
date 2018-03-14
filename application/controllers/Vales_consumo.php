@@ -329,17 +329,29 @@ function testing(){
                 );
 
 
-            if($this->Evolucion_vale_model->add_evolucion_vale($evolucion_vale) && $this->Vales_consumo_model->update_vales_consumo($id_vale,$actualizacion_vale) && $this->Evolucion_vale_model->add_aprobacion_vale($aprobacion_vale)){
-                    $this->session->set_flashdata('success','Vale Actualizado correctamente');
-                     redirect('vales_consumo/aprobaciones');
+            if($this->Evolucion_vale_model->add_evolucion_vale($evolucion_vale) && $this->Vales_consumo_model->update_vales_consumo($id_vale,$actualizacion_vale) && $this->Evolucion_vale_model->add_aprobacion_vale($aprobacion_vale))
+            {
+                $owner = $this->Vales_consumo_model->get_vales_consumo($id_vale);
+                if($this->Notificaciones_user_model->get_notifications_settings($owner['id'], $this->config->item('Aprobacion_Vale'))){
+                    $vale = array(
+                        'id_vale' => $id_vale,
+                        'id_estado_aprobacion'           => $aprobacion,
+                        'id_responsable_aprobacion'      => $user->id,
+                        'comentarios_aprobacion'         => $this->input->post('comment'),
+                        'responsable'                    => $user,
+                    );
+                    $this->generales->Notify_owner_aproval($owner, $vale);
                 }
 
+                $this->session->set_flashdata('success','Vale Actualizado correctamente');
+                 redirect('vales_consumo/aprobaciones');
             }else{
                  $this->session->set_flashdata('error','Ocurrió un error al actualizar el Vale');
                          redirect('vales_consumo/aprobaciones');
             }
 
     }
+}
 
 
 
@@ -377,17 +389,17 @@ function testing(){
 
 
     function new_create(){
-        $datos_user = $this->input->post('datos_user');
-        $total_items = $this->input->post('total_items');
-        $sector = $this->input->post('sector');
+    $datos_user = $this->input->post('datos_user');
+    $total_items = $this->input->post('total_items');
+    $sector = $this->input->post('sector');
 
-    $params = array(
-     'id_requeridor'                 => $this->user->id,
-     'id_sector'                     => $datos_user['id_sector'],
-     'fecha_creado'                  => time(),
-     'id_estado'                     => $this->config->item('PendienteDeAprobacion'),
-     'id_aprobacion'                 => $this->config->item('Pendiente'),
-    );
+        $params = array(
+         'id_requeridor'                 => $this->user->id,
+         'id_sector'                     => $datos_user['id_sector'],
+         'fecha_creado'                  => time(),
+         'id_estado'                     => $this->config->item('PendienteDeAprobacion'),
+         'id_aprobacion'                 => $this->config->item('Pendiente'),
+        );
 
      $vales_consumo_id = $this->Vales_consumo_model->add_vales_consumo($params);
 
@@ -416,19 +428,25 @@ if($vales_consumo_id){
           $this->Articulo_model->add_articulo_por_vale($articulos_por_vale);
 
       }
-      //sleep(1);
-      /*
-      * Aca reviso si el usuario quiere ser notificado o no, y le envio un mail.
-      */
+
+      // Aca reviso si el usuario quiere ser notificado o no, y le envio un mail.
       if($this->Notificaciones_user_model->get_notifications_settings($this->user->id, $this->config->item('Nuevo_Vale'))){
           $this->generales->Notify_owner($total_items, $vales_consumo_id, $sector);
       }
 
-      if(empty($this->generales->Notify_responsible($total_items, $vales_consumo_id, $sector))){
-          $this->session->set_flashdata('warning','Vale Creado correctamente! ID del Vale: '.$vales_consumo_id.'. El sector '.$sector.' no tiene usuarios cargados para habilitar el vale.');
-      }else{
-          $this->session->set_flashdata('success','Vale Creado correctamente! ID del Vale: '.$vales_consumo_id);
+      // Aca traigo los responsables del sector donde se carga el vale, reviso si quieren ser notificados y genero la notificacion.
+      $responsables = $this->Jerarquia_model->get_responsible_by_sector($datos_user['id_sector'], $this->config->item('Nuevo_Vale'));
+      foreach ($responsables as $responsable ) {
+          if($this->Notificaciones_user_model->get_notifications_settings($responsable->id, $this->config->item('Nuevo_Vale'))){
+              $this->generales->Notify_responsible($total_items, $vales_consumo_id, $sector, $responsable, $this->user);
+          }
       }
+
+      // if(empty($this->generales->Notify_responsible($total_items, $vales_consumo_id, $sector))){
+      //     $this->session->set_flashdata('warning','Vale Creado correctamente! ID del Vale: '.$vales_consumo_id.'. El sector '.$sector.' no tiene usuarios cargados para habilitar el vale.');
+      // }else{
+      //     $this->session->set_flashdata('success','Vale Creado correctamente! ID del Vale: '.$vales_consumo_id);
+      // }
 
       echo $vales_consumo_id;
     }else{
@@ -438,8 +456,11 @@ if($vales_consumo_id){
     }
 }
 function test(){
-    $result = $this->Notificaciones_user_model->get_notifications_settings($this->user->id, $this->config->item('Nuevo_Vale'));
-    print_r($result);
+    $result = $this->Jerarquia_model->get_responsible_by_sector(22, $this->config->item('Nuevo_Vale'));
+    foreach($result as $r){
+        print_r($r->id);
+    }
+
 }
 
     /*

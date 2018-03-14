@@ -15,7 +15,7 @@ class Generales{
         $this->CI->load->model('Ion_auth_model');
         $this->CI->load->helper('url');
         $this->CI->load->library('email');
-
+        $this->CI->load->library('mailer');
 
       }
     /*
@@ -72,47 +72,54 @@ class Generales{
     }
 
 
-    public function Notify_owner($datos_vale, $id_vale, $sector){
-        $data['datos_vale'] = $datos_vale;
-        $data['id_vale'] = $id_vale;
-        $data['sector'] = $sector;
-        $data['user'] = $this->CI->ion_auth->user()->row();
-        $message = $this->CI->load->view('email/new', $data, TRUE);
-        log_message('error', 'llegue a la funcion notifica');
-        $this->CI->email->from('lucas.fradusco@gmail.com.ar', 'Sistema de Vales');
-        $this->CI->email->to($data['user']->email);
-        $this->CI->email->set_mailtype("html");
-        $this->CI->email->subject('Nuevo Vale de Consumo #'. $id_vale);
-        $this->CI->email->message($message);
+    public function Notify_owner($total_items, $vales_consumo_id, $sector){
+       $data['datos_vale'] = $total_items;
+       $data['id_vale'] = $vales_consumo_id;
+       $data['sector'] = $sector;
+       $data['user'] = $this->CI->ion_auth->user()->row();
+       $body = $this->CI->load->view('email/new', $data, TRUE);
+       $dbdata = array(
+           '_recipients' => $data['user']->email,
+           '_body' => $body,
+           '_headers' => '[Sistema de Vales #'.$vales_consumo_id.']Nuevo Vale de Consumo #'. $vales_consumo_id,
+       );
+       $this->CI->mailer->new_mail_queue($dbdata);
+    }
 
-        if($this->CI->email->send()){
-          log_message('error', 'se mando mail');
+    public function Notify_owner_aproval($requeridor, $vale)
+    {
+
+        if($vale['id_estado_aprobacion'] == $this->CI->config->item('Aprobado')){
+            $header = '[Sistema de Vales #'.$vale['id_vale'].'] Su vale ha sido Aprobado';
         }else{
-         log_message('error', 'no se mando mail');
+            $header = '[Sistema de Vales #'.$vale['id_vale'].'] Su vale ha sido Rechazado';
         }
-
+        $body = $this->CI->load->view('email/update_aproval', $vale, TRUE);
+        $dbdata = array(
+            '_recipients' => $requeridor['email'],
+            '_body' => $body,
+            '_headers' => $header,
+        );
+         $this->CI->mailer->new_mail_queue($dbdata);
     }
 
-    public function Notify_responsible($user, $datos_vale, $id_vale){
 
+
+    public function Notify_responsible($total_items, $vales_consumo_id, $sector, $responsable, $requeridor){
+        $data['datos_vale'] = $total_items;
+        $data['id_vale'] = $vales_consumo_id;
+        $data['sector'] = $sector;
+        $data['user'] = $requeridor;
+        $body = $this->CI->load->view('email/new_aprove', $data, TRUE);
+        $dbdata = array(
+            '_recipients' => $responsable->email,
+            '_body' => $body,
+            '_headers' => 'Nuevo Vale para Aprobar. #'. $vales_consumo_id,
+        );
+        $this->CI->mailer->new_mail_queue($dbdata);
     }
 
-    public function Send_mails($args){
 
-        $this->CI->load->view($args['view'], $args);
-
-      /*
-      $message = $this->load->view($this->config->item('templates').$this->config->item('email_activate', 'ion_auth'), $data, true);
-
-      $this->email->clear();
-      $this->email->from($this->config->item('admin_email', 'ion_auth'), $this->config->item('site_title', 'ion_auth'));
-      $this->email->to($email);
-      $this->email->subject($this->config->item('site_title', 'ion_auth') . ' - ' . $this->lang->line('email_activation_subject'));
-      $this->email->message($message);
-
-*/
-
-    }
 
 
 

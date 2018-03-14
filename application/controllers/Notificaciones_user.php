@@ -19,11 +19,7 @@ class Notificaciones_user extends CI_Controller{
             $this->config->item('Administrator'),
             $this->config->item('Pañolero')
         );
-        if (!$this->ion_auth->in_group($group))
-		{
-			$this->session->set_flashdata('message', 'You must be a part of group 1 or 2 to view this page');
-			redirect('/');
-		}
+
     }
 
     /*
@@ -32,6 +28,12 @@ class Notificaciones_user extends CI_Controller{
      */
     function index($id_user = null)
     {
+        if (!$this->ion_auth->in_group($group))
+        {
+            $this->session->set_flashdata('error', 'No Tiene permiso para realizar esa acción.');
+            redirect('/');
+        }
+
         $this->data['notificaciones_users'] = $this->Notificaciones_user_model->get_all_notificaciones_users();
         $this->data['_view'] = 'notificaciones_user/index';
         $this->load->view('layouts/main',$this->data);
@@ -42,6 +44,11 @@ class Notificaciones_user extends CI_Controller{
      */
      function add()
          {
+            if (!$this->ion_auth->in_group($group))
+            {
+                $this->session->set_flashdata('error', 'No Tiene permiso para realizar esa acción.');
+                redirect('/');
+            }
              $this->load->library('form_validation');
 
      		$this->form_validation->set_rules('user_id','Usuario','required|is_unique[notificaciones_users.user_id]');
@@ -49,11 +56,11 @@ class Notificaciones_user extends CI_Controller{
      		if($this->form_validation->run())
              {
                  $params = array(
-     				'vale_nuevo' => $this->input->post('vale_nuevo'),
-     				'vale_aprobado' => $this->input->post('vale_aprobado'),
-     				'vale_listo' => $this->input->post('vale_listo'),
-     				'vale_retirado' => $this->input->post('vale_retirado'),
-     				'user_id' => $this->input->post('user_id'),
+             				'vale_nuevo' => $this->input->post('vale_nuevo'),
+             				'vale_aprobado' => $this->input->post('vale_aprobado'),
+             				'vale_listo' => $this->input->post('vale_listo'),
+             				'vale_retirado' => $this->input->post('vale_retirado'),
+             				'user_id' => $this->input->post('user_id'),
                  );
 
                  $notificaciones_user_id = $this->Notificaciones_user_model->add_notificaciones_user($params);
@@ -74,6 +81,11 @@ class Notificaciones_user extends CI_Controller{
      */
     function edit($id_notificaciones_users)
     {
+        if (!$this->ion_auth->in_group($group))
+        {
+            $this->session->set_flashdata('error', 'No Tiene permiso para realizar esa acción.');
+            redirect('/');
+        }
         // check if the notificaciones_user exists before trying to edit it
         $this->data['notificaciones_user'] = $this->Notificaciones_user_model->get_notificaciones_user($id_notificaciones_users);
 
@@ -108,22 +120,7 @@ class Notificaciones_user extends CI_Controller{
         else
             show_error('The notificaciones_user you are trying to edit does not exist.');
     }
-    /*
-     * Deleting notificaciones_user
-     */
-    function remove($id_notificaciones_users)
-    {
-        $notificaciones_user = $this->Notificaciones_user_model->get_notificaciones_user($id_notificaciones_users);
 
-        // check if the notificaciones_user exists before trying to delete it
-        if(isset($notificaciones_user['id_notificaciones_users']))
-        {
-            $this->Notificaciones_user_model->delete_notificaciones_user($id_notificaciones_users);
-            redirect('notificaciones_user/index');
-        }
-        else
-            show_error('The notificaciones_user you are trying to delete does not exist.');
-    }
 
     public function update_by_user($id_notificaciones_users, $field, $next = null){
         $this->data['notificaciones_user'] = $this->Notificaciones_user_model->get_notificaciones_user($id_notificaciones_users);

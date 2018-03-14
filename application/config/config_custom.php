@@ -55,9 +55,6 @@ $config['AdministrarRolesPorUsuario']  = 1;
 $config['AdministrarJerarquias']       = 1;
 
 
-
-
-
 /*
 |--------------------------------------------------------------------------
 | Custom Config: Perrmisos x Grupo
@@ -149,9 +146,9 @@ $config['Nuevo_Vale']			 = 'new.tpl.php';
 |
 */
 
-//$config['Mail_Aprobacion']			 = array($config['Aprobador'], $config['Pañolero']);
+$config['Mail_Aprobacion']			 = array($config['Aprobador'], $config['Pañolero']);
 
-$config['Mail_Aprobacion']			 = 99;
+//$config['Mail_Aprobacion']			 = 99;
 
 /*
 |--------------------------------------------------------------------------
