@@ -18,5 +18,6 @@ $lang['email_smtp_auth_pw'] = "Falló usando la contraseña. Error: %s";
 $lang['email_smtp_data_failure'] = "No se han podido enviar los datos: %s";
 /* New in 1.6 or Higher  */
 $lang['email_exit_status'] = "Código de estado de salida: %s";
+$lang['email_no_from'] ='no se que quiere decir esto';
 /* End of file email_lang.php */
 /* Location: ./system/language/spanish/email_lang.php */

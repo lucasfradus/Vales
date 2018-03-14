@@ -109,16 +109,25 @@ class Jerarquia_model extends CI_Model
 *
 *
 */
-    function get_responsible_by_sector($id_sector){
+    function get_responsible_by_sector($id_sector,$event_id = null){
 
         $this->db->join('users ', 'users.id = id_user_padre');
         $this->db->join('users_groups  ','users_groups.user_id = users.id');
         $this->db->join('groups', 'groups.id = users_groups.group_id' );
+        $this->db->join('notificaciones_users', 'users.id = notificaciones_users.user_id' );
         $this->db->join('sector_req','id_sector_req = id_sector_jerarquia');
         $this->db->where('id_sector_jerarquia',$id_sector);
+        if(isset($event_id)){
+            $this->db->where($event_id,1);
+        }
+
         //
         $this->db->where_in('groups.id', $this->config->item('Mail_Aprobacion'));
-        return $this->db->get('jerarquias')->result();
+        $result = $this->db->get('jerarquias')->result();
+
+          return $result;
+
+
 
     }
 
