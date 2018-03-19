@@ -1,4 +1,4 @@
-<div id="notif"></div>
+
 <div class="row">
     <div class="col-md-12">
         <div class="box">
@@ -39,7 +39,7 @@
 						<td><?php echo $v['id_vale']; ?></td>
 						<td><?php echo $v['username']; ?></td>
 						<td><?php echo $v['nombre_sector']; ?></td>
-                        <td><?php echo date('m/d/Y H:i:s', $v['fecha_creado']); ?></td>
+                        <td><?php echo date('d/m/Y H:i:s', $v['fecha_creado']); ?></td>
                         <td id="cell<?= $v['id_vale']; ?>"><?php echo $v['nombre_estado']; ?></td>
                         <td>
                             <div class="progress progress-xl progress-striped active">
@@ -52,7 +52,7 @@
                                 <a href="<?php echo site_url('vales_consumo/preparar/'.$v['id_vale']); ?>" class="btn btn-xs btn-info" data-toggle="tooltip" title="Preparar">
                                 <i class="fa fa-play"></i>
                                 </a>
-                                <button type="button"  data-toggle="modal" data-target="#myModal" class="btn btn-xs btn-warning" data-toggle="tooltip" title="Modificar Estado"> <i class="fa fa-edit"></i> </button>
+                                <button type="button"  data-toggle="modal" data-target="#myModal" onclick="populate(<?php echo $v['id_estado']; ?>)" class="btn btn-xs btn-warning" data-toggle="tooltip" title="Modificar Estado"> <i class="fa fa-edit"></i> </button>
                               </div>
                               <!-- Modal -->
                               <div id="myModal" class="modal fade" role="dialog">
@@ -71,9 +71,6 @@
                                           <label for="id_sector" class="control-label"><span class="text-danger">*</span>Estado</label>
                                             <div class="form-group">
                                                         <select name="estado" class="form-control" id=EstadoVale>
-                                                          <option value=<?= $this->config->item('EnProcesoDeArmado')?>  >En Proceso De Armado</option>
-                                                          <option value=<?= $this->config->item('ListoParaRetirar')?> <?= ( $v['id_estado'] == $this->config->item('ListoParaRetirar') ? 'disabled' : '')?>>Listo Para Retirar</option>
-                                                          <option value=<?= $this->config->item('Retirado')?>>Retirado</option>
                                                         </select>
                                             </div>
                                             <div class="form-group">
@@ -103,7 +100,28 @@
     </div>
 </div>
 <script>
+function populate(status)
 
+  {
+      $('#EstadoVale').empty();
+    $.ajax({
+      type: "POST",
+      url: base_url() + "vales_consumo/get_all_estado_entrega_by_status",
+      data : {status:status},
+        success: function(data) {
+          if(data){
+          $('#EstadoVale').append(data);
+          }
+        },
+        error: function(data){
+          console.log(data);
+
+        }
+    });
+    }
+
+</script>
+<script>
   $(function () {
     $('#tableArmado').DataTable({
       'paging'      : true,

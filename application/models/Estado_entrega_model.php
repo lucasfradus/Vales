@@ -20,6 +20,32 @@ class Estado_entrega_model extends CI_Model
     }
 
     /*
+    * En esta funcion defino que eestados le voy a pasar a la vista para que puedan actualizar los vales.
+    * No lo deberia hacer en el modelo, pero paja.
+    */
+
+    function get_all_estado_entrega_by_status($id_estado_entrega)
+    {
+        if($id_estado_entrega == $this->config->item('EnProcesoDeArmado')){
+            $possible_status = array(
+                $this->config->item('ListoParaRetirar'),
+                $this->config->item('RechazoPorFaltaDeStock'),
+            );
+        }elseif($id_estado_entrega == $this->config->item('ListoParaRetirar')){
+            $possible_status = array(
+                $this->config->item('EnProcesoDeArmado'),
+                $this->config->item('Retirado'),
+            );
+        }elseif($id_estado_entrega == $this->config->item('Retirado') || $id_estado_entrega == $this->config->item('RechazoPorFaltaDeStock')){
+            $possible_status = array();
+        }
+
+        $this->db->where_in('id_estado_entrega', $possible_status);
+        return $this->db->get('estado_entrega')->result();
+    }
+
+
+    /*
      * Get all estado_entrega
      */
     function get_all_estado_entrega()

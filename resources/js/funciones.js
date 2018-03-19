@@ -16,10 +16,12 @@ function base_url() {
 
 
 
+
 //actualiza el estado de preparacion de los vales.
 function update_status(id_vale){
   var status = $('#EstadoVale').val();
   var comments = $('#ComentsVale').val();
+
 
   console.log('estado recibido: '+ status);
   console.log('comentarios recibidos: '+ comments);
@@ -31,11 +33,8 @@ function update_status(id_vale){
         data : {id_vale:id_vale, status:status, comments:comments},
           success: function(data) {
             if(data){
-              $('#myModal').modal('toggle');
-              $('#notif').addClass("alert alert-success").append('<a href="#" class="close" data-dismiss="alert>×</a>"');
-              document.getElementById('notif').innerHTML = '<strong>Exito!</strong> Vale Actualizado correctamente';
-              $("#cell"+id_vale).html(data).fadeIn(600);
-              $('input[name=nombre_estado]').val(data);
+
+            $(location).attr('href', base_url() + "vales_consumo/armado");
 
             }else{
               $('#myModal').modal('toggle');

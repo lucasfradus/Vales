@@ -3,10 +3,17 @@
   <head>
     <meta charset="UTF-8">
     <style>
-      th, tr {
+      th {
+
           border: 1px solid black;
+          height: 40px;
           border-collapse: collapse;
+          vertical-align: bottom;
+          padding: 15px;
+          text-align: left;
+
       }
+      tr:hover {background-color: #f5f5f5;}
 </style>
     <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet" />
   </head>

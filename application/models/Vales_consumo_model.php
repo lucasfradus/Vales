@@ -27,6 +27,34 @@ class Vales_consumo_model extends CI_Model
         return $this->db->get_where('vales_consumo',array('id_vale'=>$id_vale))->row_array();
     }
 
+  function search_vales($search, $parametros){
+    if(isset($parametros['id_user'])){
+      $this->db->where('id_requeridora',$parametros['id_user']);
+    }
+
+    $this->db->join('users','id = id_requeridor' );
+    $this->db->join('sector_req','id_sector_req = id_sector' );
+    $this->db->join('estado_aprobacion','id_estado_aprobacion_fk = id_aprobacion' );
+    $this->db->join('estado_entrega','id_estado_entrega = id_estado' );
+    $this->db->like('id_vale',$search);
+    $this->db->or_like('users.first_name',$search);
+    $this->db->or_like('users.username',$search);
+    $this->db->or_like('users.last_name',$search);
+    $this->db->or_like('sector_req.nombre_sector',$search);
+
+
+      if(isset($parametros['sectores'])){
+        $array =  array();
+        foreach ($parametros['sectores'] as $s) {
+            array_push($array,$s->id_sector_req);
+        }
+        $this->db->where_in('id_sector',$array);
+      }
+
+    return $this->db->get('vales_consumo')->result_array();
+  }
+
+
 
 /*
 * Uso: Dashboard
@@ -88,6 +116,27 @@ GROUP BY `id_vale_articulos` ORDER BY `id_vale` DESC
         }
         return $this->db->get('vales_consumo', 5)->result_array();
     }
+
+    function get_vales_consumo_by_sector($sectores)
+    {
+      $this->db->select('COUNT(CASE WHEN estado_entrega_item=1 THEN 1 END) AS Cargado,');
+      $this->db->select('COUNT(CASE WHEN estado_entrega_item=0 THEN 1 END) AS Pendiente');
+      $this->db->select('COUNT(estado_entrega_item) AS total_items');
+      $this->db->select('id_aprobacion, nombre_estado_aprobacion, id_vale, username, nombre_sector, fecha_creado, nombre_estado, id_requeridor');
+      $this->db->join('estado_aprobacion','id_estado_aprobacion_fk = id_aprobacion' );
+      $this->db->join('estado_entrega','id_estado_entrega = id_estado' );
+      $this->db->join('users','id = id_requeridor' );
+      $this->db->join('articulos_x_vale','id_vale_articulos = id_vale' );
+      $this->db->join('sector_req','id_sector_req = id_sector' );
+      $this->db->order_by('id_vale', 'desc');
+      $this->db->group_by('id_vale');
+        if(isset($sectores)){
+          foreach ($sectores as $s) {
+          $this->db->or_where('id_sector',$s->id_sector_jerarquia);
+          }
+        }
+          return $this->db->get('vales_consumo')->result_array();
+    }
       /*
       * Traigo los vales de consumo correspondientes al usuario que esta logueado
       * Uso: Index Vales_consumo
@@ -143,7 +192,27 @@ GROUP BY `id_vale_articulos` ORDER BY `id_vale` DESC
         return $this->db->get('vales_consumo')->result_array();
     }
 
-      function get_all_vales_consumo_estado_by_estado($where){
+      // function get_all_vales_consumo_estado_by_estado($where){
+      //   $this->db->select('COUNT(CASE WHEN estado_entrega_item=1 THEN 1 END) AS Cargado,');
+      //   $this->db->select('COUNT(CASE WHEN estado_entrega_item=0 THEN 1 END) AS Pendiente');
+      //   $this->db->select('COUNT(estado_entrega_item) AS total_items');
+      //   $this->db->select('id_aprobacion, nombre_estado_aprobacion, id_vale, username, nombre_sector, fecha_creado, nombre_estado, id_estado, id_requeridor');
+      //   $this->db->join('estado_aprobacion','id_estado_aprobacion_fk = id_aprobacion' );
+      //   $this->db->join('estado_entrega','id_estado_entrega = id_estado' );
+      //   $this->db->join('users','id = id_requeridor' );
+      //   $this->db->join('articulos_x_vale','id_vale_articulos = id_vale' );
+      //   $this->db->join('sector_req','id_sector_req = id_sector' );
+      //   $this->db->where($where);
+      //   $this->db->order_by('id_vale', 'desc');
+      //   $this->db->group_by('id_vale');
+      //
+      //   return $this->db->get('vales_consumo')->result_array();
+      // }
+//
+// $where = 'id_aprobacion = '.$this->config->item('Aprobado').' and id_estado ='.$this->config->item('PendienteDeAprobacion').' OR id_estado ='.$this->config->item('EnProcesoDeArmado').' OR id_estado ='.$this->config->item('ListoParaRetirar');
+
+
+      function get_all_vales_consumo_estado_by_estado($estado){
         $this->db->select('COUNT(CASE WHEN estado_entrega_item=1 THEN 1 END) AS Cargado,');
         $this->db->select('COUNT(CASE WHEN estado_entrega_item=0 THEN 1 END) AS Pendiente');
         $this->db->select('COUNT(estado_entrega_item) AS total_items');
@@ -153,7 +222,8 @@ GROUP BY `id_vale_articulos` ORDER BY `id_vale` DESC
         $this->db->join('users','id = id_requeridor' );
         $this->db->join('articulos_x_vale','id_vale_articulos = id_vale' );
         $this->db->join('sector_req','id_sector_req = id_sector' );
-        $this->db->where($where);
+        $this->db->where('id_aprobacion', $this->config->item('Aprobado'));
+        $this->db->where_in('id_estado', $estado);
         $this->db->order_by('id_vale', 'desc');
         $this->db->group_by('id_vale');
 

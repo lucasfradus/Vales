@@ -30,47 +30,45 @@ class Dashboard extends CI_Controller{
     {
 //Perfil de REQUERIDOR
         if ($this->ion_auth->in_group($this->config->item('Requeridor'))){
-
             $this->data['vales'] = $this->Vales_consumo_model->get_latest_vales_consumo($this->user->id);
-
 //Perfil de APROBADOR
         } else if($this->ion_auth->in_group($this->config->item('Aprobador'))){
-
-            $pendientes = array(
-                'id_aprobacion' => $this->config->item('Pendiente'),
-                'sectores' => $this->data['sectores'],
-            );
-            $aprobados = array(
-                'id_aprobacion' => $this->config->item('Aprobado'),
-                'sectores' => $this->data['sectores'],
-            );
-            $rechazados = array(
-                'id_aprobacion' => $this->config->item('Rechazado'),
-                'sectores' => $this->data['sectores'],
-            );
-            $EnProcesoDeArmado = array(
-                'id_aprobacion' => $this->config->item('Aprobado'),
-                'sectores' => $this->data['sectores'],
-                'id_estado' => $this->config->item('EnProcesoDeArmado'),
-            );
-            $ListoParaRetirar = array(
-                'id_aprobacion' => $this->config->item('Aprobado'),
-                'sectores' => $this->data['sectores'],
-                'id_estado' => $this->config->item('ListoParaRetirar'),
-            );
-            $Retirado = array(
-                'id_aprobacion' => $this->config->item('Aprobado'),
-                'sectores' => $this->data['sectores'],
-                'id_estado' => $this->config->item('Retirado'),
-            );
-
-            $this->data['pendientes']        = $this->Vales_consumo_model->get_all_vales_count_array($pendientes);
-            $this->data['aprobados']         = $this->Vales_consumo_model->get_all_vales_count_array($aprobados);
-            $this->data['rechazados']        = $this->Vales_consumo_model->get_all_vales_count_array($rechazados);
-            $this->data['EnProcesoDeArmado'] = $this->Vales_consumo_model->get_all_vales_count_array($EnProcesoDeArmado);
-            $this->data['ListoParaRetirar']  = $this->Vales_consumo_model->get_all_vales_count_array($ListoParaRetirar);
-            $this->data['Retirado']          = $this->Vales_consumo_model->get_all_vales_count_array($Retirado);
             $this->data['vales']             = $this->Vales_consumo_model->get_latest_vales_consumo_by_sector($this->data['sectores']);
+            // $pendientes = array(
+            //     'id_aprobacion' => $this->config->item('Pendiente'),
+            //     'sectores' => $this->data['sectores'],
+            // );
+            // $aprobados = array(
+            //     'id_aprobacion' => $this->config->item('Aprobado'),
+            //     'sectores' => $this->data['sectores'],
+            // );
+            // $rechazados = array(
+            //     'id_aprobacion' => $this->config->item('Rechazado'),
+            //     'sectores' => $this->data['sectores'],
+            // );
+            // $EnProcesoDeArmado = array(
+            //     'id_aprobacion' => $this->config->item('Aprobado'),
+            //     'sectores' => $this->data['sectores'],
+            //     'id_estado' => $this->config->item('EnProcesoDeArmado'),
+            // );
+            // $ListoParaRetirar = array(
+            //     'id_aprobacion' => $this->config->item('Aprobado'),
+            //     'sectores' => $this->data['sectores'],
+            //     'id_estado' => $this->config->item('ListoParaRetirar'),
+            // );
+            // $Retirado = array(
+            //     'id_aprobacion' => $this->config->item('Aprobado'),
+            //     'sectores' => $this->data['sectores'],
+            //     'id_estado' => $this->config->item('Retirado'),
+            // );
+
+            // $this->data['pendientes']        = $this->Vales_consumo_model->get_all_vales_count_array($pendientes);
+            // $this->data['aprobados']         = $this->Vales_consumo_model->get_all_vales_count_array($aprobados);
+            // $this->data['rechazados']        = $this->Vales_consumo_model->get_all_vales_count_array($rechazados);
+            // $this->data['EnProcesoDeArmado'] = $this->Vales_consumo_model->get_all_vales_count_array($EnProcesoDeArmado);
+            // $this->data['ListoParaRetirar']  = $this->Vales_consumo_model->get_all_vales_count_array($ListoParaRetirar);
+            // $this->data['Retirado']          = $this->Vales_consumo_model->get_all_vales_count_array($Retirado);
+
 
     //$this->data['pendientes'] = $this->Vales_consumo_model->get_all_vales_count($this->config->item('Pendiente'),null,$this->data['sectores']);
     //$this->data['aprobados'] = $this->Vales_consumo_model->get_all_vales_count($this->config->item('Aprobado'),null,$this->data['sectores']);
@@ -79,8 +77,9 @@ class Dashboard extends CI_Controller{
     //$this->data['ListoParaRetirar'] = $this->Vales_consumo_model->get_all_vales_count($this->config->item('Aprobado'),$this->config->item('ListoParaRetirar'),$this->data['sectores']);
     //$this->data['Retirado'] = $this->Vales_consumo_model->get_all_vales_count($this->config->item('Aprobado'),$this->config->item('Retirado'),$this->data['sectores']);
 
-        }
-
+}else if($this->ion_auth->in_group($this->config->item('Pañolero'))){
+        $this->data['vales']             = $this->Vales_consumo_model->get_latest_vales_consumo_by_sector($this->data['sectores']);
+    }
            $this->data['_view'] = 'dashboard';
            $this->load->view('layouts/main',$this->data);
 
