@@ -4,6 +4,13 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>Vales de Cosumo</title>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+
+
+
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <!-- Bootstrap 3.3.6 -->
@@ -23,7 +30,7 @@
         <!-- AdminLTE Skins. Choose a skin from the css/skins
              folder instead of downloading all of them to reduce the load. -->
         <link rel="stylesheet" href="<?php echo site_url('resources/css/_all-skins.min.css');?>">
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+
     </head>
 
     <body class="hold-transition skin-blue sidebar-mini">
@@ -143,7 +150,7 @@
                                 <?php if ($this->ion_auth->in_group(array($this->config->item('Aprobador'),$this->config->item('Pañolero'),$this->config->item('Administrator')))): ?>
                                 <li>
                                     <a href="<?php echo site_url('vales_consumo/aprobaciones');?>"><i class="fa fa-check"></i> Vales Para Aprobar
-                                     <!-- <i class="label label-primary pull-righ"><?= $aprobaciones_barra ?></i> -->
+
                                       </a>
                                 </li>
                                 <?php endif ?>
@@ -323,7 +330,8 @@
 
 
         <!-- jQuery 2.2.3 -->
-        <script src="<?php echo site_url('resources/js/jquery-2.2.3.min.js');?>"></script>
+        <!-- <script src="<?php echo site_url('resources/js/jquery-2.2.3.min.js');?>"></script> -->
+
         <!-- Bootstrap 3.3.6 -->
         <script src="<?php echo site_url('resources/js/bootstrap.min.js');?>"></script>
         <!-- FastClick -->
@@ -348,9 +356,7 @@
         <!-- Pace Loader -->
         <script src="<?php echo site_url('resources/js/pace/pace.js');?>"></script>
         <link rel="stylesheet" href="<?php echo site_url('resources/js/pace/themes/red/pace-theme-flash.css');?>">
-        <!-- Select2 -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
 
 
 

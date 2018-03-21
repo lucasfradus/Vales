@@ -79,7 +79,9 @@ class Dashboard extends CI_Controller{
 
 }else if($this->ion_auth->in_group($this->config->item('Pañolero'))){
         $this->data['vales']             = $this->Vales_consumo_model->get_latest_vales_consumo_by_sector($this->data['sectores']);
-    }
+    }else if($this->ion_auth->in_group($this->config->item('Administrator'))){
+            $this->data['vales']             = $this->Vales_consumo_model->get_all_vales_consumo();
+        }
            $this->data['_view'] = 'dashboard';
            $this->load->view('layouts/main',$this->data);
 

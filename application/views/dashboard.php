@@ -13,7 +13,7 @@
             <!-- /.box-header -->
             <div class="box-body">
               <div class="table-responsive">
-                <table class="table no-margin">
+                <table class="table no-margin" id="example2">
                   <thead>
                   <tr>
                     <th>ID Vale</th>
@@ -79,6 +79,36 @@
     </div>
   </section>
 </div>
+<script>
 
+  $(function () {
+    $('#example2').DataTable({
+      'paging'      : true,
+      'lengthChange': true,
+      'searching'   : true,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : true,
+      "language": {
+                      "lengthMenu": "Mostrar _MENU_ Resultados por página",
+                      "zeroRecords": "No se han encontrado resultados",
+                      "info": "Mostrando página _PAGE_ de _PAGES_ | Total de Resultados: _MAX_ ",
+                      "search" : "Buscar",
+                      "infoEmpty": "No se han encontrado resultados",
+                      "paginate": {
+                                       "first":      "<<<",
+                                       "last":       ">>>",
+                                       "next":       ">>",
+                                       "previous":   "<<"
+                                   },
+                      "infoFiltered": "(filtrado de  _MAX_ total de resultados)"
+                  },
+       "columnDefs": [{
+                       "targets": 'nosort',
+                       "orderable": false
+                   }]
+    })
+  })
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.js"></script>
