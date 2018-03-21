@@ -446,7 +446,7 @@ class Auth extends CI_Controller {
 
         $this->data['title'] = $this->lang->line('create_user_heading');
 
-        if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin())
+        if (!$this->ion_auth->logged_in() || $this->ion_auth->in_group(array($this->config->item('Administrador'),$this->config->item('Pañolero'))))
         {
             redirect('auth', 'refresh');
         }
@@ -465,7 +465,7 @@ class Auth extends CI_Controller {
         }
         else
         {
-            $this->form_validation->set_rules('email', $this->lang->line('create_user_validation_email_label'), 'required|valid_email|is_unique[' . $tables['users'] . '.email]');
+            $this->form_validation->set_rules('email', $this->lang->line('create_user_validation_email_label'), 'required|valid_email');
         }
 
         $this->form_validation->set_rules('company', $this->lang->line('create_user_validation_company_label'), 'trim');

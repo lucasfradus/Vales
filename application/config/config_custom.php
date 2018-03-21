@@ -100,6 +100,7 @@ $config['PendienteDeAprobacion']	 = 2;
 $config['EnProcesoDeArmado']		   = 3;
 $config['ListoParaRetirar']				 = 4;
 $config['Retirado']						     = 5;
+$config['RechazoPorFaltaDeStock']  = 6;
 
 /*
 |--------------------------------------------------------------------------

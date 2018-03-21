@@ -3,12 +3,18 @@
   <head>
     <meta charset="UTF-8">
     <style>
-      th, tr {
+      th {
+
           border: 1px solid black;
+          height: 40px;
           border-collapse: collapse;
+          vertical-align: bottom;
+          padding: 15px;
+          text-align: left;
+
       }
+      tr:hover {background-color: #f5f5f5;}
 </style>
-    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet" />
   </head>
   <body>
 		<h3>Hay un nuevo vale aguardando aprobación.</h3>
@@ -35,6 +41,6 @@
   </body><br>
   Puede realizar un seguimiento del mismo <a href="http://localhost/Vales/vales_consumo/view/<?=$id_vale?>"> ACA </a>
   <br>
-  Acciones Rápidas: 
+  Acciones Rápidas:
  <a href="http://localhost/Vales/vales_consumo/view/<?=$id_vale?>"> Aprobar</a>|<a href="http://localhost/Vales/vales_consumo/view/<?=$id_vale?>"> Rechazar</a>
 </html>

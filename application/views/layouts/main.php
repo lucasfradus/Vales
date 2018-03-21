@@ -32,9 +32,9 @@
                 <!-- Logo -->
                 <a href="<?= base_url('/'); ?>" class="logo">
                     <!-- mini logo for sidebar mini 50x50 pixels -->
-                    <span class="logo-mini">ILVA SA -- Version: 0.1 -- Branch: Desarrollo</span>
+                    <span class="logo-mini">Vales</span>
                     <!-- logo for regular state and mobile devices -->
-                    <span class="logo-lg">ILVA SA -- Version: 0.1 -- Branch: Desarrollo</span>
+                    <span class="logo-lg">Vales de Consumo</span>
                 </a>
                 <!-- Header Navbar: style can be found in header.less -->
                 <nav class="navbar navbar-static-top">
@@ -90,7 +90,7 @@
                     <!-- Sidebar user panel -->
                     <div class="user-panel">
                         <div class="pull-left image">
-                            <img src="<?php echo site_url('resources/img/user2-160x160.jpg');?>" class="img-circle" alt="User Image">
+                            <img src="<?php echo site_url('resources/img/ilva.jpg');?>" class="img-circle" alt="User Image">
                         </div>
                         <div class="pull-left info">
                             <p><?= $sesion->first_name.' '.$sesion->last_name?></p>
@@ -107,15 +107,17 @@
                         </div>
                     </div>
                     <!-- search form -->
-                              <form action="#" method="get" class="sidebar-form">
-                                <div class="input-group">
-                                  <input type="text" name="q" class="form-control" placeholder="Buscar Vale">
-                                  <span class="input-group-btn">
-                                        <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                                        </button>
-                                      </span>
-                                </div>
-                              </form>
+                <?php if (!$this->ion_auth->in_group($this->config->item('Requeridor'))): ?>
+                    <?php echo form_open('vales_consumo/search',array('class'=>'sidebar-form','method'=>'POST')); ?>
+                        <div class="input-group">
+                          <input type="text" name="search" class="form-control" placeholder="Buscar Vale">
+                          <span class="input-group-btn">
+                                <button type="submit" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                                </button>
+                              </span>
+                        </div>
+                    <?php echo form_close(); ?>
+                <?php endif ?>
                     <!-- /.search form -->
                     <!-- sidebar menu: : style can be found in sidebar.less -->
                     <ul class="sidebar-menu">
@@ -138,18 +140,24 @@
 
                                     </a>
                                 </li>
+                                <?php if ($this->ion_auth->in_group(array($this->config->item('Aprobador'),$this->config->item('Pañolero'),$this->config->item('Administrator')))): ?>
                                 <li>
                                     <a href="<?php echo site_url('vales_consumo/aprobaciones');?>"><i class="fa fa-check"></i> Vales Para Aprobar
-                                     <i class="label label-primary pull-righ"><?= $aprobaciones_barra ?></i>
+                                     <!-- <i class="label label-primary pull-righ"><?= $aprobaciones_barra ?></i> -->
                                       </a>
                                 </li>
+                                <?php endif ?>
+                                <?php if ($this->ion_auth->in_group(array($this->config->item('Pañolero'),$this->config->item('Administrator')))): ?>
                                 <li>
                                     <a href="<?php echo site_url('vales_consumo/armado');?>"><i class="fa fa-industry"></i> Armado de Vale
-                                        <i class="label label-primary pull-righ"><?= $estado_barra ?></i>
+                                        <!-- <i class="label label-primary pull-righ"><?= $estado_barra ?></i> -->
                                     </a>
                                 </li>
+                                <?php endif ?>
+
                             </ul>
                         </li>
+                        <?php if ($this->ion_auth->in_group(array($this->config->item('Administrator'),$this->config->item('Pañolero')))): ?>
 						<li>
                             <a href="#">
                                 <i class="fa fa-barcode"></i> <span>Articulos</span>
@@ -236,6 +244,7 @@
                                   </li>
                             </ul>
                         </li>
+                        <?php endif ?>
                     </ul>
                 </section>
                 <!-- /.sidebar -->
@@ -372,4 +381,47 @@ function startTime() {
   }, 500);
 }
 startTime();
+</script>
+<!-- Custom styles to disable animation temporarily (inlined for show) -->
+<style>
+/* Probably doesn't need all these prefixes but oh well */
+.disable-animations, .disable-animations * {
+  /* CSS transitions */
+  -o-transition-property: none !important;
+  -moz-transition-property: none !important;
+  -webkit-transition-property: none !important;
+  transition-property: none !important;
+  /* CSS transforms */
+  -o-transform: none !important;
+  -moz-transform: none !important;
+  -webkit-transform: none !important;
+  transform: none !important;
+  /* CSS animations */
+  -webkit-animation: none !important;
+  -moz-animation: none !important;
+  -o-animation: none !important;
+  animation: none !important;
+}
+</style>
+
+<!-- AdminLTE JavaScript -->
+
+
+<!-- Custom scripts loaded AFTER AdminLTE JavaScript (inlined for show) -->
+<script>
+$(function ($) {
+  var $body = $('body');
+  // On click, capture state and save it in localStorage
+  $($.AdminLTE.options.sidebarToggleSelector).click(function () {
+    localStorage.setItem('sidebar', $body.hasClass('sidebar-collapse') ? 1 : 0);
+  });
+
+  // On ready, read the set state and collapse if needed
+  if (localStorage.getItem('sidebar') === '0') {
+    $body.addClass('disable-animations sidebar-collapse');
+    requestAnimationFrame(function () {
+      $body.removeClass('disable-animations');
+    });
+  }
+});
 </script>

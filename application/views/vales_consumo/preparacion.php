@@ -38,7 +38,7 @@
           <div class="col-md-6">
             <label for="id_requeridor" class="control-label">Modificar Estado</label>
               <div class="form-group">
-                <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#myModal">Modificar Estado </button>
+                <button type="button" id="changeStatus" class="btn btn-info btn-block" data-toggle="modal" data-target="#myModal">Modificar Estado </button>
               </div>
           </div>
     </div>
@@ -155,9 +155,11 @@
             <label for="id_sector" class="control-label"><span class="text-danger">*</span>Estado</label>
               <div class="form-group">
                           <select name="estado" class="form-control" id=EstadoVale>
-                            <option value=<?= $this->config->item('EnProcesoDeArmado')?> disabled >En Proceso De Armado</option>
-                            <option value=<?= $this->config->item('ListoParaRetirar')?> <?= ( $vale['id_estado'] == $this->config->item('ListoParaRetirar') ? 'disabled' : '')?>>Listo Para Retirar</option>
-                            <option value=<?= $this->config->item('Retirado')?>>Retirado</option>
+														<?php foreach ($estados as $estado) {
+															?>
+															<option value="<?=$estado->id_estado_entrega?>"><?=$estado->nombre_estado?></option>
+															<?php
+														}?>
                           </select>
               </div>
               <div class="form-group">
@@ -172,6 +174,9 @@
     </div>
   </div>
 </div>
+
+
+
 
 <script>
 

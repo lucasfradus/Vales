@@ -64,7 +64,7 @@ class Vales_consumo extends CI_Controller{
             }else if($this->ion_auth->in_group($this->config->item('Administrator')) || $this->ion_auth->in_group($this->config->item('Pañolero'))){
               $this->data['vales_consumo'] = $this->Vales_consumo_model->get_all_vales_consumo();
             }else if($this->ion_auth->in_group($this->config->item('Aprobador'))){
-
+              $this->data['vales_consumo'] = $this->Vales_consumo_model->get_vales_consumo_by_sector($this->data['sectores']);
             }else{
             $this->session->set_flashdata('error', 'No Tiene permisos para realizar esta acción');
                     redirect('/');
@@ -74,7 +74,26 @@ class Vales_consumo extends CI_Controller{
     }
 
 
-
+public function search(){
+  //los parametros que le paso, van a hacer que la busqueda sea mas o menos potente.
+  if($this->ion_auth->in_group($this->config->item('Requeridor'))){
+      $parametros = array(
+        'id_user' => $this->user->id,
+      );
+     }else if($this->ion_auth->in_group($this->config->item('Administrator')) || $this->ion_auth->in_group($this->config->item('Pañolero'))){
+       $parametros = array(
+         'all' => 1,
+       );
+     }else if($this->ion_auth->in_group($this->config->item('Aprobador'))){
+       $parametros = array(
+         'sectores' => $this->data['sectores'],
+       );
+     }
+  $search = $this->input->post('search');
+  $this->data['vales_consumo'] = $this->Vales_consumo_model->search_vales($search,$parametros);
+  $this->data['_view'] = 'vales_consumo/search';
+  $this->load->view('layouts/main',$this->data);
+}
 
 function testing(){
     $result = $this->input->post('search_data');
@@ -90,6 +109,7 @@ function testing(){
                 }
 
                  $this->data['vale'] = $this->Vales_consumo_model->get_vales_consumo($id_vale);
+
 
                   if(isset($this->data['vale']['id_vale']))
                     {
@@ -110,7 +130,7 @@ function testing(){
 
 
                             }
-                            $this->data['estado']         = $this->Estado_entrega_model->get_all_estado_entrega();
+                            $this->data['estados']        = $this->Estado_entrega_model->get_all_estado_entrega_by_status($this->data['vale']['id_estado']);
                             $this->data['aprobacion']     = $this->Evolucion_vale_model->get_aprobacion_vale($id_vale);
                             $this->data['evolucion']      = $this->Evolucion_vale_model->get_evolucion_vale($id_vale);
                             $this->data['items']          = $this->Articulo_model->get_articulo_por_vale($id_vale,$this->config->item('Pendiente'));
@@ -211,9 +231,10 @@ function testing(){
             if($this->ion_auth->in_group($group)){
                 $this->data['estado'] = $this->Estado_entrega_model->get_all_estado_entrega();
 
-                //hago el Where aca, es muy villero, pero active record tiene algunas limitaciones en cuanto a querys tan especificas
-                $where = 'id_aprobacion = '.$this->config->item('Aprobado').' and id_estado ='.$this->config->item('PendienteDeAprobacion').' OR id_estado ='.$this->config->item('EnProcesoDeArmado').' OR id_estado ='.$this->config->item('ListoParaRetirar');
-                $this->data['vales_consumo'] = $this->Vales_consumo_model->get_all_vales_consumo_estado_by_estado($where);
+                // //hago el Where aca, es muy villero, pero active record tiene algunas limitaciones en cuanto a querys tan especificas
+                // $where = 'id_aprobacion = '.$this->config->item('Aprobado').' and id_estado ='.$this->config->item('PendienteDeAprobacion').' OR id_estado ='.$this->config->item('EnProcesoDeArmado').' OR id_estado ='.$this->config->item('ListoParaRetirar');
+                $estados = array($this->config->item('PendienteDeAprobacion'),$this->config->item('EnProcesoDeArmado'),$this->config->item('ListoParaRetirar'));
+                $this->data['vales_consumo'] = $this->Vales_consumo_model->get_all_vales_consumo_estado_by_estado($estados);
                 $this->data['_view'] = 'vales_consumo/armado';
                 $this->load->view('layouts/main',$this->data);
             }else{
@@ -221,6 +242,19 @@ function testing(){
                redirect('vales_consumo/index');
             }
     }
+/*
+* Esta funcion la llamo via AJAX para que me devuelva los posibles estados que puede tomar un vale en base al estado en el que se encuentra.
+*
+*
+*/
+    function get_all_estado_entrega_by_status()
+    {
+      $result = $this->Estado_entrega_model->get_all_estado_entrega_by_status($this->input->post('status'));
+      foreach ($result as $r) {
+         echo '<option value='.$r->id_estado_entrega.'>'.$r->nombre_estado.'</option>';
+      }
+    }
+
     function UpdateStatusArmado(){
         $user = $this->ion_auth->user()->row();
             if ($this->uri->segment(3) && $this->uri->segment(4)){
@@ -251,14 +285,22 @@ function testing(){
 
             if($this->Evolucion_vale_model->add_evolucion_vale($evolucion_vale) && $this->Vales_consumo_model->update_vales_consumo($id_vale,$actualizacion_vale)){
 
-
-                    $this->session->set_flashdata('success','Vale Actualizado correctamente');
-                     redirect('vales_consumo/armado');
+                $owner = $this->Vales_consumo_model->get_vales_consumo($id_vale);
+                if($this->Notificaciones_user_model->get_notifications_settings($owner['id'], $this->config->item('Aprobacion_Vale'))){
+                    $vale = array(
+                        'id_vale_evolucion'   => $id_vale,
+                        'id_estado'           => $this->Estado_entrega_model->get_estado_entrega($id_estado_entrega),
+                        'id_responsable'      => $user,
+                    );
+                    $this->generales->Notify_owner_ready($owner, $vale);
+                }
+                    $this->session->set_flashdata('error','No tiene permiso para realizar esta acción.');
+                    echo true;
                 }
 
             }else{
                  $this->session->set_flashdata('error','Ocurrió un error al actualizar el Vale');
-                         redirect('vales_consumo/armado');
+                         echo false;
             }
 
     }
@@ -456,11 +498,17 @@ if($vales_consumo_id){
     }
 }
 function test(){
-    $result = $this->Jerarquia_model->get_responsible_by_sector(22, $this->config->item('Nuevo_Vale'));
-    foreach($result as $r){
-        print_r($r->id);
-    }
+    $owner = $this->user;
+    $vale = array(
+        'id_vale'   => 49,
+        'id_estado'           => $this->Estado_entrega_model->get_estado_entrega(4),
+        'responsable'         => $this->user,
+        'observacion'         => 'hola que tal',
+        'items'               => $this->Articulo_model->get_articulo_por_vale(49),
+        'info_vale'           => $this->Vales_consumo_model->get_vales_consumo(49),
+    );
 
+    $this->generales->Notify_owner_ready($owner, $vale);
 }
 
     /*
@@ -577,6 +625,7 @@ function test(){
     /*
     * Funcion que llamo desde AJAX para actualizar el estado de preparacion de un vale
     * La llamo desde preparacion.php
+    * id_vale:id_vale, status:status, comments:comments
     */
     function update_status(){
       $evolucion_vale = array(
@@ -584,21 +633,34 @@ function test(){
               'id_estado'               => $this->input->post('status'),
               'fecha'                   => time(),
               'id_responsable'          => $this->user->id,
-              'observacion'             => $this->input->post('comments')
+              'observacion'             => $this->input->post('comments'),
       );
       $params = array(
           'id_estado' => $this->input->post('status'),
       );
 
       if($this->Evolucion_vale_model->add_evolucion_vale($evolucion_vale) && $this->Vales_consumo_model->update_vales_consumo($this->input->post('id_vale'),$params)){
-            echo $this->Estado_entrega_model->get_estado_entrega($this->input->post('status'))->nombre_estado;
+          $owner = $this->Vales_consumo_model->get_vales_consumo($this->input->post('id_vale'));
+          if($this->Notificaciones_user_model->get_notifications_settings($owner['id'], $this->config->item('Listo_Para_Retirar_Vale'))){
+              $vale = array(
+                  'id_vale'             => $this->input->post('id_vale'),
+                  'id_estado'           => $this->Estado_entrega_model->get_estado_entrega($this->input->post('status')),
+                  'responsable'         => $this->user,
+                  'observacion'         => $this->input->post('comments'),
+                  'items'               => $this->Articulo_model->get_articulo_por_vale($this->input->post('id_vale')),
+                  'info_vale'           => $this->Vales_consumo_model->get_vales_consumo($this->input->post('id_vale')),
+              );
+
+              $this->generales->Notify_owner_ready($owner, $vale);
+          }
+             $this->session->set_flashdata('success','Vale Actualizado Correctamente!');
+             echo true;
       }else{
-        echo false;
+         $this->session->set_flashdata('error','Ocurrió un error al crear el vale, intente nuevamente.');
+         echo true;
       }
 
     }
-
-
 
 
         /*

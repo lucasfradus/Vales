@@ -71,9 +71,9 @@
               <button class="btn btn-danger" id="btn-delete-all">
 								<i class="fa fa-eraser"></i> Borrar Todo
 							</button>
-							<button class="btn btn-danger" id="test">
+							<!-- <button class="btn btn-danger" id="test">
 								<i class="fa fa-eraser"></i> Test
-							</button>
+							</button> -->
 
 
             </div>

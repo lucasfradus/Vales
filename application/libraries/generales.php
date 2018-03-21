@@ -48,18 +48,18 @@ class Generales{
         $this->data['perfil'] = $this->CI->Ion_auth_model->get_users_groups()->row();
 
 
-            $aprobaciones_barra = array(
-                'id_aprobacion' => $this->CI->config->item('Pendiente'),
-                'sectores' => $this->data['sectores'],
-            );
-            $estado_barra = array(
-                'id_aprobacion' => $this->CI->config->item('Aprobado'),
-                'sectores' => $this->data['sectores'],
-                'id_estado' => $this->CI->config->item('EnProcesoDeArmado'),
-            );
-
-            $this->data['aprobaciones_barra']       = $this->CI->Vales_consumo_model->get_all_vales_count_array($aprobaciones_barra);
-            $this->data['estado_barra']             = $this->CI->Vales_consumo_model->get_all_vales_count_array($estado_barra);
+            // $aprobaciones_barra = array(
+            //     'id_aprobacion' => $this->CI->config->item('Pendiente'),
+            //     'sectores' => $this->data['sectores'],
+            // );
+            // $estado_barra = array(
+            //     'id_aprobacion' => $this->CI->config->item('Aprobado'),
+            //     'sectores' => $this->data['sectores'],
+            //     'id_estado' => $this->CI->config->item('EnProcesoDeArmado'),
+            // );
+            //
+            // $this->data['aprobaciones_barra']       = $this->CI->Vales_consumo_model->get_all_vales_count_array($aprobaciones_barra);
+            // $this->data['estado_barra']             = $this->CI->Vales_consumo_model->get_all_vales_count_array($estado_barra);
 
 
         //$this->data['aprobaciones_barra'] =  $this->CI->Vales_consumo_model->get_all_vales_count($this->CI->config->item('Pendiente'),null,$this->data['sectores']);
@@ -88,7 +88,6 @@ class Generales{
 
     public function Notify_owner_aproval($requeridor, $vale)
     {
-
         if($vale['id_estado_aprobacion'] == $this->CI->config->item('Aprobado')){
             $header = '[Sistema de Vales #'.$vale['id_vale'].'] Su vale ha sido Aprobado';
         }else{
@@ -102,6 +101,40 @@ class Generales{
         );
          $this->CI->mailer->new_mail_queue($dbdata);
     }
+/*
+'id_vale'             => $this->input->post('id_vale'),
+'id_estado'           => $this->Estado_entrega_model->get_estado_entrega($this->input->post('status')),
+'responsable'         => $this->user,
+'observacion'         => $this->input->post('comments'),
+
+*/
+    public function Notify_owner_ready($requeridor, $vale)
+    {
+        if($vale['id_estado']->id_estado_entrega == $this->CI->config->item('EnProcesoDeArmado')){
+
+            $header = '[Sistema de Vales #'.$vale['id_vale'].'] Su vale se encuentra en proceso de armado';
+
+        }elseif($vale['id_estado']->id_estado_entrega == $this->CI->config->item('ListoParaRetirar')){
+
+            $header = '[Sistema de Vales #'.$vale['id_vale'].'] Su vale ya esta listo para ser retirado';
+
+        }elseif($vale['id_estado']->id_estado_entrega == $this->CI->config->item('Retirado')){
+
+            $header = '[Sistema de Vales #'.$vale['id_vale'].'] Su vale ha sido retirado';
+
+        }elseif($vale['id_estado']->id_estado_entrega == $this->CI->config->item('RechazoPorFaltaDeStock')){
+
+            $header = '[Sistema de Vales #'.$vale['id_vale'].'] Su vale ha sido Rechazado por falta de stock';
+        }
+        $body = $this->CI->load->view('email/update_status', $vale, TRUE);
+        $dbdata = array(
+            '_recipients' => $requeridor['email'],
+            '_body' => $body,
+            '_headers' => $header,
+        );
+         $this->CI->mailer->new_mail_queue($dbdata);
+    }
+
 
 
 
