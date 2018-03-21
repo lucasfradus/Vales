@@ -4,12 +4,15 @@
             <div class="box-header">
                 <h2 class="box-title">Articulos Cargados</h2> <br><br>
                 <div class="box-tools">
+
                     <a href="<?=site_url('articulo/add'); ?>" class="btn btn-success btn-sm">Crear Nuevo Articulo</a>
+                    <a href="<?=site_url('articulo/bulk_add'); ?>" class="btn btn-info btn-sm">Carga Masiva de Articulos</a>
                 </div>
-
-
+            <div class="col-md-6">
+            <select name="articulo" class="select2" onChange="get_un_med()" style="width: 100%" id="articulo" ></select>
+            </div>
             <div class="box-body">
-               <table id="example2" class="table table-bordered table-hover">
+               <table class="table table-bordered table-hover">
                     <thead>
                 <tr>
                         <th>Id Articulo</th>
@@ -57,16 +60,57 @@
                     <?php } ?>
                      </tbody>
                 </table>
+                <p><?php echo $links; ?></p>
 
             </div>
         </div>
     </div>
 </div>
 
+
+<script type="text/javascript">
+					 $('.select2').select2({
+						placeholder: 'Buscar Articulo por Descripción o Código',
+						allowClear: true,
+						language:{
+							inputTooShort: function () {
+						    return "Al menos se deben ingresar 3 caracteres";
+						  }
+						},
+						 minimumInputLength: 3,
+							 ajax:{
+									 url: "<?php echo base_url('articulo/autocompete'); ?>",
+									 dataType: "json",
+									 delay: 250,
+									 data: function(params){
+											 return{
+													 search: params.term
+											 };
+									 },
+									 processResults: function(data){
+											 var results = [];
+
+											 $.each(data, function(index, item){
+													 results.push({
+															 id: item.id_articulo,
+															 text: item.descripcion1,
+                                                             value:'<a href=#>'+item.id_articulo+'</a>'
+
+													 });
+											 });
+											 return{
+													 results: results
+											 };
+									 }
+							 }
+					 });
+	 </script>
+
+
+
 <script type="text/javascript">
 
-function ajaxSearch()
-{
+$('#search_data').on('click', function(){
     var input_data = $('#search_data').val();
 
     if (input_data.length === 0)
@@ -96,7 +140,7 @@ function ajaxSearch()
          });
 
      }
- }
+ });
 </script>
 
 

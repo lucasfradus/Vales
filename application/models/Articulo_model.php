@@ -24,6 +24,12 @@ class Articulo_model extends CI_Model
         return $this->db->get_where('articulos',array('id_articulo'=>$id_articulo))->row_array();
     }
 
+    function get_articulo_by_number($id_articulo)
+    {
+        return $this->db->get_where('articulos',array('num_articulo'=>$id_articulo))->row_array();
+    }
+
+
     function get_un_medida($id_articulo)
     {
         $array = array(
@@ -105,7 +111,8 @@ class Articulo_model extends CI_Model
     $this->db->like('descripcion1', $search_data);
     $this->db->or_like('descripcion2', $search_data);
     $this->db->or_like('num_articulo', $search_data);
-    return $this->db->get('articulos', 8)->result();
+    $this->db->where('status', $this->config->item('Activo'));
+    return $this->db->get('articulos', 8)->result_array();
 }
 
 public function get_autocomplete_uno($search_data)
@@ -150,7 +157,16 @@ public function get_autocomplete_uno($search_data)
     }
 
     /*
-     * function to add new articulo
+     * Parametros que recibo
+     $params = array(
+               'id_un_med1' => $this->input->post('id_un_med1'),
+               'id_un_med2' => $this->input->post('id_un_med2'),
+               'num_articulo' => $this->input->post('num_articulo'),
+               'descripcion1' => $this->input->post('descripcion1'),
+               'descripcion2' => $this->input->post('descripcion2'),
+               'status' => $this->input->post('status'),
+           );
+
      */
     function add_articulo($params)
     {

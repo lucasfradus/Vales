@@ -15,10 +15,12 @@ class Notificaciones_user extends CI_Controller{
 
 //Esta pagina solo la deberian poder ver los administradores o los pañoleros.
 
-        $group= array(
-            $this->config->item('Administrator'),
-            $this->config->item('Pañolero')
-        );
+        if (!$this->ion_auth->in_group(array($this->config->item('Administrator'),$this->config->item('Pañolero'))))
+        {
+            $this->session->set_flashdata('error', 'No Tiene permiso para realizar esa acción.');
+            redirect('/');
+        }
+
 
     }
 
@@ -28,11 +30,6 @@ class Notificaciones_user extends CI_Controller{
      */
     function index($id_user = null)
     {
-        if (!$this->ion_auth->in_group($group))
-        {
-            $this->session->set_flashdata('error', 'No Tiene permiso para realizar esa acción.');
-            redirect('/');
-        }
 
         $this->data['notificaciones_users'] = $this->Notificaciones_user_model->get_all_notificaciones_users();
         $this->data['_view'] = 'notificaciones_user/index';
@@ -44,11 +41,7 @@ class Notificaciones_user extends CI_Controller{
      */
      function add()
          {
-            if (!$this->ion_auth->in_group($group))
-            {
-                $this->session->set_flashdata('error', 'No Tiene permiso para realizar esa acción.');
-                redirect('/');
-            }
+
              $this->load->library('form_validation');
 
      		$this->form_validation->set_rules('user_id','Usuario','required|is_unique[notificaciones_users.user_id]');
@@ -81,11 +74,7 @@ class Notificaciones_user extends CI_Controller{
      */
     function edit($id_notificaciones_users)
     {
-        if (!$this->ion_auth->in_group($group))
-        {
-            $this->session->set_flashdata('error', 'No Tiene permiso para realizar esa acción.');
-            redirect('/');
-        }
+
         // check if the notificaciones_user exists before trying to edit it
         $this->data['notificaciones_user'] = $this->Notificaciones_user_model->get_notificaciones_user($id_notificaciones_users);
 

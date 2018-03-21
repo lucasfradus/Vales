@@ -1,3 +1,6 @@
+
+
+
 <div class="row">
     <div class="col-md-12">
       	<div class="box box-info">
@@ -33,32 +36,28 @@
 							</select>
 						</div>
 					</div>
-					<div class="col-md-6">
-						<label for="articulo" ><span class="text-danger">*</span>Articulo</label>
-						<div class="form-group">
-						<select name="articulo" class="form-control select2" onChange="get_un_med()" style="width: 100%" id="articulo" >
-						<?php
-						foreach($all_productos as $articulo)
-						{
-						echo '<option value="'.$articulo['id_articulo'].'">'.$articulo['num_articulo'].' | '.$articulo['descripcion1'].' | '.$articulo['descripcion2'].'</option>';
-						}
-						?>
-						</select>
-						</div>
-					</div>
- <div class="col-md-4">
-		 <div class="form-group" id="cantidad">
-				<label for="cantidad" class="control-label"><span class="text-danger">*</span>Cantidad</label>
-				<input type="number" id="cant" class="form-control" name="cantidad" min="1" >
 
-	 </div>
- </div>
- <div class="col-md-2">
-		<div class="form-group" id="cantidad">
-			 <label for="cantidad" class="control-label">Unidad de Medida</label>
-			 <input id="suggestions" type="text" class="form-control" disabled>
-	</div>
- </div>
+				<div class="col-md-6">
+						<label for="articulo" ><span class="text-danger">*</span>Articulo</label>
+							<div class="form-group">
+								<select name="articulo" class="form-control select2" onChange="get_un_med()" style="width: 100%" id="articulo" >
+							</select>
+						</div>
+				</div>
+
+			<div class="col-md-4">
+				 <div class="form-group" id="cantidad">
+						<label for="cantidad" class="control-label"><span class="text-danger">*</span>Cantidad</label>
+						<input type="number" id="cant" class="form-control" name="cantidad" min="1" >
+
+			 </div>
+			</div>
+		 <div class="col-md-2">
+				<div class="form-group" id="cantidad">
+					 <label for="cantidad" class="control-label">Unidad de Medida</label>
+					 <input id="suggestions" type="text" class="form-control" disabled>
+			</div>
+		 </div>
 
 
 
@@ -97,7 +96,8 @@
 			</div>	<button class="btn btn-danger pull-right" id="btn-cancel">
 					<i class="fa fa-times-circle"></i> Cancelar
 				</button>
-				<!--<button class="btn btn-success pull-right" id="btn-confirm">-->
+				<!-- <button class="btn btn-success pull-right" id="btn-confirm"> -->
+				<!-- <button class="btn btn-success pull-right" onclick="search_articles()"> -->
 					<button class="btn btn-success pull-right" id="CrearVale">
 						<i id="CrearValeButton" class="fa fa-check"></i> Crear Vale
 				</button>
@@ -159,8 +159,41 @@
 
 
 
+<script type="text/javascript">
+					 $('.select2').select2({
+						placeholder: 'Buscar Articulo por Descripción o Código',
+						allowClear: true,
+						language:{
+							inputTooShort: function () {
+						    return "Al menos se deben ingresar 3 caracteres";
+						  }
+						},
+						 minimumInputLength: 3,
+							 ajax:{
+									 url: "<?php echo base_url('articulo/autocompete'); ?>",
+									 dataType: "json",
+									 delay: 250,
+									 data: function(params){
+											 return{
+													 search: params.term
+											 };
+									 },
+									 processResults: function(data){
+											 var results = [];
 
-
+											 $.each(data, function(index, item){
+													 results.push({
+															 id: item.id_articulo,
+															 text: item.num_articulo +' | '+ item.descripcion1 +' | '+ item.descripcion2
+													 });
+											 });
+											 return{
+													 results: results
+											 };
+									 }
+							 }
+					 });
+	 </script>
 
 
 <script>
@@ -446,15 +479,6 @@ function get_un_med() {
 </script>
 
 
-<script type="text/javascript">
-     $(document).ready(function() {
-
-			     $('.select2').select2();
-
-				 });
-
-
-</script>
 
 
 
