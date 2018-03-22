@@ -11,7 +11,7 @@
 *
 */
 function base_url() {
-    return 'http://localhost/Vales/';
+    return 'http://ilvanet/Vales/';
 }
 
 

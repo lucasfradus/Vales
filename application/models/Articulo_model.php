@@ -106,14 +106,47 @@ class Articulo_model extends CI_Model
     }
 
 
-    public function get_autocomplete($search_data)
-{
-    $this->db->like('descripcion1', $search_data);
-    $this->db->or_like('descripcion2', $search_data);
-    $this->db->or_like('num_articulo', $search_data);
-    $this->db->where('status', $this->config->item('Activo'));
-    return $this->db->get('articulos', 8)->result_array();
-}
+    public function get_autocomplete($search_data, $number, $category)
+    {
+
+        if(isset($category)){
+            $this->db->like('num_articulo', $category, 'after');
+        }
+
+        if(isset($number)){
+            if (substr($number, 0, 1)=='0'){
+                $number = substr($number, 1);
+            }
+            $this->db->like('num_articulo', $number, 'after');
+            $this->db->where('status', $this->config->item('Activo'));
+            $this->db->where('(descripcion1 LIKE "%'.$search_data.'%" OR descripcion2 LIKE "%'.$search_data.'%")');
+        }else{
+            if (substr($search_data, 0, 1)=='0'){
+                $search_data = substr($search_data, 1);
+            }
+            $this->db->or_like('num_articulo', $search_data);
+            $this->db->or_like('descripcion1', $search_data);
+            $this->db->or_like('descripcion2', $search_data);
+        }
+
+
+        $this->db->where('status', $this->config->item('Activo'));
+        return $this->db->get('articulos')->result_array();
+    }
+
+    public function get_autocomplete_test( $number, $search_data, $category)
+    {
+
+        // $query = 'SELECT num_articulo, descripcion1, descripcion2 FROM articulos WHERE num_articulo LIKE '.$number.%' AND (descripcion1 LIKE '%'.$search_data.'%' OR descripcion2 LIKE '%'.$search_data.'%')';
+        $this->db->like('num_articulo', $number, 'after');
+        $this->db->where('status', $this->config->item('Activo'));
+        $this->db->where('(descripcion1 LIKE "%'.$search_data.'%" OR descripcion2 LIKE "%'.$search_data.'%")');
+
+        return $this->db->get('articulos')->result_array();
+
+    }
+
+
 
 public function get_autocomplete_uno($search_data)
 {

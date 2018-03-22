@@ -33,7 +33,7 @@
           <tbody>
             <?php foreach($datos_vale as $item){ ?>
                 <tr>
-                   <th><?= $item['id_item']?></th>
+                   <th><?= $item['num_articulo']?></th>
                    <th><?= $item['descripcion']?></th>
                    <th><?= $item['cantidad']?></th>
                 <tr>

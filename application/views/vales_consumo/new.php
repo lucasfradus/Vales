@@ -36,25 +36,43 @@
 							</select>
 						</div>
 					</div>
+				<div class="col-md-3">
+					<div class="col-md-4">
+							<label for="articulo" >Categoria</label>
+								<div class="form-group">
+									<input type="text" class="form-control" id="category" disabled>
 
-				<div class="col-md-6">
-						<label for="articulo" ><span class="text-danger">*</span>Articulo</label>
-							<div class="form-group">
-								<select name="articulo" class="form-control select2" onChange="get_un_med()" style="width: 100%" id="articulo" >
-							</select>
-						</div>
+							</div>
+					</div>
+					<div class="col-md-8">
+							<label for="articulo">Numero Articulo</label>
+								<div class="form-group">
+									<input type="text" class="form-control" id="number">
+							</div>
+					</div>
+					<div align="center" class="text-muted">Filtros opcionales de busqueda</div>
+
 				</div>
+					<div class="col-md-6">
+							<label for="articulo" ><span class="text-danger">*</span>Articulo</label>
+								<div class="form-group">
+									<select name="articulo" class="form-control select2" onChange="get_un_med()" style="width: 100%" id="articulo" >
+								</select>
+							</div>
+					</div>
 
-			<div class="col-md-4">
+
+
+			<div class="col-md-2">
 				 <div class="form-group" id="cantidad">
 						<label for="cantidad" class="control-label"><span class="text-danger">*</span>Cantidad</label>
 						<input type="number" id="cant" class="form-control" name="cantidad" min="1" >
 
 			 </div>
 			</div>
-		 <div class="col-md-2">
+		 <div class="col-md-1">
 				<div class="form-group" id="cantidad">
-					 <label for="cantidad" class="control-label">Unidad de Medida</label>
+					 <label for="cantidad" class="control-label">Un. de Med.</label>
 					 <input id="suggestions" type="text" class="form-control" disabled>
 			</div>
 		 </div>
@@ -175,7 +193,9 @@
 									 delay: 250,
 									 data: function(params){
 											 return{
-													 search: params.term
+													 search: params.term,
+													 category: $('#category').val(),
+													 number: $('#number').val()
 											 };
 									 },
 									 processResults: function(data){
@@ -312,6 +332,7 @@ function Valida_y_agrega(id_item, cantidad, nombre){
 		total.push(
 			{
 			id_item : id_item,
+      num_articulo: nombre[0],
       descripcion: nombre[1],
 			cantidad : cantidad
 			}

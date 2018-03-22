@@ -77,6 +77,7 @@ class Generales{
        $data['id_vale'] = $vales_consumo_id;
        $data['sector'] = $sector;
        $data['user'] = $this->CI->ion_auth->user()->row();
+
        $body = $this->CI->load->view('email/new', $data, TRUE);
        $dbdata = array(
            '_recipients' => $data['user']->email,
@@ -147,7 +148,7 @@ class Generales{
         $dbdata = array(
             '_recipients' => $responsable->email,
             '_body' => $body,
-            '_headers' => 'Nuevo Vale para Aprobar. #'. $vales_consumo_id,
+            '_headers' => '[Sistema de Vales #'.$vales_consumo_id.'] Nuevo Vale para Aprobar. #'. $vales_consumo_id,
         );
         $this->CI->mailer->new_mail_queue($dbdata);
     }

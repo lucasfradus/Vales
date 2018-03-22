@@ -6,11 +6,17 @@
                 <div class="box-tools">
 
                     <a href="<?=site_url('articulo/add'); ?>" class="btn btn-success btn-sm">Crear Nuevo Articulo</a>
-                    <a href="<?=site_url('articulo/bulk_add'); ?>" class="btn btn-info btn-sm">Carga Masiva de Articulos</a>
+                    <!-- <a href="<?=site_url('articulo/bulk_add'); ?>" class="btn btn-info btn-sm">Carga Masiva de Articulos</a> -->
                 </div>
             <div class="col-md-6">
-            <select name="articulo" class="select2" onChange="get_un_med()" style="width: 100%" id="articulo" ></select>
+            <select name="articulo" class="select2" style="width: 100%" id="articulo" ></select>
+
             </div>
+            <div class="col-md-6">
+                <button class="btn btn-sm btn-info" onclick="Redirect()">Ver</button>
+                <button class="btn btn-sm btn-warning" onclick="Redirect_edit()">Editar</button>
+
+                </div>
             <div class="box-body">
                <table class="table table-bordered table-hover">
                     <thead>
@@ -66,6 +72,22 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+function Redirect(){
+    var id = $('#articulo').val();
+    if(id){
+        window.location.href = "<?php echo base_url('articulo/view/') ?>"+id;
+    }
+}
+</script>
+<script type="text/javascript">
+function Redirect_edit(){
+    var id = $('#articulo').val();
+    if(id){
+        window.location.href = "<?php echo base_url('articulo/edit/') ?>"+id;
+    }
+}
+</script>
 
 
 <script type="text/javascript">
@@ -93,8 +115,8 @@
 											 $.each(data, function(index, item){
 													 results.push({
 															 id: item.id_articulo,
-															 text: item.descripcion1,
-                                                             value:'<a href=#>'+item.id_articulo+'</a>'
+															 text: item.num_articulo+' | ' +item.descripcion1+' | ' +item.descripcion2,
+
 
 													 });
 											 });

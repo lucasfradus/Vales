@@ -18,9 +18,9 @@ class Articulo extends CI_Controller{
         $this->data = $this->generales->imports_generales();
 
         //aca valido que solo ciertos perfiles de usuarios puedan utilizar los metodos de estre controlador
-        $group = array($this->config->item('Administrator'));
-                if(!$this->ion_auth->in_group($group)){
-                  $this->session->set_flashdata('error','No tiene permiso para realizar esta acción.');
+
+                if(!$this->ion_auth->in_group($this->config->item('Administrator'))){
+                  $this->session->set_flashdata('error','No tiene permiso para realizar esta acción1.11111');
                          redirect('/');
 
                 }
@@ -90,7 +90,6 @@ class Articulo extends CI_Controller{
      */
     function index()
     {
-        if($this->ion_auth->RolCheck($this->config->item('VerArticulos'))){
 //paginacion
        $params['limit'] = 10;
        $params['offset'] = ($this->input->get('per_page')) ? $this->input->get('per_page') : 0;
@@ -105,7 +104,6 @@ class Articulo extends CI_Controller{
         $this->data['_view'] = 'articulo/index';
         $this->load->view('layouts/main',$this->data);
 
-        }
     }
 
     /*
@@ -113,7 +111,34 @@ class Articulo extends CI_Controller{
      */
 
     function autocompete(){
-     echo json_encode($this->Articulo_model->get_autocomplete($this->input->get('search')));
+     echo json_encode($this->Articulo_model->get_autocomplete($this->input->get('search'), $this->input->get('number'), $this->input->get('category')));
+ }
+
+function test(){
+
+
+
+
+    $category = null;
+    $number = '0101000';
+
+    if (substr($number, 0, 1)=='0'){
+        echo "arranca con 0<br>";
+        echo substr($number, 1);
+    }else {
+        echo "no";
+    }
+
+    // $string = 'Caja';
+    //
+    // $result = $this->Articulo_model->get_autocomplete_test($number, $string, $category);
+    // foreach ($result as $r ) {
+    //     echo "<br>";
+    //     echo 'NUMERO de ART '.$r['num_articulo'].' | DESCRIPCION'. $r['descripcion1'];
+    //     echo "<br>";
+    // }
+
+
  }
 
 
@@ -123,7 +148,7 @@ class Articulo extends CI_Controller{
 
     function add(){
 
-    if($this->ion_auth->RolCheck($this->config->item('AltaArticulos'))){
+    // if($this->ion_auth->RolCheck($this->config->item('AltaArticulos'))){
 
         $this->form_validation->set_rules('num_articulo','Numero de Articulo','required|integer|is_unique[articulos.num_articulo]');
         $this->form_validation->set_rules('descripcion1','Descripcion1','required');
@@ -152,14 +177,14 @@ class Articulo extends CI_Controller{
             $this->data['_view'] = 'articulo/add';
             $this->load->view('layouts/main',$this->data);
         }
-    }
+    // }
 }
      /*
      * Ver el detalle de un articulo
      */
 
     function view($id_articulo){
-        if($this->ion_auth->RolCheck($this->config->item('VerArticulos'))){
+        // if($this->ion_auth->RolCheck($this->config->item('VerArticulos'))){
             $this->data['articulo'] = $this->Articulo_model->get_articulo($id_articulo);
               if(isset($this->data['articulo']['id_articulo'])){
 
@@ -169,7 +194,7 @@ class Articulo extends CI_Controller{
               }else{
                 show_error('El articulo que esta intentado ver no existe.');
               }
-        }
+        // }
     }
 
 
@@ -177,7 +202,7 @@ class Articulo extends CI_Controller{
      * Editing a articulo
      */
      function edit($id_articulo){
-        if($this->ion_auth->RolCheck($this->config->item('EditarArticulos'))){
+        //if($this->ion_auth->RolCheck($this->config->item('EditarArticulos'))){
         // check if the articulo exists before trying to edit it
         $this->data['articulo'] = $this->Articulo_model->get_articulo($id_articulo);
 
@@ -216,7 +241,7 @@ class Articulo extends CI_Controller{
         }
         else
             show_error('El articulo que esta intentado editar no existe.');
-    }
+    //}
 }
 
     /*
