@@ -111,9 +111,10 @@ $password = array(
     <div class="wrapper">
         <form action="" method="post" name="Login_Form" class="form-signin">
           <div class="form-signin-heading">
-            <h3 >Bienvenido!</h3>
+            <h3>Vales de Consumo</h3>
               <img src="<?php echo site_url('resources/img/ilva.jpg');?>">
-              <hr class="colorgraph"><br>
+              <hr class="colorgraph">
+              En caso de no contar con un usuario, deberá solicitarlo a Pañol.
             </div>
               <?php echo form_input($identity);?>
                   <?php echo form_input($password);?>

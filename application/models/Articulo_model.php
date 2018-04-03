@@ -16,7 +16,19 @@ class Articulo_model extends CI_Model
      */
     function get_articulo($id_articulo)
     {
-        $this->db->select('id_articulo,num_articulo,descripcion1,descripcion2,status');
+        $this->db->select('id_articulo,num_articulo,descripcion1,descripcion2,tipo_linea,tipo_almacenamiento,articulos.status, pto_venta, texto_busqueda');
+        $this->db->select('f1.nombre_categoria AS FK_Familia');
+        $this->db->join('fk_categorias f1', 'f1.id_fk_categoria = articulos.fk_codigo_familia','left');
+
+        $this->db->select('f2.nombre_categoria AS FK_Cod1');
+        $this->db->join('fk_categorias f2', 'f2.id_fk_categoria = articulos.fk_codigo_cat1','left');
+
+        $this->db->select('f3.nombre_categoria AS FK_Cod2');
+        $this->db->join('fk_categorias f3', 'f3.id_fk_categoria = articulos.fk_codigo_cat2','left');
+
+        $this->db->select('f4.nombre_categoria AS FK_Cod3');
+        $this->db->join('fk_categorias f4', 'f4.id_fk_categoria = articulos.fk_codigo_cat3','left');
+
        $this->db->select('u1.un_medida AS UN_Medida_1');
        $this->db->select('u2.un_medida AS UN_Medida_2');
        $this->db->join('fk_un_med u1', 'u1.id_un_medida = articulos.id_un_med1');
@@ -119,7 +131,12 @@ class Articulo_model extends CI_Model
             }
             $this->db->like('num_articulo', $number, 'after');
             $this->db->where('status', $this->config->item('Activo'));
-            $this->db->where('(descripcion1 LIKE "%'.$search_data.'%" OR descripcion2 LIKE "%'.$search_data.'%")');
+            $this->db->group_start();
+              $this->db->like('descripcion1', $search_data);
+              $this->db->or_like('descripcion2',  $search_data);
+            $this->db->group_end();
+
+            //$this->db->where('(descripcion1 LIKE "%'.$search_data.'%" OR descripcion2 LIKE "%'.$search_data.'%")');
         }else{
             if (substr($search_data, 0, 1)=='0'){
                 $search_data = substr($search_data, 1);
@@ -171,11 +188,26 @@ public function get_autocomplete_uno($search_data)
      */
        function get_all_articulos($params = array())
     {
-       $this->db->select('id_articulo,num_articulo,descripcion1,descripcion2,status');
+        $this->db->select('id_articulo,num_articulo,descripcion1,descripcion2,tipo_linea,tipo_almacenamiento,articulos.status, pto_venta, texto_busqueda');
+
+       $this->db->select('f1.nombre_categoria AS FK_Familia');
+       $this->db->join('fk_categorias f1', 'f1.id_fk_categoria = articulos.fk_codigo_familia','left');
+
+       $this->db->select('f2.nombre_categoria AS FK_Cod1');
+       $this->db->join('fk_categorias f2', 'f2.id_fk_categoria = articulos.fk_codigo_cat1','left');
+
+       $this->db->select('f3.nombre_categoria AS FK_Cod2');
+       $this->db->join('fk_categorias f3', 'f3.id_fk_categoria = articulos.fk_codigo_cat2','left');
+
+       $this->db->select('f4.nombre_categoria AS FK_Cod3');
+       $this->db->join('fk_categorias f4', 'f4.id_fk_categoria = articulos.fk_codigo_cat3','left');
+
        $this->db->select('u1.un_medida AS UN_Medida_1');
-       $this->db->select('u2.un_medida AS UN_Medida_2');
        $this->db->join('fk_un_med u1', 'u1.id_un_medida = articulos.id_un_med1');
+
+       $this->db->select('u2.un_medida AS UN_Medida_2');
        $this->db->join('fk_un_med u2', 'u2.id_un_medida = articulos.id_un_med2');
+
         $this->db->order_by('id_articulo', 'asc');
         if(isset($params['limit']) && !empty($params['limit']))
         {

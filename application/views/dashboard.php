@@ -18,6 +18,7 @@
                   <tr>
                     <th>ID Vale</th>
                     <th>Requeridor</th>
+                    <th>Tipo</th>
                     <th>Sector</th>
                     <th>Estado de Aprobacion</th>
                     <th>Estado de Preparacion</th>
@@ -46,11 +47,18 @@
                             $class = 'progress-bar progress-bar-warning';
                         }
 
+                        if($v['id_tipo']==$this->config->item('Tipo_Pañol')){
+                            $tipo_vale='badge bg-aqua';
+                        }else {
+                            $tipo_vale='badge bg-navy';
+                        }
+
                   		?>
 
                   <tr>
                     <td><a href="<?= site_url('vales_consumo/view/'.$v['id_vale']); ?>"><?php echo $v['id_vale']; ?></a></td>
                     <td><?= $v['username']; ?></td>
+                    <td><span class="<?= $tipo_vale ?>"><?php echo ($v['id_tipo']==$this->config->item('Tipo_Pañol') ? 'Pañol' : 'M. Prima'); ?></span></td>
                     <td><?= $v['nombre_sector']; ?></td>
                     <td><span class="<?= $estado_aprobacion ?>"><?= $v['nombre_estado_aprobacion']; ?></span></td>
           			   <td>
@@ -83,6 +91,7 @@
 
   $(function () {
     $('#example2').DataTable({
+      'aaSorting' : [2, 'asc'],
       'paging'      : true,
       'lengthChange': true,
       'searching'   : true,

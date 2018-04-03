@@ -23,6 +23,7 @@ class Vales_consumo_model extends CI_Model
         $this->db->join('estado_entrega','id_estado_entrega = id_estado' );
         $this->db->join('users','id = id_requeridor' );
         $this->db->join('sector_req','id_sector_req = id_sector' );
+        $this->db->join('fk_motivo', 'vales_consumo.id_motivo = fk_motivo.id_motivo');
 
         return $this->db->get_where('vales_consumo',array('id_vale'=>$id_vale))->row_array();
     }
@@ -80,13 +81,13 @@ GROUP BY `id_vale_articulos` ORDER BY `id_vale` DESC
       $this->db->select('COUNT(CASE WHEN estado_entrega_item=1 THEN 1 END) AS Cargado,');
       $this->db->select('COUNT(CASE WHEN estado_entrega_item=0 THEN 1 END) AS Pendiente');
       $this->db->select('COUNT(estado_entrega_item) AS total_items');
-      $this->db->select('id_aprobacion, nombre_estado_aprobacion, id_vale, username, nombre_sector, fecha_creado, nombre_estado, id_requeridor');
+      $this->db->select('id_aprobacion, nombre_estado_aprobacion, id_vale, username, nombre_sector, fecha_creado, nombre_estado, id_requeridor, id_tipo');
         $this->db->join('estado_aprobacion','id_estado_aprobacion_fk = id_aprobacion' );
         $this->db->join('estado_entrega','id_estado_entrega = id_estado' );
         $this->db->join('users','id = id_requeridor' );
         $this->db->join('articulos_x_vale','id_vale_articulos = id_vale' );
         $this->db->join('sector_req','id_sector_req = id_sector' );
-        $this->db->order_by('id_vale', 'desc');
+        $this->db->order_by('id_vale', 'ASC');
         $this->db->group_by('id_vale');
         if(isset($user)){
             $this->db->where('id_requeridor =', $user);
@@ -101,7 +102,7 @@ GROUP BY `id_vale_articulos` ORDER BY `id_vale` DESC
       $this->db->select('COUNT(CASE WHEN estado_entrega_item=1 THEN 1 END) AS Cargado,');
       $this->db->select('COUNT(CASE WHEN estado_entrega_item=0 THEN 1 END) AS Pendiente');
       $this->db->select('COUNT(estado_entrega_item) AS total_items');
-      $this->db->select('id_aprobacion, nombre_estado_aprobacion, id_vale, username, nombre_sector, fecha_creado, nombre_estado, id_requeridor');
+      $this->db->select('id_aprobacion, nombre_estado_aprobacion, id_vale, username, nombre_sector, fecha_creado, nombre_estado, id_requeridor, id_tipo');
         $this->db->join('estado_aprobacion','id_estado_aprobacion_fk = id_aprobacion' );
         $this->db->join('estado_entrega','id_estado_entrega = id_estado' );
         $this->db->join('users','id = id_requeridor' );
@@ -122,7 +123,7 @@ GROUP BY `id_vale_articulos` ORDER BY `id_vale` DESC
       $this->db->select('COUNT(CASE WHEN estado_entrega_item=1 THEN 1 END) AS Cargado,');
       $this->db->select('COUNT(CASE WHEN estado_entrega_item=0 THEN 1 END) AS Pendiente');
       $this->db->select('COUNT(estado_entrega_item) AS total_items');
-      $this->db->select('id_aprobacion, nombre_estado_aprobacion, id_vale, username, nombre_sector, fecha_creado, nombre_estado, id_requeridor');
+      $this->db->select('id_aprobacion, nombre_estado_aprobacion, id_vale, username, nombre_sector, fecha_creado, nombre_estado, id_requeridor, id_tipo, nombre_estado_aprobacion');
       $this->db->join('estado_aprobacion','id_estado_aprobacion_fk = id_aprobacion' );
       $this->db->join('estado_entrega','id_estado_entrega = id_estado' );
       $this->db->join('users','id = id_requeridor' );
@@ -148,7 +149,7 @@ GROUP BY `id_vale_articulos` ORDER BY `id_vale` DESC
             $this->db->select('COUNT(CASE WHEN estado_entrega_item=1 THEN 1 END) AS Cargado,');
             $this->db->select('COUNT(CASE WHEN estado_entrega_item=0 THEN 1 END) AS Pendiente');
             $this->db->select('COUNT(estado_entrega_item) AS total_items');
-            $this->db->select('id_aprobacion, nombre_estado_aprobacion, id_vale, username, nombre_sector, fecha_creado, nombre_estado, id_requeridor');
+            $this->db->select('id_aprobacion, nombre_estado_aprobacion, id_vale, username, nombre_sector, fecha_creado, nombre_estado, id_requeridor, id_tipo');
             $this->db->join('estado_aprobacion','id_estado_aprobacion_fk = id_aprobacion' );
             $this->db->join('estado_entrega','id_estado_entrega = id_estado' );
             $this->db->join('users','id = id_requeridor' );
@@ -174,13 +175,13 @@ GROUP BY `id_vale_articulos` ORDER BY `id_vale` DESC
        $this->db->select('COUNT(CASE WHEN estado_entrega_item=1 THEN 1 END) AS Cargado,');
       $this->db->select('COUNT(CASE WHEN estado_entrega_item=0 THEN 1 END) AS Pendiente');
       $this->db->select('COUNT(estado_entrega_item) AS total_items');
-      $this->db->select('id_aprobacion, nombre_estado_aprobacion, id_vale, username, nombre_sector, fecha_creado, nombre_estado, id_requeridor');
+      $this->db->select('id_aprobacion, nombre_estado_aprobacion, id_vale, username, nombre_sector, fecha_creado, nombre_estado, id_requeridor, id_tipo,fk_motivo.nombre_motivo');
         $this->db->join('estado_aprobacion','id_estado_aprobacion_fk = id_aprobacion' );
         $this->db->join('estado_entrega','id_estado_entrega = id_estado' );
         $this->db->join('users','id = id_requeridor' );
         $this->db->join('articulos_x_vale','id_vale_articulos = id_vale' );
         $this->db->join('sector_req','id_sector_req = id_sector' );
-
+        $this->db->join('fk_motivo','fk_motivo.id_motivo = vales_consumo.id_motivo' );
         if(isset($status)){
             $this->db->where('id_estado =', $status);
         }
@@ -216,7 +217,7 @@ GROUP BY `id_vale_articulos` ORDER BY `id_vale` DESC
         $this->db->select('COUNT(CASE WHEN estado_entrega_item=1 THEN 1 END) AS Cargado,');
         $this->db->select('COUNT(CASE WHEN estado_entrega_item=0 THEN 1 END) AS Pendiente');
         $this->db->select('COUNT(estado_entrega_item) AS total_items');
-        $this->db->select('id_aprobacion, nombre_estado_aprobacion, id_vale, username, nombre_sector, fecha_creado, nombre_estado, id_estado, id_requeridor');
+        $this->db->select('id_aprobacion, nombre_estado_aprobacion, id_vale, username, nombre_sector, fecha_creado, nombre_estado, id_estado, id_requeridor, id_tipo');
         $this->db->join('estado_aprobacion','id_estado_aprobacion_fk = id_aprobacion' );
         $this->db->join('estado_entrega','id_estado_entrega = id_estado' );
         $this->db->join('users','id = id_requeridor' );
@@ -236,7 +237,7 @@ GROUP BY `id_vale_articulos` ORDER BY `id_vale` DESC
       $this->db->select('COUNT(CASE WHEN estado_entrega_item=1 THEN 1 END) AS Cargado,');
       $this->db->select('COUNT(CASE WHEN estado_entrega_item=0 THEN 1 END) AS Pendiente');
       $this->db->select('COUNT(estado_entrega_item) AS total_items');
-      $this->db->select('id_aprobacion, nombre_estado_aprobacion, id_vale, username, nombre_sector, fecha_creado, nombre_estado, id_requeridor');
+      $this->db->select('id_aprobacion, nombre_estado_aprobacion, id_vale, username, nombre_sector, fecha_creado, nombre_estado, id_requeridor, id_tipo');
       $this->db->join('estado_aprobacion','id_estado_aprobacion_fk = id_aprobacion' );
       $this->db->join('estado_entrega','id_estado_entrega = id_estado' );
       $this->db->join('users','id = id_requeridor' );
@@ -259,17 +260,18 @@ GROUP BY `id_vale_articulos` ORDER BY `id_vale` DESC
         $this->db->where('id_aprobacion', $id_aprobacion);
 
         if(isset($sectores)){
-           $where = '';
-           $total = count($sectores);
-           $i=1;
-              foreach ($sectores as $s){
-                $where .= "id_sector='$s->id_sector_jerarquia'";
-                    if($i<$total){
-                      $where .= " OR ";
-                    }
-                 $i++;
-              }
-             $this->db->where($where);
+          $this->db->where_in($sectores);
+           // $where = '';
+           // $total = count($sectores);
+           // $i=1;
+           //    foreach ($sectores as $s){
+           //      $where .= "id_sector='$s->id_sector_jerarquia'";
+           //          if($i<$total){
+           //            $where .= " OR ";
+           //          }
+           //       $i++;
+           //    }
+           //   $this->db->where($where);
         }
 
         if(isset($id_estado)){
@@ -290,17 +292,18 @@ GROUP BY `id_vale_articulos` ORDER BY `id_vale` DESC
         }
 
         if(isset($array['sectores'])){
-           $where = '';
-           $total = count($array['sectores']);
-           $i=1;
-              foreach ($array['sectores'] as $s){
-                $where .= "id_sector='$s->id_sector_jerarquia'";
-                    if($i<$total){
-                      $where .= " OR ";
-                    }
-                 $i++;
-              }
-             $this->db->where($where);
+          $this->db->where_in($array['sectores']);
+           // $where = '';
+           // $total = count($array['sectores']);
+           // $i=1;
+           //    foreach ($array['sectores'] as $s){
+           //      $where .= "id_sector='$s->id_sector_jerarquia'";
+           //          if($i<$total){
+           //            $where .= " OR ";
+           //          }
+           //       $i++;
+           //    }
+           //   $this->db->where($where);
         }
 
         if(isset($array['id_estado'])){

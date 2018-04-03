@@ -21,12 +21,19 @@
                <table class="table table-bordered table-hover">
                     <thead>
                 <tr>
-                        <th>Id Articulo</th>
                         <th>Código Articulo</th>
                         <th>Descripción 1</th>
                         <th>Descripción 2</th>
-                        <th>UN Medida 1</th>
-                        <th>UN Medida 2</th>
+                        <th>Texto Busqueda</th>
+                        <th>Familia</th>
+                        <th>Cat 1</th>
+                        <th>Cat 2</th>
+                        <th>Cat 3</th>
+                        <th>UN Med Prim</th>
+                        <th>UN Med Sec</th>
+                        <th>Tipo Linea</th>
+                        <th>Tipo Alm</th>
+                        <th>Pto. Venta</th>
                         <th>Estado</th>
                         <th class="nosort" >Acciones</th>
                 </tr>
@@ -34,12 +41,19 @@
                  <tbody>
                     <?php foreach($articulos as $a){ ?>
                     <tr>
-						<td><?php echo $a['id_articulo']; ?></td>
 						<td><?php echo $a['num_articulo']; ?></td>
 						<td><?php echo $a['descripcion1']; ?></td>
 						<td><?php echo $a['descripcion2']; ?></td>
+                        <td><?php echo $a['texto_busqueda']; ?></td>
+                        <td><?php echo $a['FK_Familia']; ?></td>
+                        <td><?php echo $a['FK_Cod1']; ?></td>
+                        <td><?php echo $a['FK_Cod2']; ?></td>
+                        <td><?php echo $a['FK_Cod3']; ?></td>
 						<td><?php echo $a['UN_Medida_1']; ?></td>
 						<td><?php echo $a['UN_Medida_2']; ?></td>
+                        <td><?php echo $a['tipo_linea']; ?></td>
+						<td><?php echo $a['tipo_almacenamiento']; ?></td>
+                        <td><?php echo $a['pto_venta']; ?></td>
                          <td class="text-center">
                                <?php if($a['status'] === '1'): ?>
                                 <span class="label label-success"><?php echo "Activo"; ?></span>

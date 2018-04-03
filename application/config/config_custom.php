@@ -16,15 +16,40 @@ $config['email'] = 'lucas.fradusco@gmail.com';
 
 /*
 |--------------------------------------------------------------------------
-| Custom Config: Jerarquia Default
+| Custom Config: Items Default
 |--------------------------------------------------------------------------
 | Aca defino la jerarquia que se le asigna x default a los usuarios cuando son cargados.
 | si no tiene ninguna jerarquia asociada, va a tener errores cuando inicia sesion.
 | tambien defino cual será la jerarquia de prueba
 |
 */
-$config['JerarquiaDefault']		    		= 28;
-$config['JerarquiaPrueba']		    		= 27;
+$config['JerarquiaDefault']		    		= 1;
+$config['RolDefault']		    	      	= 1;
+
+/*
+|--------------------------------------------------------------------------
+| Custom Config: categoria de FAmilias
+|--------------------------------------------------------------------------
+| Aca defino la jerarquia que se le asigna x default a los usuarios cuando son cargados.
+| si no tiene ninguna jerarquia asociada, va a tener errores cuando inicia sesion.
+| tambien defino cual será la jerarquia de prueba
+|
+*/
+$config['category_family']		    		= 'Familia';
+$config['category_cod1']		    	 	  = 'Cod1';
+$config['category_cod2']		    	  	= 'Cod2';
+$config['category_cod3']		    		  = 'Cod3';
+/*
+|--------------------------------------------------------------------------
+| Custom Config: Tipo de Vale
+|--------------------------------------------------------------------------
+| Aca defino la jerarquia que se le asigna x default a los usuarios cuando son cargados.
+| si no tiene ninguna jerarquia asociada, va a tener errores cuando inicia sesion.
+| tambien defino cual será la jerarquia de prueba
+|
+*/
+$config['Tipo_Pañol']		      		= 0;
+$config['Tipo_mprimas']		    		= 1;
 
 
 /*

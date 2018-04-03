@@ -15,6 +15,8 @@
                         <tr>
                           <th>Id Vale</th>
                           <th>Requeridor</th>
+                          <th>Tipo</th>
+                          <th>Motivo</th>
                           <th>Sector Aprobador</th>
                           <th>Fecha Creación</th>
                           <th>Estado Aprobacion</th>
@@ -36,14 +38,12 @@
                         }else{
                             $class = 'progress-bar progress-bar-warning';
                         }
-
-
-
                         ?>
-
                         <tr>
     						<td><?php echo $v['id_vale']; ?></td>
     						<td><?php echo $v['username']; ?></td>
+                            <td><?php echo ($v['id_tipo']==$this->config->item('Tipo_Pañol') ? 'Pañol' : 'M. Prima'); ?></td>
+                            <td><?php echo $v['nombre_motivo']; ?></td>
     						<td><?php echo $v['nombre_sector']; ?></td>
                             <td><?php echo date('m/d/Y H:i:s', $v['fecha_creado']); ?></td>
                             <td><?php echo $v['nombre_estado_aprobacion']; ?></td>
@@ -76,6 +76,7 @@
 
            $(function () {
              $('#example1').DataTable({
+               'aaSorting' : [2, 'asc'],
                'paging'      : true,
                'lengthChange': true,
                'searching'   : true,

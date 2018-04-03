@@ -12,7 +12,7 @@ class Roles_group extends CI_Controller{
         $this->load->library('ion_auth');
         $this->load->library('session');
         $this->load->model('Vales_consumo_model');
-        $this->load->model('Jerarquia_model');
+        $this->load->model('Role_model');
         $this->load->model('User_model');
 
          $this->user = $this->ion_auth->user()->row();
@@ -34,15 +34,15 @@ class Roles_group extends CI_Controller{
      */
     function index()
     {
-      //  $this->data['roles_group'] = $this->Roles_group_model->get_all_roles_group();
-      $this->data['get_all_roles_group'] = $this->Roles_group_model->get_all_roles_group();
-      $this->data['all_users'] = $this->User_model->get_all_users();
-
-
+        $this->data['get_all_roles_group'] = $this->Role_model->get_all_roles();
+        $this->data['all_users'] = $this->User_model->get_all_users();
         $this->data['_view'] = 'roles_group/index';
         $this->load->view('layouts/main',$this->data);
     }
 
+    function get_roles(){
+      echo json_encode($this->Roles_group_model->get_roles($this->input->POST('id_user'), $this->input->POST('id_role')));
+    }
     /*
      * Adding a new roles_group
      */
@@ -107,21 +107,26 @@ class Roles_group extends CI_Controller{
             show_error('The roles_group you are trying to edit does not exist.');
     }
 
+    function test(){
+        $roles_group = $this->Roles_group_model->get_roles_group(43);
+        echo json_encode($roles_group);
+    }
+
     /*
      * Deleting roles_group
      */
-    function remove($id)
+    function remove()
     {
-        $roles_group = $this->Roles_group_model->get_roles_group($id);
 
-        // check if the roles_group exists before trying to delete it
-        if(isset($roles_group['']))
+        $roles_group = $this->Roles_group_model->get_roles_group($this->input->POST('rol_id'));
+    //    check if the roles_group exists before trying to delete it
+        if(isset($roles_group['id_rol_']))
         {
-            $this->Roles_group_model->delete_roles_group($id);
-            redirect('roles_group/index');
+            $this->Roles_group_model->delete_roles_group($roles_group['id_rol_']);
+            echo $roles_group['id_rol_'];
         }
         else
-            show_error('The roles_group you are trying to delete does not exist.');
-    }
+            echo 'false';
+     }
 
 }

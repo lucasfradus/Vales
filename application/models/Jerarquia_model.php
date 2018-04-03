@@ -102,6 +102,14 @@ class Jerarquia_model extends CI_Model
         $this->db->where('status_sector', $this->config->item('Activo'));
         return $this->db->get_where('jerarquias',array('id_user_padre'=>$id_user))->result();
     }
+    
+    function get_sector_user_mat_prima($id_user){
+        $array = array('COR','ESM','MC','MD','MES','PUL','SEL');
+        $this->db->join('sector_req', 'id_sector_req = id_sector_jerarquia');
+        $this->db->where_in('FASE', $array);
+        $this->db->where('status_sector', $this->config->item('Activo'));
+        return $this->db->get_where('jerarquias',array('id_user_padre'=>$id_user))->result();
+    }
 
 
 /*

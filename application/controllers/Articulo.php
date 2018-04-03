@@ -14,6 +14,7 @@ class Articulo extends CI_Controller{
         $this->load->helper('date');
         $this->load->library('form_validation');
         $this->load->model('Fk_un_med_model');
+        $this->load->model('Fk_categoria_model');
 
         $this->data = $this->generales->imports_generales();
 
@@ -34,12 +35,12 @@ class Articulo extends CI_Controller{
 
     function import(){
       $this->load->library('CSVReader');
-      $csvData = $this->csvreader->parse_file(site_url('art2.csv'));
+      $csvData = $this->csvreader->parse_file(site_url('art.csv'));
  $i = 0;
       foreach ($csvData as $row) {
           $i++;
-          $id_un_med_1 = $this->Fk_un_med_model->get_fk_un_med_by_name($row['id_un_med_1']);
-          $id_un_med_2 = $this->Fk_un_med_model->get_fk_un_med_by_name($row['id_un_med_2']);
+           $id_un_med_1 = $this->Fk_un_med_model->get_fk_un_med_by_name($row['id_un_med_1']);
+           //$id_un_med_2 = $this->Fk_un_med_model->get_fk_un_med_by_name($row['id_un_med_2']);
           // echo $id_un_med_1."<br>";
           // echo $id_un_med_2."<br>";
           // var_dump($this->Articulo_model->get_articulo_by_number($row['num_articulo']));
@@ -62,14 +63,22 @@ class Articulo extends CI_Controller{
           // echo "-----------------------<br>";
 
             //Antes de hacer la carga tengo que chequear que no exista ese numero de articulo y que esten bien las unidades de medida. si no, no lo cargo
-          if ($id_un_med_1 && $id_un_med_2 && !$this->Articulo_model->get_articulo_by_number($row['num_articulo'])){
+          if (!$this->Articulo_model->get_articulo_by_number($row['num_articulo'])&&$id_un_med_1){
               $params = array(
                   'id_un_med1' =>  $id_un_med_1,
-                  'id_un_med2' =>  $id_un_med_2,
+                  'id_un_med2' =>  133,
                   'num_articulo' => $row['num_articulo'],
-                  'codigo_jde' => $row['codigo_jde'],
+                  'codigo_jde' => 000000000,
+                  'fk_codigo_familia' => $this->Fk_categoria_model->get_fk_cat_by_name(array('codigo_categoria' => 'Familia', 'nombre_categoria' => $row['family'])),
+                  'fk_codigo_cat1' => $this->Fk_categoria_model->get_fk_cat_by_name(array('codigo_categoria' => 'Cod1', 'nombre_categoria' => $row['cod_1'])),
+                  'fk_codigo_cat2' => $this->Fk_categoria_model->get_fk_cat_by_name(array('codigo_categoria' => 'Cod2', 'nombre_categoria' => $row['cod_2'])),
+                  'fk_codigo_cat3' => $this->Fk_categoria_model->get_fk_cat_by_name(array('codigo_categoria' => 'Cod3', 'nombre_categoria' => $row['cod_3'])),
                   'descripcion1' => $row['descripcion1'],
                   'descripcion2' => $row['descripcion2'],
+                  'texto_busqueda' => $row['texto_busqueda'],
+                  'tipo_linea' =>  $row['tipo_linea'],
+                  'tipo_almacenamiento' => $row['tipo_almacenamiento'],
+                  'pto_venta' => $row['pto_venta'],
                   'status' => 1,
               );
               $articulo_id = $this->Articulo_model->add_articulo($params);
@@ -153,6 +162,7 @@ function test(){
         $this->form_validation->set_rules('num_articulo','Numero de Articulo','required|integer|is_unique[articulos.num_articulo]');
         $this->form_validation->set_rules('descripcion1','Descripcion1','required');
         $this->form_validation->set_rules('id_un_med1','Id Un Med1','required|integer');
+        $this->form_validation->set_rules('categoy','Categoria','required');
 
         if($this->form_validation->run())
         {
@@ -174,6 +184,11 @@ function test(){
             $this->load->model('Fk_un_med_model');
             $this->data['all_fk_un_med'] = $this->Fk_un_med_model->get_all_fk_un_med();
 
+            $this->load->model('Fk_categoria_model');
+            $this->data['categoy_family'] = $this->Fk_categoria_model->get_all_fk_categorias_codigo($this->config->item('category_family'));
+            $this->data['categoy_cod1'] =   $this->Fk_categoria_model->get_all_fk_categorias_codigo($this->config->item('category_cod1'));
+            $this->data['categoy_cod2'] =   $this->Fk_categoria_model->get_all_fk_categorias_codigo($this->config->item('category_cod2'));
+            $this->data['categoy_cod3'] =   $this->Fk_categoria_model->get_all_fk_categorias_codigo($this->config->item('category_cod3'));
             $this->data['_view'] = 'articulo/add';
             $this->load->view('layouts/main',$this->data);
         }

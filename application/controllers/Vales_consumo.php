@@ -17,6 +17,7 @@ class Vales_consumo extends CI_Controller{
         $this->load->model('Evolucion_vale_model');
         $this->load->model('Estado_entrega_model');
         $this->load->model('Ion_auth_model');
+        $this->load->model('Fk_motivo_model');
         $this->load->library('pagination');
         $this->load->library('ion_auth');
         $this->load->helper('date');
@@ -60,7 +61,7 @@ class Vales_consumo extends CI_Controller{
     {
 
          if($this->ion_auth->in_group($this->config->item('Requeridor')) && $this->ion_auth->RolCheck($this->config->item('VerVales'))){
-                $this->data['vales_consumo'] = $this->Vales_consumo_model->get_my_vales_consumo($this->user->id);
+              $this->data['vales_consumo'] = $this->Vales_consumo_model->get_my_vales_consumo($this->user->id);
             }else if($this->ion_auth->in_group($this->config->item('Administrator')) || $this->ion_auth->in_group($this->config->item('Pañolero'))){
               $this->data['vales_consumo'] = $this->Vales_consumo_model->get_all_vales_consumo();
             }else if($this->ion_auth->in_group($this->config->item('Aprobador'))){
@@ -102,8 +103,8 @@ function testing(){
 
 
     function preparar($id_vale =  null){
-      $group = array($this->config->item('Aprobador'), $this->config->item('Pañolero'));
-            if($this->ion_auth->in_group($group) && $this->ion_auth->RolCheck($this->config->item('PrepararVale'))){
+      $group = array($this->config->item('Administrator'), $this->config->item('Pañolero'));
+            if($this->ion_auth->in_group($group)){
                 if(!isset($id_vale)){
                     $id_vale = $this->input->post('id_vale');
                 }
@@ -230,9 +231,6 @@ function testing(){
       $group = array($this->config->item('Administrator'), $this->config->item('Pañolero'));
             if($this->ion_auth->in_group($group)){
                 $this->data['estado'] = $this->Estado_entrega_model->get_all_estado_entrega();
-
-                // //hago el Where aca, es muy villero, pero active record tiene algunas limitaciones en cuanto a querys tan especificas
-                // $where = 'id_aprobacion = '.$this->config->item('Aprobado').' and id_estado ='.$this->config->item('PendienteDeAprobacion').' OR id_estado ='.$this->config->item('EnProcesoDeArmado').' OR id_estado ='.$this->config->item('ListoParaRetirar');
                 $estados = array($this->config->item('PendienteDeAprobacion'),$this->config->item('EnProcesoDeArmado'),$this->config->item('ListoParaRetirar'));
                 $this->data['vales_consumo'] = $this->Vales_consumo_model->get_all_vales_consumo_estado_by_estado($estados);
                 $this->data['_view'] = 'vales_consumo/armado';
@@ -422,18 +420,66 @@ function testing(){
             }
     }
 
+    function aprobar($id_vale =  null){
+      $group = array($this->config->item('Administrator'), $this->config->item('Pañolero'),$this->config->item('Aprobador'));
+          if(!$this->ion_auth->in_group($group)){
+            $this->session->set_flashdata('error','No tiene permiso para realizar esta acción.');
+             redirect('vales_consumo/index');
+          }
+                $this->data['vale'] = $this->Vales_consumo_model->get_vales_consumo($id_vale);
+                $this->data['estado'] = $this->Estado_entrega_model->get_all_estado_aprobacion();
+                
+                    if(isset($this->data['vale']['id_vale']))
+                    {
+                        $this->data['aprobacion']     = $this->Evolucion_vale_model->get_aprobacion_vale($id_vale);
+                        $this->data['evolucion']      = $this->Evolucion_vale_model->get_evolucion_vale($id_vale);
+                        $this->data['items']          = $this->Articulo_model->get_articulo_por_vale($id_vale);
+                        $this->data['_view']          = 'vales_consumo/aprobar';
+                        $this->load->view('layouts/main',$this->data);
+
+                    }else{
+                        $this->session->set_flashdata('error','El vale que esta intentando visualizar no existe. ');
+                         redirect('vales_consumo/index');
+                    }
+
+    }
+    /*
+     * Esta funcion la llamo con un select2 para traer los articulos y asi no tener que cargar todos cada vez que quiero crear un vale nuevo
+     */
+
+    function autocompete(){
+     echo json_encode($this->Articulo_model->get_autocomplete($this->input->get('search'), $this->input->get('number'), $this->input->get('category')));
+ }
+
     function add(){
-        $this->data['all_productos'] = $this->Articulo_model->get_all_articulos($params = array('status' => $this->config->item('Activo')));
+        //$this->data['all_productos'] = $this->Articulo_model->get_all_articulos($params = array('status' => $this->config->item('Activo')));
+        $this->load->model('Fk_categoria_model');
+        $this->data['categoy_family'] = $this->Fk_categoria_model->get_all_fk_categorias_codigo($this->config->item('category_family'));
+        $this->data['categoy_cod1'] =   $this->Fk_categoria_model->get_all_fk_categorias_codigo($this->config->item('category_cod1'));
+        $this->data['categoy_cod2'] =   $this->Fk_categoria_model->get_all_fk_categorias_codigo($this->config->item('category_cod2'));
+        $this->data['categoy_cod3'] =   $this->Fk_categoria_model->get_all_fk_categorias_codigo($this->config->item('category_cod3'));
+
         $this->data['all_sector_req'] = $this->Jerarquia_model->get_sector_user($this->user->id);
+        $this->data['all_motivos'] = $this->Fk_motivo_model->get_all_fk_motivo();
         $this->data['_view'] = 'vales_consumo/new';
         $this->load->view('layouts/main',$this->data);
     }
+
+    function add_mat_prima(){
+        //$this->data['all_productos'] = $this->Articulo_model->get_all_articulos($params = array('status' => $this->config->item('Activo')));
+        $this->data['all_sector_req'] = $this->Jerarquia_model->get_sector_user_mat_prima($this->user->id);
+        $this->data['_view'] = 'vales_consumo/new_mat_prima';
+        $this->load->view('layouts/main',$this->data);
+    }
+
 
 
     function new_create(){
     $datos_user = $this->input->post('datos_user');
     $total_items = $this->input->post('total_items');
     $sector = $this->input->post('sector');
+    $tipo = $this->input->post('tipo');
+    $id_motivo = $this->input->post('motivo');
 
         $params = array(
          'id_requeridor'                 => $this->user->id,
@@ -441,6 +487,9 @@ function testing(){
          'fecha_creado'                  => time(),
          'id_estado'                     => $this->config->item('PendienteDeAprobacion'),
          'id_aprobacion'                 => $this->config->item('Pendiente'),
+         'id_responsable'                => 'null',
+         'id_tipo'                       => $tipo,
+         'id_motivo'                     => $id_motivo,
         );
 
      $vales_consumo_id = $this->Vales_consumo_model->add_vales_consumo($params);

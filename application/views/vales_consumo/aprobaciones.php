@@ -11,6 +11,7 @@
                         <tr>
                             <th>Id Vale</th>
                             <th>Requeridor</th>
+                            <th>Tipo</th>
                             <th>Sector Aprobador</th>
                             <th>Fecha Creación</th>
                             <th>Estado Aprobacion</th>
@@ -23,13 +24,14 @@
                     <tr>
 						<td><?= $v['id_vale']; ?></td>
 						<td><?= $v['username']; ?></td>
+            <td><?php echo ($v['id_tipo']==$this->config->item('Tipo_Pañol') ? 'Pañol' : 'M. Prima'); ?></td>
 						<td><?= $v['nombre_sector']; ?></td>
                         <td><?= date('m/d/Y H:i:s', $v['fecha_creado']); ?></td>
                         <td><?= $v['nombre_estado_aprobacion']; ?></td>
 						<td>
                             <div class="btn-group">
-                                <a href="<?php echo site_url('vales_consumo/view/'.$v['id_vale']); ?>" class="btn btn-xs btn-info" data-toggle="tooltip" title="Ver">
-                                <i class="glyphicon glyphicon-search"></i>
+                                <a href="<?php echo site_url('vales_consumo/aprobar/'.$v['id_vale']); ?>" class="btn btn-xs btn-info" data-toggle="tooltip" title="Ver">
+                                <i class="fa fa-play"></i>
                                 </a>
                         <button type="button" class="btn btn btn-default btn-xs" data-toggle="modal" data-target="#message<?php echo $v['id_vale'];?>">Modificar Estado</button>
                     </tr>

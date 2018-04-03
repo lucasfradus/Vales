@@ -993,6 +993,15 @@ class Ion_auth_model extends CI_Model
 			);
 			$jerarquia_id = $this->Jerarquia_model->add_jerarquia($params);
 		}
+		$this->load->model('Role_model');
+
+		$params = array(
+			'user_id' => $id,
+			'role_id' => $this->config->item('RolDefault'),
+					);
+
+					$roles_group_id = $this->Roles_group_model->add_roles_group($params);
+
 		if (!empty($groups))
 		{
 			foreach ($groups as $group ) {

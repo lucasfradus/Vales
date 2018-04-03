@@ -16,16 +16,33 @@ class Roles_group_model extends CI_Model
      */
     function get_roles_group($id)
     {
-        return $this->db->get_where('roles_group',array('id_rol_'=>$id))->row_array();
+        return $this->db->get_where('roles_groups',array('id_rol_'=>$id))->row_array();
     }
+
+    function get_roles($user_id = null, $role_id = null)
+    {
+        if(isset($user_id) && $user_id != 0){
+            $this->db->where('user_id',$user_id);
+        }
+        if(isset($role_id) && $role_id != 0){
+            $this->db->where('role_id',$role_id);
+        }
+        $this->db->select('id_rol_, first_name, last_name, username, nombre_rol');
+        $this->db->join('users', 'user_id=id');
+        $this->db->join('roles', 'role_id=id_rol');
+         return $this->db->get('roles_groups')->result();
+
+    }
+
 
     /*
      * Get all roles_group
      */
     function get_all_roles_group($id_user = null)
     {
-         $this->db->join('users', 'user_id=id');
-         $this->db->join('roles', 'role_id=id_rol');
+
+        $this->db->join('users', 'user_id=id');
+        $this->db->join('roles', 'role_id=id_rol');
         $this->db->order_by('id_rol_', 'desc');
         if(isset($id_user)){
           $this->db->where('user_id', $id_user);

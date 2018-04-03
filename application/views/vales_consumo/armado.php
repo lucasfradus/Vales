@@ -12,6 +12,7 @@
                         <tr>
                           <th>Id Vale</th>
                           <th>Requeridor</th>
+                          <th>Tipo</th>
                           <th>Sector Aprobador</th>
                           <th>Fecha Creación</th>
                           <th>Estado de Entrega </th>
@@ -38,6 +39,7 @@
                     <tr>
 						<td><?php echo $v['id_vale']; ?></td>
 						<td><?php echo $v['username']; ?></td>
+                        <td><?php echo ($v['id_tipo']==$this->config->item('Tipo_Pañol') ? 'Pañol' : 'M. Prima'); ?></td>
 						<td><?php echo $v['nombre_sector']; ?></td>
                         <td><?php echo date('d/m/Y H:i:s', $v['fecha_creado']); ?></td>
                         <td id="cell<?= $v['id_vale']; ?>"><?php echo $v['nombre_estado']; ?></td>

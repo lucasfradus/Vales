@@ -53,40 +53,4 @@ function update_status(id_vale){
     });
 }
 
-   function buscar_rol(){
-      console.log("llegue");
-   }
-     /*
-     var id_user_padre = $('#id_user').val();
-     var id_sector_jerarquia = $('#role_id').val();
-
-     console.log(id_user_padre);
-      console.log(id_sector_jerarquia);
-
-     $('#tabla').empty();
-     $('#alert').empty();
-
-     if(!id_sector_jerarquia && !id_user_padre){
-       console.log("no ingreso nada");
-       $('#alert').append('<span class="text-danger">Debe Ingresar al menos un criterio para realizar la busqueda. </span>');
-     }else{
-
-       $.ajax({
-           type: "POST",
-           url: "<?php echo base_url(); ?>" + "jerarquia/get_jerarquia",
-           data : {id_sector_jerarquia:id_sector_jerarquia, id_user_padre:id_user_padre},
-             success: function(data) {
-               if(data){
-                 $('#tabla').append(data).fadeIn(300);
-               }else{
-                 $('#alert').append('<span class="text-danger">No se han encontrado resultados </span>');
-               }
-             },
-             error: function(data){
-               $('#alert').append(data);
-
-             }
-       });
-
-     }
-   }*/
+  

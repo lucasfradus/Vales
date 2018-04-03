@@ -9,7 +9,7 @@
 
         <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 
-
+        <link rel="icon" href="<?=base_url('resources/img/ilva-ico.ico')?>" type="image/gif">
 
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -140,14 +140,17 @@
                             </a>
                             <ul class="treeview-menu">
                                 <li class="active">
-                                    <a href="<?php echo site_url('vales_consumo/add');?>"><i class="fa fa-plus"></i> Nuevo Vale de Consumo</a>
+                                    <a href="<?php echo site_url('vales_consumo/add');?>"><i class="fa fa-plus"></i> Nuevo Vale de Pañol</a>
+                                </li>
+                                <li class="active">
+                                    <a href="<?php echo site_url('vales_consumo/add_mat_prima');?>"><i class="fa fa-plus-circle"></i> Nuevo Vale de Materia Prima</a>
                                 </li>
                                 <li>
                                     <a href="<?php echo site_url('vales_consumo/index');?>"><i class="fa fa-list-ol"></i> Mis Vales de Consumo
 
                                     </a>
                                 </li>
-                                <?php if ($this->ion_auth->in_group(array($this->config->item('Aprobador'),$this->config->item('Pañolero'),$this->config->item('Administrator')))): ?>
+                                <?php if ($this->ion_auth->in_group(array($this->config->item('Aprobador'),$this->config->item('Administrator')))): ?>
                                 <li>
                                     <a href="<?php echo site_url('vales_consumo/aprobaciones');?>"><i class="fa fa-check"></i> Vales Para Aprobar
 
@@ -164,24 +167,10 @@
 
                             </ul>
                         </li>
-                        <?php if ($this->ion_auth->in_group(array($this->config->item('Administrator'),$this->config->item('Pañolero')))): ?>
-						<li>
-                            <a href="#">
-                                <i class="fa fa-barcode"></i> <span>Articulos</span>
-                            </a>
-                            <ul class="treeview-menu">
-								<li class="active">
-                                    <a href="<?php echo site_url('articulo/add');?>"><i class="fa fa-plus"></i> Agregar Nuevo</a>
-                                </li>
-								<li>
-                                    <a href="<?php echo site_url('articulo/index');?>"><i class="fa fa-list-ul"></i> Ver Listado</a>
-                                </li>
-							</ul>
-                        </li>
-
+                        <?php if ($this->ion_auth->in_group($this->config->item('Administrator'))): ?>
                         <li>
                           <a href="#">
-                            <i class="fa fa-cogs"></i> <span>Configuracion de Usuarios</span>
+                            <i class="fa fa-cogs"></i> <span>Configuración General</span>
                           </a>
                             <ul class="treeview-menu">
                                   <li>
@@ -189,63 +178,58 @@
                                       <i class="fa fa-group"></i> <span>Usuarios</span>
                                     </a>
                                   <ul class="treeview-menu">
-                                    <li class="active">
-                                      <a href="<?php echo site_url('auth/create_user');?>"><i class="fa fa-plus"></i> Nuevo Usuario</a>
-                                    </li>
                                     <li>
                                       <a href="<?php echo site_url('auth/index');?>"><i class="fa fa-list-ul"></i> Listado</a>
                                     </li>
-                                  </ul>
-                                  </li>
-                                  <li>
-                                    <a href="#">
-                                      <i class="fa fa-briefcase"></i> <span>Roles</span>
-                                    </a>
-                                  <ul class="treeview-menu">
-                                    <li class="active">
-                                      <a href="<?php echo site_url('roles_group/add');?>"><i class="fa fa-plus"></i> Agregar</a>
+                                    <li>
+                                      <a href="<?php echo site_url('jerarquia/index');?>"><i class="fa fa-sitemap"></i>Sectores Por Usuario</a>
                                     </li>
                                     <li>
-                                      <a href="<?php echo site_url('roles_group/index');?>"><i class="fa fa-list-ul"></i> Listar</a>
-                                    </li>
-                                  </ul>
-                                  </li>
-                                  <li>
-                                    <a href="#">
-                                      <i class="fa fa-sitemap"></i> <span>Jerarquias</span>
-                                    </a>
-                                  <ul class="treeview-menu">
-                                    <li class="active">
-                                      <a href="<?php echo site_url('jerarquia/add');?>"><i class="fa fa-plus"></i> Agregar Nuevo</a>
+                                      <a href="<?php echo site_url('roles_group/index');?>"><i class="fa fa-briefcase"></i> Roles Por Usuario</a>
                                     </li>
                                     <li>
-                                      <a href="<?php echo site_url('jerarquia/index');?>"><i class="fa fa-list-ul"></i> Ver Listado</a>
+                                      <a href="<?php echo site_url('notificaciones_user/index');?>">
+                                        <i class="fa fa-bell"></i> Notificaciones x Usuario
+                                      </a>
                                     </li>
                                   </ul>
                                   </li>
                                   <li>
                                     <a href="#">
-                                      <i class="fa fa-building-o"></i> <span>Sectores</span>
+                                      <i class="fa fa-desktop"></i> <span>Vales</span>
                                     </a>
                                   <ul class="treeview-menu">
-                                    <li class="active">
-                                      <a href="<?php echo site_url('sector_req/add');?>"><i class="fa fa-plus"></i> Agregar</a>
+                                     <li>
+                                        <a href="<?php echo site_url('articulo/index');?>">
+                                            <i class="fa fa-barcode"></i> <span>Maestro de Articulos</span>
+                                        </a>
                                     </li>
                                     <li>
-                                      <a href="<?php echo site_url('sector_req/index');?>"><i class="fa fa-list-ul"></i> Listar</a>
-                                    </li>
-                                  </ul>
-                                  </li>
-                                  <li>
-                                    <a href="#">
-                                      <i class="fa fa-bell"></i> <span>Centro de Notificaciones</span>
-                                    </a>
-                                  <ul class="treeview-menu">
-                                    <li class="active">
-                                      <a href="<?php echo site_url('notificaciones_user/add');?>"><i class="fa fa-plus"></i> Agregar</a>
+                                        <a href="<?php echo site_url('Fk_motivo/index');?>">
+                                          <i class="fa fa-archive"></i> <span>Maestro de Motivos de Carga</span>
+                                        </a>
                                     </li>
                                     <li>
-                                      <a href="<?php echo site_url('notificaciones_user/index');?>"><i class="fa fa-list-ul"></i> Listar</a>
+                                        <a href="<?php echo site_url('Fk_categoria/index');?>">
+                                          <i class="fa fa-tag"></i> <span>Maestro de Categorias</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo site_url('Sector_req/index');?>">
+                                          <i class="fa fa-building"></i> <span>Maestro de Sectores </span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="<?php echo site_url('Fk_un_med/index');?>">
+                                          <i class="fa fa-globe"></i> <span>Maestro Unidades de Med</span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="<?php echo site_url('backup/index');?>">
+                                          <i class="fa fa-window-restore"></i> <span>Backup</span>
+                                        </a>
                                     </li>
                                   </ul>
                                   </li>
