@@ -115,7 +115,7 @@ function Redirect_edit(){
 						},
 						 minimumInputLength: 3,
 							 ajax:{
-									 url: "<?php echo base_url('articulo/autocompete'); ?>",
+									 url: "<?php echo base_url('articulo/autocompete_articles'); ?>",
 									 dataType: "json",
 									 delay: 250,
 									 data: function(params){

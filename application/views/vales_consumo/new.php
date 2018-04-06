@@ -5,30 +5,13 @@
     <div class="col-md-12">
       	<div class="box box-info">
             <div class="box-header with-border">
-              	<h3 class="box-title">Nuevo Vale de Consumo de Pañol</h3>
+              	<h3 class="box-title"><?php echo $title?></h3>
             </div>
-            <div class="pull-right">
-                   <div class="box-tools ">
 
-                </div>
-            </div>
+
 
           	<div class="box-body">
           		<div class="row clearfix">
-
-
-								<div class="col-md-6">
-								 <div class="box box-default">
-									 <div class="box-header with-border">
-										 <div align="center"><h3 class="box-title">Campos obligatorios</div></h3>
-										 <div class="box-tools pull-right">
-											 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-											 </button>
-										 </div>
-										 <!-- /.box-tools -->
-									 </div>
-									 <!-- /.box-header -->
-									 <div class="box-body">
 										 <div class="col-md-6">
 											 <label for="id_sector" class="control-label"><span class="text-danger">*</span>Sector Aprobador</label>
 											 <div class="form-group">
@@ -44,6 +27,7 @@
 												 </select>
 											 </div>
 										 </div>
+
 										 <div class="col-md-6">
 											 <label for="id_motivo" class="control-label"><span class="text-danger">*</span>Motivo</label>
 											 <div class="form-group">
@@ -60,49 +44,19 @@
 											 </div>
 										 </div>
 
-										 <div class="col-md-7">
-											 <div class="form-group" id="articulos">
-											 <label for="articulo" ><span class="text-danger">*</span>Articulo</label>
-												 <select name="articulo" class="form-control select2" onChange="get_un_med()" style="width: 100%" id="articulo" ></select>
-											 </div>
-										 </div>
-
-										 <div class="col-md-3">
-											 <div class="form-group" id="cantidad">
-												 <label for="cantidad" class="control-label"><span class="text-danger">*</span>Cantidad</label>
-												 <input type="number" id="cant" class="form-control" name="cantidad" min="1" >
-											 </div>
-										 </div>
-
-										 <div class="col-md-2">
-											 <div class="form-group">
-												 <label for="cantidad" class="control-label">Un. de Med.</label>
-													 <input id="suggestions" type="text" class="form-control" disabled>
-												 </div>
-											 </div>
-									 </div>
-									 <!-- /.box-body -->
-								 </div>
-								 <!-- /.box -->
-								</div>
 
 
-				<div class="col-md-6">
+
+
+
+				<div class="col-md-12">
 				 <div class="box box-default">
-					 <div class="box-header with-border">
-						 <div align="center"><h3 class="box-title">Filtros Opcionales de Busqueda</div></h3>
-						 <div class="box-tools pull-right">
-							 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-							 </button>
-						 </div>
-						 <!-- /.box-tools -->
-					 </div>
-					 <!-- /.box-header -->
+
 					 <div class="box-body">
 						 <div class="col-md-2">
 	 							<label for="articulo" >Familia</label>
 	 								<div class="form-group">
-	 									<select name="cat_family" class="form-control disabled">
+	 									<select name="cat_family" class="form-control disabled" disabled>
 	 										<option value="">S/Filtro</option>
 	 										<?php
 	 										foreach($categoy_family as $cat)
@@ -119,7 +73,7 @@
 	 					<div class="col-md-2">
 	 							<label for="articulo" >CAT 1</label>
 	 								<div class="form-group">
-	 									<select name="cat_family" class="form-control disabled">
+	 									<select name="cat_family" class="form-control" disabled>
 	 											<option value="">S/Filtro</option>
 	 										<?php
 	 										foreach($categoy_cod1 as $cat)
@@ -136,7 +90,7 @@
 	 					<div class="col-md-2">
 	 							<label for="articulo" >CAT 2</label>
 	 								<div class="form-group">
-	 									<select name="cat_family" class="form-control disabled">
+	 									<select name="cat_family" class="form-control disabled" disabled>
 	 											<option value="">S/Filtro</option>
 	 										<?php
 	 										foreach($categoy_cod2 as $cat)
@@ -153,7 +107,7 @@
 	 					<div class="col-md-2">
 	 							<label for="articulo" >CAT 3</label>
 	 								<div class="form-group">
-	 									<select name="cat_family" class="form-control disabled">
+	 									<select name="cat_family" class="form-control disabled" disabled>
 	 											<option value="">S/Filtro</option>
 	 										<?php
 	 										foreach($categoy_cod3 as $cat)
@@ -167,29 +121,46 @@
 	 									</select>
 	 							</div>
 	 					</div>
+						<div class="col-md-4">
+								<label for="articulo">Numero de Articulo</label>
+									<div class="form-group">
+										<input type="text" class="form-control" id="number">
+										<div class="text-muted"> Puede ingresar los primeros numeros del articulo</div>
+								</div>
+						</div>
+						<div class="col-md-12 text-muted" align="center">
+						 Filtros Opcionales para facilitar la busqueda de Articulos
+						 <hr>
 
-	 					<div class="col-md-4">
-	 							<label for="articulo">Numero de Articulo</label>
-	 								<div class="form-group">
-	 									<input type="text" class="form-control" id="number">
-	 							</div>
-	 					</div>
-							<!-- <div class="col-md-2">
-								<label for="articulo">  </label>
-						<button class="btn btn-success" onclick="search_change()">
-								<i class="fa fa-search"></i> Buscar
-						</button>
-					</div> -->
+						</div>
+
+						<div class="col-md-7">
+							<div class="form-group" id="articulos">
+							<label for="articulo" ><span class="text-danger">*</span>Descripcion del Articulo</label>
+								<select  name="articulo" class="form-control select2" onChange="get_un_med()" style="width: 100%" id="articulo" autofocus></select>
+							</div>
+						</div>
+
+						<div class="col-md-3">
+							<div class="form-group" id="cantidad">
+								<label for="cantidad" class="control-label"><span class="text-danger">*</span>Cantidad</label>
+								<input type="number" id="cant" class="form-control" name="cantidad" min="1" >
+							</div>
+						</div>
+
+						<div class="col-md-2">
+							<div class="form-group">
+								<label for="cantidad" class="control-label">Un. de Med.</label>
+									<input id="suggestions" type="text" class="form-control" disabled>
+								</div>
+							</div>
 					 </div>
 					 <!-- /.box-body -->
 				 </div>
 				 <!-- /.box -->
 			 </div>
-
-
-           </div>
-            <div class="box-footer">
-
+    </div>
+            <div class="box-footer pull-right">
               <button class="btn btn-success" onclick="Add_item()">
   								<i class="fa fa-plus"></i> Agregar Articulo
               </button>
@@ -199,8 +170,6 @@
 							<!-- <button class="btn btn-danger" id="test">
 								<i class="fa fa-eraser"></i> Test
 							</button> -->
-
-
             </div>
 				</div>
 				<div class="box-body">
@@ -308,7 +277,8 @@
 											 return{
 													 search: params.term,
 													 category: $('#category').val(),
-													 number: $('#number').val()
+													 number: $('#number').val(),
+													 vale_type: <?= $hidden_type ?>,
 											 };
 									 },
 									 processResults: function(data){
@@ -344,7 +314,7 @@ var user = {
 	};
 //var array = JSON.stringify(user);
 
-
+console.log('datos del user: '+user);
 
 
 function Add_item(){
@@ -524,9 +494,9 @@ if(confirm){
 
 				 data: {
 					 total_items: total,
-					 datos_user:user,
 					 sector:$( "#id_sector option:selected" ).text(),
-					 tipo:"0",
+					 id_sector:$("#id_sector").val(),
+					 tipo:<?= $hidden_type ?>,
 					 motivo:$( "#id_motivo option:selected" ).val(),
 				 },
 

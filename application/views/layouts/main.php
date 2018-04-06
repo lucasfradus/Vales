@@ -140,10 +140,10 @@
                             </a>
                             <ul class="treeview-menu">
                                 <li class="active">
-                                    <a href="<?php echo site_url('vales_consumo/add');?>"><i class="fa fa-plus"></i> Nuevo Vale de Pañol</a>
+                                    <a href="<?php echo site_url('vales_consumo/add/'.$this->config->item('Tipo_Pañol'));?>"><i class="fa fa-plus"></i> Nuevo Vale de Pañol</a>
                                 </li>
                                 <li class="active">
-                                    <a href="<?php echo site_url('vales_consumo/add_mat_prima');?>"><i class="fa fa-plus-circle"></i> Nuevo Vale de Materia Prima</a>
+                                    <a href="<?php echo site_url('vales_consumo/add/'.$this->config->item('Tipo_mprimas'));?>"><i class="fa fa-plus-circle"></i> Nuevo Vale de Materia Prima</a>
                                 </li>
                                 <li>
                                     <a href="<?php echo site_url('vales_consumo/index');?>"><i class="fa fa-list-ol"></i> Mis Vales de Consumo

@@ -1,3 +1,4 @@
+
 <div class="row">
     <div class="col-md-12">
       	<div class="box box-info">
@@ -8,7 +9,7 @@
           	<div class="box-body">
           		<div class="row clearfix">
 					<div class="col-md-4">
-						<label for="id_un_med1" class="control-label"><span class="text-danger">*</span>Unidad de Medida 1</label>
+						<label for="id_un_med1" class="control-label"><span class="text-danger">*</span>Unidad de Medida Principal</label>
 						<div class="form-group">
 							<select name="id_un_med1" class="form-control select2">
 								<?php
@@ -24,7 +25,7 @@
 						</div>
 					</div>
 					<div class="col-md-4">
-						<label for="id_un_med2" class="control-label">Unidad de Medida 2</label>
+						<label for="id_un_med2" class="control-label">Unidad de Medida Secundaria</label>
 						<div class="form-group">
 							<select name="id_un_med2" class="form-control select2">
 								<?php
@@ -71,9 +72,10 @@
 					<div class="col-md-12">
 					<div align="center"><h4>Tipos de Categorias</h4></div>
 						<div class="col-md-3">
-							<label for="category_type" class="control-label"><span class="text-danger">*</span>Tipo de Categoria Familia</label>
+							<label for="fk_codigo_familia" class="control-label"><span class="text-danger">*</span>Tipo de Categoria Familia</label>
 							<div class="form-group">
-								<select name="category_type"  class="form-control" id="category_type">
+								<select name="fk_codigo_familia"  class="form-control" id="fk_codigo_familia">
+									<option value="">Sin Categoria</option>
 									<?php
 									foreach($categoy_family as $cat_fam)
 									{
@@ -87,44 +89,44 @@
 							</div>
 						</div>
 						<div class="col-md-3">
-							<label for="category_type" class="control-label"><span class="text-danger">*</span>Tipo de Categoria Codigo 1</label>
+							<label for="fk_codigo_cat1" class="control-label"><span class="text-danger">*</span>Tipo de Categoria Codigo 1</label>
 							<div class="form-group">
-								<select name="category_type" class="form-control" id="category_type">
-									<option>Sin Categoria</option>
+								<select name="fk_codigo_cat1" class="form-control" id="fk_codigo_cat1">
+									<option value="">Sin Categoria</option>
 									<?php
 									foreach($categoy_cod1 as $cat_cod1)
 									{
-										$selected = ($cat_cod1['id_fk_categoria'] == $this->input->post('cat_cod1')) ? ' selected="selected"' : "";
+										$selected = ($cat_cod1['id_fk_categoria'] == $this->input->post('fk_codigo_cat1')) ? ' selected="selected"' : "";
 
 										echo '<option value="'.$cat_cod1['id_fk_categoria'].'" '.$selected.'>'.$cat_cod1['nombre_categoria'].' | '.$cat_cod1['descripcion_categoria'].'</option>';
 									}
 									?>
 								</select>
-								<span class="text-danger"><?php echo form_error('category_type');?></span>
+								<span class="text-danger"><?php echo form_error('fk_codigo_cat1');?></span>
 							</div>
 						</div>
 						<div class="col-md-3">
-							<label for="category_type" class="control-label"><span class="text-danger">*</span>Tipo de Categoria Codigo 2</label>
+							<label for="fk_codigo_cat2" class="control-label"><span class="text-danger">*</span>Tipo de Categoria Codigo 2</label>
 							<div class="form-group">
-								<select name="category_type" class="form-control" id="category_type">
-									<option>Sin Categoria</option>
+								<select name="fk_codigo_cat2" class="form-control" id="fk_codigo_cat2">
+									<option value="">Sin Categoria</option>
 									<?php
 									foreach($categoy_cod2 as $cat_cod2)
 									{
-										$selected = ($cat_cod2['id_fk_categoria'] == $this->input->post('cat_cod2')) ? ' selected="selected"' : "";
+										$selected = ($cat_cod2['id_fk_categoria'] == $this->input->post('fk_codigo_cat2')) ? ' selected="selected"' : "";
 
 										echo '<option value="'.$cat_cod2['id_fk_categoria'].'" '.$selected.'>'.$cat_cod2['nombre_categoria'].' | '.$cat_cod2['descripcion_categoria'].'</option>';
 									}
 									?>
 								</select>
-								<span class="text-danger"><?php echo form_error('category_type');?></span>
+								<span class="text-danger"><?php echo form_error('fk_codigo_cat2');?></span>
 							</div>
 						</div>
 						<div class="col-md-3">
-							<label for="category_type" class="control-label"><span class="text-danger">*</span>Tipo de Categoria Codigo 3</label>
+							<label for="fk_codigo_cat3" class="control-label"><span class="text-danger">*</span>Tipo de Categoria Codigo 3</label>
 							<div class="form-group">
-								<select name="category_type" class="form-control" id="category_type">
-									<option>Sin Categoria</option>
+								<select name="fk_codigo_cat3" class="form-control" id="fk_codigo_cat3">
+									<option value="">Sin Categoria</option>
 									<?php
 									foreach($categoy_cod3 as $cat_cod3)
 									{
@@ -134,7 +136,7 @@
 									}
 									?>
 								</select>
-								<span class="text-danger"><?php echo form_error('category_type');?></span>
+								<span class="text-danger"><?php echo form_error('fk_codigo_cat3');?></span>
 							</div>
 						</div>
 						<div align="center"><h4>Información Adicional</h4></div>

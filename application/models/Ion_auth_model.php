@@ -963,6 +963,16 @@ class Ion_auth_model extends CI_Model
 		*/
 
 		$this->load->model('Notificaciones_user_model');
+		//aca valido si el mail es valido o no, si no es valido, no envio notificaciones
+		if (strcmp($email, $this->config->item('Defaultemail')) !== 0) {
+				$notificaciones = array(
+					'vale_nuevo' => 0,
+					'vale_aprobado' => 0,
+					'vale_listo' => 0,
+					'vale_retirado' => 0,
+					'user_id' => $id,
+				);
+    }else{
 			$notificaciones = array(
 				'vale_nuevo' => 1,
 				'vale_aprobado' => 1,
@@ -970,6 +980,8 @@ class Ion_auth_model extends CI_Model
 				'vale_retirado' => 1,
 				'user_id' => $id,
 			);
+    }
+
 		$notificaciones_user_id = $this->Notificaciones_user_model->add_notificaciones_user($notificaciones);
 
 		$this->load->model('Jerarquia_model');
@@ -993,7 +1005,7 @@ class Ion_auth_model extends CI_Model
 			);
 			$jerarquia_id = $this->Jerarquia_model->add_jerarquia($params);
 		}
-		$this->load->model('Role_model');
+		$this->load->model('Roles_group_model');
 
 		$params = array(
 			'user_id' => $id,

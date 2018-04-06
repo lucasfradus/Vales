@@ -22,9 +22,6 @@ class Auth extends CI_Controller {
 			$this->data['sesion'] = $this->user;
 			$this->data['user'] = $this->user;
 			$this->data['perfil'] = $this->Ion_auth_model->get_users_groups()->row();
-			$this->data['aprobaciones_barra'] =  $this->Vales_consumo_model->get_all_vales_count($this->config->item('Pendiente'),null,$sectores);
-
-			$this->data['estado_barra'] = $this->Vales_consumo_model->get_all_vales_count($this->config->item('Aprobado'),$this->config->item('EnProcesoDeArmado'), $this->Jerarquia_model->get_sector_user($this->user->id));
 
 		}
 
@@ -131,7 +128,7 @@ class Auth extends CI_Controller {
 		$logout = $this->ion_auth->logout();
 
 		// redirect them to the login page
-		$this->session->set_flashdata('message', $this->ion_auth->messages());
+		$this->session->set_flashdata('success', $this->ion_auth->messages());
 		redirect('auth/login', 'refresh');
 	}
 
@@ -192,12 +189,12 @@ class Auth extends CI_Controller {
 			if ($change)
 			{
 				//if the password was successfully changed
-				$this->session->set_flashdata('message', $this->ion_auth->messages());
+				$this->session->set_flashdata('success', $this->ion_auth->messages());
 				$this->logout();
 			}
 			else
 			{
-				$this->session->set_flashdata('message', $this->ion_auth->errors());
+				$this->session->set_flashdata('error', $this->ion_auth->errors());
 				redirect('auth/change_password', 'refresh');
 			}
 		}
@@ -235,6 +232,7 @@ class Auth extends CI_Controller {
 
 			// set any errors and display the form
 			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+			$this->load->view('layouts/main2');
 			$this->_render_page('auth/forgot_password', $this->data);
 		}
 		else
@@ -253,7 +251,7 @@ class Auth extends CI_Controller {
 		            	   $this->ion_auth->set_error('forgot_password_email_not_found');
 		            	}
 
-		                $this->session->set_flashdata('message', $this->ion_auth->errors());
+		                $this->session->set_flashdata('error', $this->ion_auth->errors());
                 		redirect("auth/forgot_password", 'refresh');
             		}
 
@@ -263,12 +261,12 @@ class Auth extends CI_Controller {
 			if ($forgotten)
 			{
 				// if there were no errors
-				$this->session->set_flashdata('message', $this->ion_auth->messages());
+				$this->session->set_flashdata('success', $this->ion_auth->messages());
 				redirect("auth/login", 'refresh'); //we should display a confirmation page here instead of the login page
 			}
 			else
 			{
-				$this->session->set_flashdata('message', $this->ion_auth->errors());
+				$this->session->set_flashdata('error', $this->ion_auth->errors());
 				redirect("auth/forgot_password", 'refresh');
 			}
 		}
@@ -321,6 +319,7 @@ class Auth extends CI_Controller {
 				$this->data['code'] = $code;
 
 				// render
+				$this->load->view('layouts/main2');
 				$this->_render_page('auth/reset_password', $this->data);
 			}
 			else
@@ -345,12 +344,12 @@ class Auth extends CI_Controller {
 					if ($change)
 					{
 						// if the password was successfully changed
-						$this->session->set_flashdata('message', $this->ion_auth->messages());
+						$this->session->set_flashdata('success', $this->ion_auth->messages());
 						redirect("auth/login", 'refresh');
 					}
 					else
 					{
-						$this->session->set_flashdata('message', $this->ion_auth->errors());
+						$this->session->set_flashdata('error', $this->ion_auth->errors());
 						redirect('auth/reset_password/' . $code, 'refresh');
 					}
 				}
@@ -380,13 +379,13 @@ class Auth extends CI_Controller {
 		if ($activation)
 		{
 			// redirect them to the auth page
-			$this->session->set_flashdata('message', $this->ion_auth->messages());
+			$this->session->set_flashdata('success', $this->ion_auth->messages());
 			redirect("auth", 'refresh');
 		}
 		else
 		{
 			// redirect them to the forgot password page
-			$this->session->set_flashdata('message', $this->ion_auth->errors());
+			$this->session->set_flashdata('error', $this->ion_auth->errors());
 			redirect("auth/forgot_password", 'refresh');
 		}
 	}
@@ -494,7 +493,7 @@ class Auth extends CI_Controller {
         {
             // check to see if we are creating the user
             // redirect them back to the admin page
-            $this->session->set_flashdata('message', $this->ion_auth->messages());
+            $this->session->set_flashdata('success', $this->ion_auth->messages());
             redirect("auth", 'refresh');
         }
         else
@@ -529,6 +528,7 @@ class Auth extends CI_Controller {
                 'id'    => 'email',
                 'type'  => 'text',
 								'class' => 'form-control',
+								'id'		=> 'email',
                 'value' => $this->form_validation->set_value('email'),
             );
             $this->data['password'] = array(
@@ -797,7 +797,7 @@ class Auth extends CI_Controller {
 			{
 				// check to see if we are creating the group
 				// redirect them back to the admin page
-				$this->session->set_flashdata('message', $this->ion_auth->messages());
+				$this->session->set_flashdata('success', $this->ion_auth->messages());
 				redirect("auth", 'refresh');
 			}
 		}

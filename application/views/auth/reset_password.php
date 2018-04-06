@@ -1,3 +1,4 @@
+<script src="<?php echo site_url('resources/js/bootstrap.min.js');?>"></script>
 <h1><?php echo lang('reset_password_heading');?></h1>
 
 <div id="infoMessage"><?php echo $message;?></div>

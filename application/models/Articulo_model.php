@@ -118,35 +118,42 @@ class Articulo_model extends CI_Model
     }
 
 
-    public function get_autocomplete($search_data, $number, $category)
+    public function get_autocomplete($search_data, $number, $category,$type)
     {
+    //Si el vale es de PAÑOL, muestro los items con pto_venta 99, si es de mprima, 98.
+        if(strcmp($type, $this->config->item('Tipo_Pañol')) === 0){
+            $this->db->where('pto_venta', $this->config->item('Tipo_Pañol_codigo'));
+                }else{
+                $this->db->where('pto_venta', $this->config->item('Tipo_mprimas_codigo'));
+        }
 
         if(isset($category)){
             $this->db->like('num_articulo', $category, 'after');
         }
 
         if(isset($number)){
-            if (substr($number, 0, 1)=='0'){
-                $number = substr($number, 1);
-            }
-            $this->db->like('num_articulo', $number, 'after');
-            $this->db->where('status', $this->config->item('Activo'));
-            $this->db->group_start();
-              $this->db->like('descripcion1', $search_data);
-              $this->db->or_like('descripcion2',  $search_data);
-            $this->db->group_end();
+        $this->db->like('num_articulo', $number, 'after');
+        $this->db->where('status', $this->config->item('Activo'));
+        $this->db->group_start();
+            $this->db->like('descripcion1', $search_data);
+            $this->db->or_like('descripcion2',  $search_data);
+        $this->db->group_end();
 
-            //$this->db->where('(descripcion1 LIKE "%'.$search_data.'%" OR descripcion2 LIKE "%'.$search_data.'%")');
         }else{
-            if (substr($search_data, 0, 1)=='0'){
-                $search_data = substr($search_data, 1);
-            }
             $this->db->or_like('num_articulo', $search_data);
             $this->db->or_like('descripcion1', $search_data);
             $this->db->or_like('descripcion2', $search_data);
         }
 
+        $this->db->where('status', $this->config->item('Activo'));
+        return $this->db->get('articulos')->result_array();
+    }
 
+    public function get_autocomplete_articles($search_data)
+    {
+        $this->db->or_like('num_articulo', $search_data);
+        $this->db->or_like('descripcion1', $search_data);
+        $this->db->or_like('descripcion2', $search_data);
         $this->db->where('status', $this->config->item('Activo'));
         return $this->db->get('articulos')->result_array();
     }

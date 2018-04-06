@@ -79,7 +79,8 @@
             </div>
             <!-- /.box-body -->
             <div class="box-footer clearfix">
-              <a href="<?= site_url('vales_consumo/add/'); ?>" class="btn btn-sm btn-info btn-flat pull-left">Nuevo Vale</a>
+              <a href="<?=site_url('vales_consumo/add/'.$this->config->item('Tipo_Pañol')); ?>" class="btn btn-success btn-sm btn-flat pull-left"><i class="fa fa-plus"></i> Nuevo Vale Pañol</a> 
+              <a href="<?=site_url('vales_consumo/add/'.$this->config->item('Tipo_mprimas')); ?>" class="btn btn-success btn-sm btn-flat pull-left"><i class="fa fa-plus-circle"></i> Nuevo Vale M.Prima</a>
               <a href="<?= site_url('vales_consumo/'); ?>" class="btn btn-sm btn-default btn-flat pull-right">Ver Todo</a>
             </div>
             <!-- /.box-footer -->

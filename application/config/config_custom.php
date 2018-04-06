@@ -11,8 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 
-
-$config['email'] = 'lucas.fradusco@gmail.com';
+$config['Defaultemail'] = 'no-email@ilva.com.ar';
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +49,11 @@ $config['category_cod3']		    		  = 'Cod3';
 */
 $config['Tipo_Pañol']		      		= 0;
 $config['Tipo_mprimas']		    		= 1;
+
+//Veo el punto de venta
+$config['Tipo_Pañol_codigo']		  = 99;
+$config['Tipo_mprimas_codigo']		= 98;
+
 
 
 /*

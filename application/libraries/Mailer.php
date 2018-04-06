@@ -37,14 +37,16 @@ class Mailer extends CI_Email
      public function new_mail_queue($data){
          $date = date("Y-m-d H:i:s");
          $to = is_array($data['_recipients']) ? implode(", ", $data['_recipients']) : $data['_recipients'];
-         $dbdata = array(
-             'to' => $to,
-             'message' => $data['_body'],
-             'headers' => $data['_headers'],
-             'status' => 'pending',
-             'date' => $date
-         );
-         return $this->CI->db->insert($this->table_email_queue, $dbdata);
+           $dbdata = array(
+               'to' => $to,
+               'message' => $data['_body'],
+               'headers' => $data['_headers'],
+               'status' => 'pending',
+               'date' => $date
+           );
+           return $this->CI->db->insert($this->table_email_queue, $dbdata);
+
+
      }
 
 }

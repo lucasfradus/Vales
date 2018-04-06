@@ -149,8 +149,9 @@ GROUP BY `id_vale_articulos` ORDER BY `id_vale` DESC
             $this->db->select('COUNT(CASE WHEN estado_entrega_item=1 THEN 1 END) AS Cargado,');
             $this->db->select('COUNT(CASE WHEN estado_entrega_item=0 THEN 1 END) AS Pendiente');
             $this->db->select('COUNT(estado_entrega_item) AS total_items');
-            $this->db->select('id_aprobacion, nombre_estado_aprobacion, id_vale, username, nombre_sector, fecha_creado, nombre_estado, id_requeridor, id_tipo');
+            $this->db->select('id_aprobacion, nombre_estado_aprobacion, id_vale, username, nombre_sector, fecha_creado, nombre_estado, id_requeridor, id_tipo, nombre_motivo');
             $this->db->join('estado_aprobacion','id_estado_aprobacion_fk = id_aprobacion' );
+            $this->db->join('fk_motivo', 'fk_motivo.id_motivo = vales_consumo.id_motivo');
             $this->db->join('estado_entrega','id_estado_entrega = id_estado' );
             $this->db->join('users','id = id_requeridor' );
             $this->db->join('articulos_x_vale','id_vale_articulos = id_vale' );

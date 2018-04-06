@@ -20,11 +20,11 @@ class Articulo extends CI_Controller{
 
         //aca valido que solo ciertos perfiles de usuarios puedan utilizar los metodos de estre controlador
 
-                if(!$this->ion_auth->in_group($this->config->item('Administrator'))){
-                  $this->session->set_flashdata('error','No tiene permiso para realizar esta acción1.11111');
-                         redirect('/');
+        if(!$this->ion_auth->in_group($this->config->item('Administrator'))){
+          $this->session->set_flashdata('error','No tiene permiso para realizar esta acción1.11111');
+                 redirect('/');
 
-                }
+        }
     }
 
     function bulk_add(){
@@ -122,30 +122,19 @@ class Articulo extends CI_Controller{
     function autocompete(){
      echo json_encode($this->Articulo_model->get_autocomplete($this->input->get('search'), $this->input->get('number'), $this->input->get('category')));
  }
+     function autocompete_articles(){
+      echo json_encode($this->Articulo_model->get_autocomplete_articles($this->input->get('search')));
+    }
+
+
 
 function test(){
 
-
-
-
-    $category = null;
-    $number = '0101000';
-
-    if (substr($number, 0, 1)=='0'){
-        echo "arranca con 0<br>";
-        echo substr($number, 1);
-    }else {
-        echo "no";
+    if (strcmp('no-email@ilva.com.ar', $this->config->item('Defaultemail')) !== 0) {
+        echo '$var1 no es igual a $var2 en una comparación que considera mayúsculas y minúsculas';
+    } else{
+        echo 'son iguales';
     }
-
-    // $string = 'Caja';
-    //
-    // $result = $this->Articulo_model->get_autocomplete_test($number, $string, $category);
-    // foreach ($result as $r ) {
-    //     echo "<br>";
-    //     echo 'NUMERO de ART '.$r['num_articulo'].' | DESCRIPCION'. $r['descripcion1'];
-    //     echo "<br>";
-    // }
 
 
  }
@@ -162,17 +151,25 @@ function test(){
         $this->form_validation->set_rules('num_articulo','Numero de Articulo','required|integer|is_unique[articulos.num_articulo]');
         $this->form_validation->set_rules('descripcion1','Descripcion1','required');
         $this->form_validation->set_rules('id_un_med1','Id Un Med1','required|integer');
-        $this->form_validation->set_rules('categoy','Categoria','required');
+
 
         if($this->form_validation->run())
         {
             $params = array(
-                'id_un_med1' => $this->input->post('id_un_med1'),
-                'id_un_med2' => $this->input->post('id_un_med2'),
-                'num_articulo' => $this->input->post('num_articulo'),
-                'descripcion1' => $this->input->post('descripcion1'),
-                'descripcion2' => $this->input->post('descripcion2'),
-                'status' => $this->input->post('status'),
+                'id_un_med1'          => $this->input->post('id_un_med1'),
+                'id_un_med2'          => $this->input->post('id_un_med2'),
+                'num_articulo'        => $this->input->post('num_articulo'),
+                'descripcion1'        => $this->input->post('descripcion1'),
+                'descripcion2'        => $this->input->post('descripcion2'),
+                'texto_busqueda'      => $this->input->post('texto_busqueda'),
+                'fk_codigo_familia'   => $this->input->post('fk_codigo_familia'),
+                'fk_codigo_cat1'      => $this->input->post('fk_codigo_cat1'),
+                'fk_codigo_cat2'      => $this->input->post('fk_codigo_cat2'),
+                'fk_codigo_cat3'      => $this->input->post('fk_codigo_cat3'),
+                'tipo_linea'          => $this->input->post('tipo_linea'),
+                'tipo_almacenamiento' => $this->input->post('tipo_almacenamiento'),
+                'pto_venta'           => $this->input->post('pto_venta'),
+                'status' => $this->config->item('Activo'),
             );
 
             $articulo_id = $this->Articulo_model->add_articulo($params);
@@ -232,11 +229,19 @@ function test(){
             if($this->form_validation->run())
             {
                 $params = array(
-                    'id_un_med1' => $this->input->post('id_un_med1'),
-                    'id_un_med2' => $this->input->post('id_un_med2'),
-                    'num_articulo' => $this->input->post('num_articulo'),
-                    'descripcion1' => $this->input->post('descripcion1'),
-                    'descripcion2' => $this->input->post('descripcion2'),
+                    'id_un_med1'          => $this->input->post('id_un_med1'),
+                    'id_un_med2'          => $this->input->post('id_un_med2'),
+                    'num_articulo'        => $this->input->post('num_articulo'),
+                    'descripcion1'        => $this->input->post('descripcion1'),
+                    'descripcion2'        => $this->input->post('descripcion2'),
+                    'texto_busqueda'      => $this->input->post('texto_busqueda'),
+                    'fk_codigo_familia'   => $this->input->post('fk_codigo_familia'),
+                    'fk_codigo_cat1'      => $this->input->post('fk_codigo_cat1'),
+                    'fk_codigo_cat2'      => $this->input->post('fk_codigo_cat2'),
+                    'fk_codigo_cat3'      => $this->input->post('fk_codigo_cat3'),
+                    'tipo_linea'          => $this->input->post('tipo_linea'),
+                    'tipo_almacenamiento' => $this->input->post('tipo_almacenamiento'),
+                    'pto_venta'           => $this->input->post('pto_venta'),
                     'status' => $this->input->post('status'),
                 );
 

@@ -36,6 +36,7 @@ class Notificaciones_user_model extends CI_Model
         $this->db->join('users ', 'users.id = user_id');
         $this->db->order_by('id_notificaciones_users', 'desc');
         $this->db->where('users.active',1);
+        $this->db->distinct();
         return $this->db->get('notificaciones_users')->result_array();
     }
 

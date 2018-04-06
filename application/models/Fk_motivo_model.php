@@ -36,6 +36,16 @@ class Fk_motivo_model extends CI_Model
         $this->db->order_by('id_motivo', 'asc');
         return $this->db->get('fk_motivo')->result_array();
     }
+    /*
+     * Traigo solo el motivo que es para mprima
+     */
+    function get_all_fk_motivo_mat_prima()
+    {
+        $this->db->where('id_motivo', $this->config->item('Inactivo'));
+        return $this->db->get('fk_motivo')->result_array();
+    }
+
+
 
     /*
      * function to add new fk_motivo

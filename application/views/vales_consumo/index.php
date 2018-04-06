@@ -6,7 +6,8 @@
             <div class="box-header">
                 <h3 class="box-title">Mis Vales de Consumo</h3>
             	<div class="box-tools">
-                    <a href="<?=site_url('vales_consumo/add'); ?>" class="btn btn-success btn-sm">Crear Nuevo Vale</a>
+                    <a href="<?=site_url('vales_consumo/add/'.$this->config->item('Tipo_Pañol')); ?>" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> Nuevo Vale Pañol</a>
+                    <a href="<?=site_url('vales_consumo/add/'.$this->config->item('Tipo_mprimas')); ?>" class="btn btn-success btn-sm"><i class="fa fa-plus-circle"></i> Nuevo Vale M.Prima</a>
                 </div>
             </div>
             <div class="box-body">

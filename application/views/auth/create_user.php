@@ -3,7 +3,7 @@
       	<div class="box box-info">
             <div class="box-header with-border">
               	<h3 class="box-title"><?php echo lang('create_user_heading');?></h3>
-                <p><?php echo lang('create_user_subheading');?></p>
+                <p>Por favor, introduzca la información del usuario.</p>
             </div>
 
 <?php echo form_open("auth/create_user");?>
@@ -35,11 +35,15 @@
       ?>
       </div>
 
-      <div class="col-md-6">
+      <div class="col-md-4">
             <?php echo lang('create_user_email_label', 'email');?> <br />
             <?php echo form_input($email);?>
             <small>El Email se utiliza para enviar notificaciones.</small>
             <span class="text-danger"><?= form_error('email') ?></span>
+      </div>
+      <div class="col-md-2">
+            <label>  </label><br>
+            <input type="checkbox" name="valid_email" id="valid_email"></input><label for="valid_email"> No Utilizar Mail </label>
       </div>
 
       <div class="col-md-6">
@@ -103,3 +107,17 @@
           </div>
     </div>
 </div>
+
+<script>
+
+//Como varios usuarios no tienen mail, dejo esta opcion para no que el boludo que hace las altas no ponga boludeces y los mails nos reboten flama.
+$('#valid_email').on('click',function(e){
+  if ($('#valid_email').is(':checked')) {
+    $('#email').prop('readonly', true);
+    $('#email').val('no-email@ilva.com.ar');
+  }else{
+    $('#email').prop('readonly', false);
+    $('#email').val('');
+  }
+});
+</script>

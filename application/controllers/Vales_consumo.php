@@ -32,22 +32,6 @@ class Vales_consumo extends CI_Controller{
 
 
     }
-/*
-    function sendMail($datos){
-      $this->load->library('email');
-      $this->email->from('lucas.fradusco@gmail.com.ar', 'Sistema de Vales');
-      $this->email->to($datos['user']->email);
-      $this->email->subject(($datos['subject']);
-      $this->email->message('test');
-
-      if($this->email->send()){
-        echo "todo ok";
-      }else{
-        echo "no todo ok!";
-      }
-    }
-
-*/
 
 
 
@@ -157,7 +141,7 @@ function testing(){
 
 
     /*
-    *   Funcion que llamo con AJAX para actualizar el estado de un vale
+    *   Funcion que llamo con AJAX para actualizar el estado de un vale. es un asco, pero por el momento va a quedar asi.
     *
     */
 
@@ -185,9 +169,10 @@ function testing(){
                             echo  false;
                      }
                  }
-
-
-
+/*
+*  Funcion que remueve items del vale
+*  Si nada pincha con esto comentado, la borro.
+*/
      function remove_item_vale(){
                   $update_articulo_por_vale = array(
                                      'id_vale'                 => $this->input->post('id_vale'),
@@ -219,10 +204,6 @@ function testing(){
                                     echo  false;
                              }
                  }
-
-
-
-
 
 
 
@@ -428,7 +409,7 @@ function testing(){
           }
                 $this->data['vale'] = $this->Vales_consumo_model->get_vales_consumo($id_vale);
                 $this->data['estado'] = $this->Estado_entrega_model->get_all_estado_aprobacion();
-                
+
                     if(isset($this->data['vale']['id_vale']))
                     {
                         $this->data['aprobacion']     = $this->Evolucion_vale_model->get_aprobacion_vale($id_vale);
@@ -448,42 +429,71 @@ function testing(){
      */
 
     function autocompete(){
-     echo json_encode($this->Articulo_model->get_autocomplete($this->input->get('search'), $this->input->get('number'), $this->input->get('category')));
+     echo json_encode($this->Articulo_model->get_autocomplete($this->input->get('search'), $this->input->get('number'), $this->input->get('category'), $this->input->get('vale_type')));
  }
 
-    function add(){
-        //$this->data['all_productos'] = $this->Articulo_model->get_all_articulos($params = array('status' => $this->config->item('Activo')));
-        $this->load->model('Fk_categoria_model');
-        $this->data['categoy_family'] = $this->Fk_categoria_model->get_all_fk_categorias_codigo($this->config->item('category_family'));
-        $this->data['categoy_cod1'] =   $this->Fk_categoria_model->get_all_fk_categorias_codigo($this->config->item('category_cod1'));
-        $this->data['categoy_cod2'] =   $this->Fk_categoria_model->get_all_fk_categorias_codigo($this->config->item('category_cod2'));
-        $this->data['categoy_cod3'] =   $this->Fk_categoria_model->get_all_fk_categorias_codigo($this->config->item('category_cod3'));
-
-        $this->data['all_sector_req'] = $this->Jerarquia_model->get_sector_user($this->user->id);
-        $this->data['all_motivos'] = $this->Fk_motivo_model->get_all_fk_motivo();
-        $this->data['_view'] = 'vales_consumo/new';
-        $this->load->view('layouts/main',$this->data);
+    function new($type){
+      var_dump($type) ;
     }
 
-    function add_mat_prima(){
-        //$this->data['all_productos'] = $this->Articulo_model->get_all_articulos($params = array('status' => $this->config->item('Activo')));
-        $this->data['all_sector_req'] = $this->Jerarquia_model->get_sector_user_mat_prima($this->user->id);
-        $this->data['_view'] = 'vales_consumo/new_mat_prima';
-        $this->load->view('layouts/main',$this->data);
+
+
+    function add($type = null){
+      if(strcmp($type, $this->config->item('Tipo_Pañol')) === 0 || strcmp($type, $this->config->item('Tipo_mprimas')) === 0){
+        if(strcmp($type, $this->config->item('Tipo_Pañol')) === 0){
+          $this->data['title'] = 'Nuevo Vale de Consumo de Pañol';
+          $this->data['hidden_type'] = $this->config->item('Tipo_Pañol');
+          $this->data['all_sector_req'] = $this->Jerarquia_model->get_sector_user($this->user->id);
+          $this->data['all_motivos'] = $this->Fk_motivo_model->get_all_fk_motivo();
+        }else{
+          $this->data['title'] = 'Nuevo Vale de Consumo de Materias Prima';
+          $this->data['hidden_type'] = $this->config->item('Tipo_mprimas');
+          $this->data['all_sector_req'] = $this->Jerarquia_model->get_sector_user_mat_prima($this->user->id);
+          $this->data['all_motivos'] = $this->Fk_motivo_model->get_all_fk_motivo_mat_prima();
+        }
+
+        if (!empty($this->data['all_sector_req'])){
+          $this->load->model('Fk_categoria_model');
+          $this->data['categoy_family'] = $this->Fk_categoria_model->get_all_fk_categorias_codigo($this->config->item('category_family'));
+          $this->data['categoy_cod1'] =   $this->Fk_categoria_model->get_all_fk_categorias_codigo($this->config->item('category_cod1'));
+          $this->data['categoy_cod2'] =   $this->Fk_categoria_model->get_all_fk_categorias_codigo($this->config->item('category_cod2'));
+          $this->data['categoy_cod3'] =   $this->Fk_categoria_model->get_all_fk_categorias_codigo($this->config->item('category_cod3'));
+          $this->data['_view'] = 'vales_consumo/new';
+          $this->load->view('layouts/main',$this->data);
+        }else{
+          $this->session->set_flashdata('error','Su Usuario no tiene sectores habilitados para realizar esta acción');
+           redirect('vales_consumo/index');
+        }
+      }else{
+        $this->session->set_flashdata('error','Ha ocurrido un error. Por favor Utilice los puntos de menú para navegar.');
+         redirect('vales_consumo/index');
+      }
     }
+
+    // function add_mat_prima(){
+    //     $this->load->model('Fk_categoria_model');
+    //     $this->data['categoy_family'] = $this->Fk_categoria_model->get_all_fk_categorias_codigo($this->config->item('category_family'));
+    //     $this->data['categoy_cod1'] =   $this->Fk_categoria_model->get_all_fk_categorias_codigo($this->config->item('category_cod1'));
+    //     $this->data['categoy_cod2'] =   $this->Fk_categoria_model->get_all_fk_categorias_codigo($this->config->item('category_cod2'));
+    //     $this->data['categoy_cod3'] =   $this->Fk_categoria_model->get_all_fk_categorias_codigo($this->config->item('category_cod3'));
+    //     $this->data['all_sector_req'] = $this->Jerarquia_model->get_sector_user_mat_prima($this->user->id);
+    //     $this->data['all_motivos'] = $this->Fk_motivo_model->get_all_fk_motivo();
+    //     $this->data['_view'] = 'vales_consumo/new_mat_prima';
+    //     $this->load->view('layouts/main',$this->data);
+    // }
 
 
 
     function new_create(){
-    $datos_user = $this->input->post('datos_user');
     $total_items = $this->input->post('total_items');
     $sector = $this->input->post('sector');
     $tipo = $this->input->post('tipo');
     $id_motivo = $this->input->post('motivo');
+    $id_sector = $this->input->post('id_sector');
 
         $params = array(
          'id_requeridor'                 => $this->user->id,
-         'id_sector'                     => $datos_user['id_sector'],
+         'id_sector'                     => $id_sector,
          'fecha_creado'                  => time(),
          'id_estado'                     => $this->config->item('PendienteDeAprobacion'),
          'id_aprobacion'                 => $this->config->item('Pendiente'),
@@ -526,7 +536,7 @@ if($vales_consumo_id){
       }
 
       // Aca traigo los responsables del sector donde se carga el vale, reviso si quieren ser notificados y genero la notificacion.
-      $responsables = $this->Jerarquia_model->get_responsible_by_sector($datos_user['id_sector'], $this->config->item('Nuevo_Vale'));
+      $responsables = $this->Jerarquia_model->get_responsible_by_sector($id_sector, $this->config->item('Nuevo_Vale'));
       foreach ($responsables as $responsable ) {
           if($this->Notificaciones_user_model->get_notifications_settings($responsable->id, $this->config->item('Nuevo_Vale'))){
               $this->generales->Notify_responsible($total_items, $vales_consumo_id, $sector, $responsable, $this->user);
@@ -546,84 +556,20 @@ if($vales_consumo_id){
 
     }
 }
-function test(){
-    $owner = $this->user;
-    $vale = array(
-        'id_vale'   => 49,
-        'id_estado'           => $this->Estado_entrega_model->get_estado_entrega(4),
-        'responsable'         => $this->user,
-        'observacion'         => 'hola que tal',
-        'items'               => $this->Articulo_model->get_articulo_por_vale(49),
-        'info_vale'           => $this->Vales_consumo_model->get_vales_consumo(49),
-    );
 
-    $this->generales->Notify_owner_ready($owner, $vale);
+function test(){
+    if($this->generales->email_check('no-email@ilva.csom.ar')){
+      echo "true";
+    }else{
+      echo "dalts";
+    }
 }
 
-    /*
-     * Adding a new vales_consumo
-     */
-    // function add(){
-    //     if($this->ion_auth->RolCheck($this->config->item('NuevoVale'))){
-    //
-    //     $this->form_validation->set_rules('cantidad','Cantidad','required');
-    //
-    //     if($this->form_validation->run()){
-    //         if($this->input->post('corrida')==1){
-    //
-    //              $params = array(
-    //             'id_requeridor'                 => $this->user->id,
-    //             'id_sector'                     => $this->input->post('id_sector'),
-    //             'fecha_creado'                  => time(),
-    //             'id_estado'                     => $this->config->item('EnProcesoDeCarga'),
-    //         );
-    //
-    //             $vales_consumo_id = $this->Vales_consumo_model->add_vales_consumo($params);
-    //
-    //
-    //
-    //             $evolucion_vale = array(
-    //                 'id_vale_evolucion'          => $vales_consumo_id,
-    //                 'id_estado'                  => $this->config->item('EnProcesoDeCarga'),
-    //                 'fecha'                      => time(),
-    //                 'id_responsable'             => $this->user->id,
-    //         );
-    //              $this->Evolucion_vale_model->add_evolucion_vale($evolucion_vale);
-    //
-    //
-    //         }else{
-    //             $vales_consumo_id = $this->input->post('vales_consumo_id');
-    //             }
-    //
-    //         $articulos_por_vale = array(
-    //                 'id_vale_articulos'          => $vales_consumo_id,
-    //                 'id_articulo_por_vale'       => $this->input->post('articulo'),
-    //                 'cantidad'                   => $this->input->post('cantidad'),
-    //                 'estado_entrega_item'        => $this->config->item('Pendiente'),
-    //         );
-    //          //una vez que ya generé el vale deshabilito algunos campos para que no hagan lio
-    //         $this->data['disabled'] = 'disabled';
-    //
-    //         $this->Articulo_model->add_articulo_por_vale($articulos_por_vale);
-    //
-    //             $this->data['items'] = $this->Articulo_model->get_articulo_por_vale($vales_consumo_id);
-    //             $this->data['vales_consumo_id'] = $vales_consumo_id;
-    //
-    //     }
-    //
-    //             $this->data['all_productos'] = $this->Articulo_model->get_all_articulos($params = array('status' => $this->config->item('Activo')));
-    //             $this->data['all_sector_req'] = $this->Jerarquia_model->get_sector_user($this->user->id);
-    //             $this->data['_view'] = 'vales_consumo/add';
-    //             $this->load->view('layouts/main',$this->data);
-    //
-    //     }
-    // }
+
 
       /*
         *   Cargo el vale que genero el usuario
-        *
-        *
-        */
+        * La dejo comentada, si no pincha, se borra
 
     function create($id_vale){
          $user = $this->ion_auth->user()->row();
@@ -646,23 +592,8 @@ function test(){
                 );
     if($this->Evolucion_vale_model->add_evolucion_vale($evolucion_vale) && $this->Vales_consumo_model->update_vales_consumo($id_vale,$params) && $this->Evolucion_vale_model->add_aprobacion_vale($aprobacion_vale)){
 
-
-      /*
-      Argumentos que envio al mail
-
-      */
-                  $mail['id_vale'] = $id_vale;
-                  $mail['fecha'] = time();
-                  $mail['id_responsable'] = $user->id;
-                  $mail['user'] = $user;
-                  $mail['view'] = $this->config->item('templates').$this->config->item('Nuevo_Vale');
-                  $this->generales->Send_mails($mail);
-
-
-
                   /*  $this->session->set_flashdata('success','Vale Creado correctamente! ID del Vale: '.$id_vale);
                      redirect('vales_consumo/index');
-*/
 
 
                 }else{
@@ -671,6 +602,8 @@ function test(){
                 }
 
     }
+
+    */
     /*
     * Funcion que llamo desde AJAX para actualizar el estado de preparacion de un vale
     * La llamo desde preparacion.php
