@@ -84,6 +84,9 @@
                                             <a href="<?= base_url('Auth/logout'); ?>" class="btn btn-default btn-flat">Cerrar Sesión</a>
                                         </div>
                                     </li>
+                                    <li>
+                                        <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i>Panel de Vista</a>
+                                      </li>
                                 </ul>
                             </li>
                         </ul>
@@ -170,6 +173,19 @@
                         <?php if ($this->ion_auth->in_group($this->config->item('Administrator'))): ?>
                         <li>
                           <a href="#">
+                            <i class="fa fa-flag-checkered"></i> <span>Reportes</span>
+                          </a>
+                            <ul class="treeview-menu">
+                              <li>
+                                <a href="<?php echo site_url('reportes/ReporteVales');?>"><i class="fa fa-flag"></i>Vales de Consumo</a>
+                              </li>
+                              <li>
+                                <a href="<?php echo site_url('reportes/ReporteTransferencias');?>"><i class="fa fa-flag"></i>Transferencias</a>
+                              </li>
+                            </ul>
+                        </li>
+                        <li>
+                          <a href="#">
                             <i class="fa fa-cogs"></i> <span>Configuración General</span>
                           </a>
                             <ul class="treeview-menu">
@@ -215,6 +231,11 @@
                                         </a>
                                     </li>
                                     <li>
+                                        <a href="<?php echo site_url('Fk_categorias_lm/index');?>">
+                                          <i class="fa fa-tags"></i> <span>Maestro de Categorias LM</span>
+                                        </a>
+                                    </li>
+                                    <li>
                                         <a href="<?php echo site_url('Sector_req/index');?>">
                                           <i class="fa fa-building"></i> <span>Maestro de Sectores </span>
                                         </a>
@@ -225,7 +246,6 @@
                                           <i class="fa fa-globe"></i> <span>Maestro Unidades de Med</span>
                                         </a>
                                     </li>
-
                                     <li>
                                         <a href="<?php echo site_url('backup/index');?>">
                                           <i class="fa fa-window-restore"></i> <span>Backup</span>
@@ -233,7 +253,9 @@
                                     </li>
                                   </ul>
                                   </li>
+
                             </ul>
+
                         </li>
                         <?php endif ?>
                     </ul>

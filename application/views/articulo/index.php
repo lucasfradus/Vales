@@ -29,6 +29,7 @@
                         <th>Cat 1</th>
                         <th>Cat 2</th>
                         <th>Cat 3</th>
+                        <th>Cat LM</th>
                         <th>UN Med Prim</th>
                         <th>UN Med Sec</th>
                         <th>Tipo Linea</th>
@@ -49,6 +50,7 @@
                         <td><?php echo $a['FK_Cod1']; ?></td>
                         <td><?php echo $a['FK_Cod2']; ?></td>
                         <td><?php echo $a['FK_Cod3']; ?></td>
+                        <td><?php echo $a['nom_cat_lm']; ?></td>
 						<td><?php echo $a['UN_Medida_1']; ?></td>
 						<td><?php echo $a['UN_Medida_2']; ?></td>
                         <td><?php echo $a['tipo_linea']; ?></td>

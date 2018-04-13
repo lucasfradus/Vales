@@ -11,7 +11,7 @@
 *
 */
 function base_url() {
-    return 'http://ilvanet/Vales/';
+    return 'http://10.10.0.242/Vales/';
 }
 
 
@@ -52,5 +52,3 @@ function update_status(id_vale){
           }
     });
 }
-
-  

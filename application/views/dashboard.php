@@ -72,6 +72,9 @@
 
                   </tr>
              <?php } ?>
+             <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/TableExport/3.3.13/css/tableexport.css" />
+             <script src="https://cdnjs.cloudflare.com/ajax/libs/TableExport/3.3.13/js/tableexport.js"></script>
+             <script src="https://fastcdn.org/FileSaver.js/1.1.20151003/FileSaver.min.js"></script>
                   </tbody>
                 </table>
               </div>
@@ -79,7 +82,7 @@
             </div>
             <!-- /.box-body -->
             <div class="box-footer clearfix">
-              <a href="<?=site_url('vales_consumo/add/'.$this->config->item('Tipo_Pañol')); ?>" class="btn btn-success btn-sm btn-flat pull-left"><i class="fa fa-plus"></i> Nuevo Vale Pañol</a> 
+              <a href="<?=site_url('vales_consumo/add/'.$this->config->item('Tipo_Pañol')); ?>" class="btn btn-success btn-sm btn-flat pull-left"><i class="fa fa-plus"></i> Nuevo Vale Pañol</a>
               <a href="<?=site_url('vales_consumo/add/'.$this->config->item('Tipo_mprimas')); ?>" class="btn btn-success btn-sm btn-flat pull-left"><i class="fa fa-plus-circle"></i> Nuevo Vale M.Prima</a>
               <a href="<?= site_url('vales_consumo/'); ?>" class="btn btn-sm btn-default btn-flat pull-right">Ver Todo</a>
             </div>
@@ -90,6 +93,7 @@
 </div>
 <script>
 
+$("example2").tableExport();
   $(function () {
     $('#example2').DataTable({
       'aaSorting' : [2, 'asc'],

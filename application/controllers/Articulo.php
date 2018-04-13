@@ -15,6 +15,7 @@ class Articulo extends CI_Controller{
         $this->load->library('form_validation');
         $this->load->model('Fk_un_med_model');
         $this->load->model('Fk_categoria_model');
+        $this->load->model('Fk_categorias_lm_model');
 
         $this->data = $this->generales->imports_generales();
 
@@ -32,43 +33,68 @@ class Articulo extends CI_Controller{
         $this->load->view('layouts/main',$this->data);
     }
 
+/*
+
+Esta funcion maneja los update de manera mas dinamica. recibo los valores y los campos via ajax, me ahorro la pantalla de edicion.
+
+*/
+    public function dynamic_update(){
+      $name = $this->input->post('name');
+      $value = $this->input->post('value');
+      $pk = $this->input->post('pk');
+      /*
+      Primero validamos si lo que estan cambiando es el numero de articulo y que no este cargado.
+      */
+      if($name == 'num_articulo'){
+          if($this->Articulo_model->get_articulo_by_number($value)){
+              $response = array(
+                  'success' => false,
+                  'msg' => 'ese numero ya existe',
+              );
+          }else if(empty($value)){
+              $response = array(
+                  'success' => false,
+                  'msg' => 'El número de Articulo no pude estar vacio.',
+              );
+          }else{
+              $response = $this->Articulo_model->dynamic_update($name,$value,$pk);
+          }
+          /*
+          Segundo, valido el campo de descrp1 que no esta vacio.
+          */
+      }else if($name == 'descripcion1'){
+          if(empty($value)){
+              $response = array(
+                  'success' => false,
+                  'msg' => 'La descripcion Primaria no puede estar Vacia.',
+              );
+          }else{
+              $response = $this->Articulo_model->dynamic_update($name,$value,$pk);
+          }
+
+      }
+
+      echo json_encode($response);
+    }
 
     function import(){
       $this->load->library('CSVReader');
       $csvData = $this->csvreader->parse_file(site_url('art.csv'));
- $i = 0;
+      $i = 0;
       foreach ($csvData as $row) {
-          $i++;
            $id_un_med_1 = $this->Fk_un_med_model->get_fk_un_med_by_name($row['id_un_med_1']);
-           //$id_un_med_2 = $this->Fk_un_med_model->get_fk_un_med_by_name($row['id_un_med_2']);
-          // echo $id_un_med_1."<br>";
-          // echo $id_un_med_2."<br>";
-          // var_dump($this->Articulo_model->get_articulo_by_number($row['num_articulo']));
-          // echo "<br>";
-          // if ($id_un_med_1){
-          //     echo "existe la unidad de medida 1 <br>";
-          // }else{
-          //     echo "no existe la un de meiduida 1 <br>";
-          // }
-          // if ($id_un_med_2){
-          //     echo "existe la unidad de medida 2 <br>";
-          // }else{
-          //     echo "no existe la un de meiduida 2<br>";
-          // }
-          // if($this->Articulo_model->get_articulo_by_number($row['num_articulo'])){
-          //     echo "ya existe el articulo". $row['num_articulo']. "<br>";
-          // }else{
-          //     echo "No existe el articulo". $row['num_articulo']. "<br>";
-          // }
-          // echo "-----------------------<br>";
-
+           $id_un_med_2 = $this->Fk_un_med_model->get_fk_un_med_by_name($row['id_un_med_2']);
+           $id_cat_lm  = $this->Fk_categorias_lm_model->get_fk_cat_by_name($row['cat_lm']);
             //Antes de hacer la carga tengo que chequear que no exista ese numero de articulo y que esten bien las unidades de medida. si no, no lo cargo
-          if (!$this->Articulo_model->get_articulo_by_number($row['num_articulo'])&&$id_un_med_1){
+          //if (!$this->Articulo_model->get_articulo_by_number($row['num_articulo'])&&$id_un_med_1){
+              if (!$this->Articulo_model->get_articulo_by_number($row['num_articulo'])&&$id_un_med_1&&$id_un_med_2&&$id_cat_lm){
+              $i++;
               $params = array(
                   'id_un_med1' =>  $id_un_med_1,
-                  'id_un_med2' =>  133,
+                  'id_un_med2' =>  $id_un_med_2,
                   'num_articulo' => $row['num_articulo'],
                   'codigo_jde' => 000000000,
+                  'fk_codigo_lm' =>$id_cat_lm,
                   'fk_codigo_familia' => $this->Fk_categoria_model->get_fk_cat_by_name(array('codigo_categoria' => 'Familia', 'nombre_categoria' => $row['family'])),
                   'fk_codigo_cat1' => $this->Fk_categoria_model->get_fk_cat_by_name(array('codigo_categoria' => 'Cod1', 'nombre_categoria' => $row['cod_1'])),
                   'fk_codigo_cat2' => $this->Fk_categoria_model->get_fk_cat_by_name(array('codigo_categoria' => 'Cod2', 'nombre_categoria' => $row['cod_2'])),
@@ -107,7 +133,7 @@ class Articulo extends CI_Controller{
        $config['base_url'] = site_url('articulo/index?');
        $config['total_rows'] = $this->Articulo_model->get_all_articulos_count();
        $this->pagination->initialize($config);
-       $this->data["links"] = $this->pagination->create_links();
+       $this->data['links'] = $this->pagination->create_links();
        $this->data['articulos'] = $this->Articulo_model->get_all_articulos($params);
 
         $this->data['_view'] = 'articulo/index';

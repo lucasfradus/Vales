@@ -11,6 +11,25 @@ class Vales_consumo_model extends CI_Model
         parent::__construct();
     }
 
+    function get_report($from, $to, $sucursal){
+
+      $this->db->select('vales_consumo.id_vale AS vale, articulos.num_articulo AS num_art, articulos.descripcion1 AS descr, cantidad_entregada AS cant, sector_req.fase, fk_categorias_lm.cod_cat_lm AS cat_lm, , fk_categorias_lm.nom_cat_lm AS cod_lm, fk_un_med.un_medida AS unidad');
+
+      $this->db->join('articulos_x_vale','id_vale_articulos = id_vale' );
+      $this->db->join('articulos','articulos_x_vale.id_articulo_por_vale  = articulos.id_articulo' );
+      $this->db->join('sector_req','id_sector_req = id_sector' );
+      $this->db->join('fk_categorias_lm','articulos.fk_codigo_lm = fk_categorias_lm.id_cat_lm' );
+      $this->db->join('evolucion_vale', 'evolucion_vale.id_vale_evolucion = vales_consumo.id_vale');
+        $this->db->join('fk_un_med','fk_un_med.id_un_medida = articulos.id_un_med1' );
+        $this->db->where('evolucion_vale.fecha >=', $from);
+        $this->db->where('evolucion_vale.fecha <=', $to);
+        $this->db->where('articulos_x_vale.cantidad_entregada >', 0);
+        $this->db->where('evolucion_vale.id_estado',  $this->config->item('Retirado'));
+        if($sucursal == $this->config->item('Tipo_Pañol') || $sucursal == $this->config->item('Tipo_mprimas')){
+          $this->db->where('vales_consumo.id_tipo', $sucursal);
+        }
+        return $this->db->get('vales_consumo')->result_array();
+    }
 
 
 

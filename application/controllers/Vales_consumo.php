@@ -81,9 +81,13 @@ public function search(){
 }
 
 function testing(){
-    $result = $this->input->post('search_data');
-    echo print_r($result);
+  $name = $this->input->post('name');
+  $value = $this->input->post('value');
+  $pk = $this->input->post('pk');
+  echo 'campo: '.$name.' | valornuevo: '.$value.' | id: '.$pk;
 }
+
+
 
 
     function preparar($id_vale =  null){

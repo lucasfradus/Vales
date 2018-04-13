@@ -29,6 +29,9 @@ class Articulo_model extends CI_Model
         $this->db->select('f4.nombre_categoria AS FK_Cod3');
         $this->db->join('fk_categorias f4', 'f4.id_fk_categoria = articulos.fk_codigo_cat3','left');
 
+        $this->db->select('nom_cat_lm AS FK_Cat_LM');
+        $this->db->join('fk_categorias_lm', 'fk_categorias_lm.id_cat_lm = articulos.fk_codigo_lm');
+
        $this->db->select('u1.un_medida AS UN_Medida_1');
        $this->db->select('u2.un_medida AS UN_Medida_2');
        $this->db->join('fk_un_med u1', 'u1.id_un_medida = articulos.id_un_med1');
@@ -79,8 +82,24 @@ class Articulo_model extends CI_Model
         return $this->db->get('articulos_x_vale')->result();
     }
 
+      function dynamic_update($name,$value,$pk){
+          $params = array(
+              $name => $value
+          );
+          $this->db->where('id_articulo',$pk);
+          if($this->db->update('articulos',$params)){
+            return  $response = array(
+                  'success' => true,
+              );
 
+          }else{
+             return $response = array(
+                  'success' => false,
+                  'msg' => 'Ocurrió un error al modificar el campo.'
+              );
+          }
 
+      }
 
 
 
@@ -195,7 +214,7 @@ public function get_autocomplete_uno($search_data)
      */
        function get_all_articulos($params = array())
     {
-        $this->db->select('id_articulo,num_articulo,descripcion1,descripcion2,tipo_linea,tipo_almacenamiento,articulos.status, pto_venta, texto_busqueda');
+        $this->db->select('id_articulo,num_articulo,descripcion1,descripcion2,tipo_linea,tipo_almacenamiento,articulos.status, pto_venta, texto_busqueda,nom_cat_lm');
 
        $this->db->select('f1.nombre_categoria AS FK_Familia');
        $this->db->join('fk_categorias f1', 'f1.id_fk_categoria = articulos.fk_codigo_familia','left');
@@ -214,6 +233,9 @@ public function get_autocomplete_uno($search_data)
 
        $this->db->select('u2.un_medida AS UN_Medida_2');
        $this->db->join('fk_un_med u2', 'u2.id_un_medida = articulos.id_un_med2');
+
+       $this->db->join('fk_categorias_lm', 'id_cat_lm = fk_codigo_lm');
+
 
         $this->db->order_by('id_articulo', 'asc');
         if(isset($params['limit']) && !empty($params['limit']))
